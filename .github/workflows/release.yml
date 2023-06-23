@@ -22,14 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sed -i 's/com/com-${{ needs.prepare.outputs.DASH_TAG }}/' wrangler.toml
-      - run: cd worker && npm ci
       - uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          workingDirectory: 'worker'
-          secrets: |
-            CF_CLIENT_ID
-            CF_CLIENT_SECRET
-        env:
-          CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
-          CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
