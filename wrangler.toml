@@ -1,5 +1,5 @@
 name = "com"
-compatibility_date = "2023-6-24"
+compatibility_date = "2023-6-23"
 routes = [
 	{ pattern = "com.chientrm.com", custom_domain = true }
 ]
