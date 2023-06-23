@@ -3,3 +3,6 @@ compatibility_date = "2023-6-24"
 routes = [
 	{ pattern = "com.chientrm.com", custom_domain = true }
 ]
+main = "./.cloudflare/worker.js"
+site.bucket = "./.cloudflare/public"
+build.command = "npm run build"
