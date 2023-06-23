@@ -21,7 +21,7 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - run: sed -i 's/com\./com-${{ needs.prepare.outputs.DASH_TAG }}\./' wrangler.toml
+      - run: sed -i 's/"com/"com-${{ needs.prepare.outputs.DASH_TAG }}/' wrangler.toml
       - run: npm ci
       - uses: cloudflare/wrangler-action@2.0.0
         with:
