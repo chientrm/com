@@ -1,19 +1,20 @@
 <script>
-	import { Column, Content, Grid, ListItem, Row, UnorderedList } from 'carbon-components-svelte';
+	import { Link, ListItem, OutboundLink, UnorderedList } from 'carbon-components-svelte';
+	import { Email, LogoGithub, LogoTwitter } from 'carbon-icons-svelte';
 </script>
 
-<Content>
-	<Grid>
-		<Row>
-			<Column>
-				<h1>Contacts</h1>
-				<UnorderedList>
-					<ListItem>Twitter: @chientrm</ListItem>
-					<ListItem>Github: chientrm</ListItem>
-					<ListItem>Linkedin: /in/chientrm</ListItem>
-					<ListItem>Email: chientrm@gmail.com</ListItem>
-				</UnorderedList>
-			</Column>
-		</Row>
-	</Grid>
-</Content>
+<h1>Contacts</h1>
+<UnorderedList>
+	<ListItem>
+		Twitter (<LogoTwitter />):
+		<OutboundLink href="https://twitter.com/chientrm">@chientrm</OutboundLink>
+	</ListItem>
+	<ListItem>
+		Github (<LogoGithub />):
+		<OutboundLink href="https://github.com/chientrm">chientrm</OutboundLink>
+	</ListItem>
+	<ListItem>
+		Email (<Email />): chientrm@gmail.com
+		<a href="mailto:chientrm@gmail.com">Send email</a>
+	</ListItem>
+</UnorderedList>

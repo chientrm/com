@@ -1,10 +1,10 @@
 import adapter from '@sveltejs/adapter-cloudflare-workers';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import {
-	optimizeImports,
-	optimizeCss,
 	elements,
 	icons,
+	optimizeCss,
+	optimizeImports,
 	pictograms
 } from 'carbon-preprocess-svelte';
 

@@ -1,42 +1,43 @@
 <script lang="ts">
 	import image from '$lib/assets/chientrm128.png';
 	import youwave from '$lib/assets/youwave.svg';
-	import {
-		Column,
-		Content,
-		Grid,
-		ImageLoader,
-		Link,
-		Row,
-		Truncate
-	} from 'carbon-components-svelte';
+	import spacexdata from '$lib/assets/spacexdata.png';
+	import { ImageLoader, Link, Truncate } from 'carbon-components-svelte';
 </script>
 
-<Content>
-	<Grid>
-		<Row>
-			<Column>
-				<h1>chientrm.com</h1>
-				<div class="avatar">
-					<ImageLoader src={image} />
-				</div>
-				<h2>Products</h2>
-				<Link href="/products/youwave">
-					<div class="youwave">
-						<ImageLoader src={youwave} />
-					</div>
-					<Truncate>YouWave</Truncate>
-				</Link>
-			</Column>
-		</Row>
-	</Grid>
-</Content>
+<div class="avatar">
+	<ImageLoader src={image} />
+</div>
+
+<h2>Products</h2>
+
+<a href="/products/youwave">
+	<div>
+		<ImageLoader src={youwave} />
+	</div>
+	<Truncate>YouWave</Truncate>
+</a>
+
+<a href="/products/spacexdata">
+	<div>
+		<ImageLoader src={spacexdata} />
+	</div>
+	<Truncate>SpaceX data</Truncate>
+</a>
 
 <style>
-	.avatar {
-		width: 48pt;
+	div {
+		width: 64pt;
 	}
-	.youwave {
+	a {
+		display: flex;
+		flex-direction: row;
+		gap: 12pt;
+		align-items: center;
+		text-decoration: none;
+	}
+	a div {
+		height: 64pt;
 		width: 64pt;
 	}
 </style>

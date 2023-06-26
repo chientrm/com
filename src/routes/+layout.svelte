@@ -1,5 +1,8 @@
 <script lang="ts">
 	import {
+		Column,
+		Content,
+		Grid,
 		Header,
 		HeaderAction,
 		HeaderGlobalAction,
@@ -7,6 +10,7 @@
 		HeaderPanelLink,
 		HeaderPanelLinks,
 		HeaderUtilities,
+		Row,
 		SideNav,
 		SideNavItems,
 		SideNavLink,
@@ -15,8 +19,7 @@
 		SkipToContent
 	} from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/all.css';
-	import SettingsAdjust from 'carbon-icons-svelte/lib/SettingsAdjust.svelte';
-	import UserAvatarFilledAlt from 'carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte';
+	import { SettingsAdjust, UserAvatarFilledAlt } from 'carbon-icons-svelte';
 
 	let isSideNavOpen = false;
 	let isOpen1 = false;
@@ -69,4 +72,6 @@
 	</SideNavItems>
 </SideNav>
 
-<slot />
+<Content>
+	<slot />
+</Content>
