@@ -1,27 +1,72 @@
 <script lang="ts">
-	import { Theme } from 'carbon-components-svelte';
+	import {
+		Header,
+		HeaderAction,
+		HeaderGlobalAction,
+		HeaderPanelDivider,
+		HeaderPanelLink,
+		HeaderPanelLinks,
+		HeaderUtilities,
+		SideNav,
+		SideNavItems,
+		SideNavLink,
+		SideNavMenu,
+		SideNavMenuItem,
+		SkipToContent
+	} from 'carbon-components-svelte';
 	import 'carbon-components-svelte/css/all.css';
+	import SettingsAdjust from 'carbon-icons-svelte/lib/SettingsAdjust.svelte';
+	import UserAvatarFilledAlt from 'carbon-icons-svelte/lib/UserAvatarFilledAlt.svelte';
+
+	let isSideNavOpen = false;
+	let isOpen1 = false;
+	let isOpen2 = false;
 </script>
 
-<div>
-	<Theme
-		render="toggle"
-		toggle={{
-			themes: ['g10', 'g80'],
-			labelA: 'Dark mode',
-			labelB: 'Dark mode',
-			hideLabel: true
-		}}
-		persist
-		persistKey="__carbon-theme"
-	/>
-	<slot />
-</div>
+<Header platformName="chientrm.com" bind:isSideNavOpen>
+	<svelte:fragment slot="skip-to-content">
+		<SkipToContent />
+	</svelte:fragment>
+	<HeaderUtilities>
+		<HeaderGlobalAction aria-label="Settings" icon={SettingsAdjust} />
+		<HeaderAction bind:isOpen={isOpen1} icon={UserAvatarFilledAlt} closeIcon={UserAvatarFilledAlt}>
+			<HeaderPanelLinks>
+				<HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
+				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 4</HeaderPanelLink>
+				<HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
+				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+				<HeaderPanelDivider>Switcher subject 3</HeaderPanelDivider>
+				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+			</HeaderPanelLinks>
+		</HeaderAction>
+		<HeaderAction bind:isOpen={isOpen2}>
+			<HeaderPanelLinks>
+				<HeaderPanelDivider>Switcher subject 1</HeaderPanelDivider>
+				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+				<HeaderPanelDivider>Switcher subject 2</HeaderPanelDivider>
+				<HeaderPanelLink>Switcher item 1</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 2</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 3</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 4</HeaderPanelLink>
+				<HeaderPanelLink>Switcher item 5</HeaderPanelLink>
+			</HeaderPanelLinks>
+		</HeaderAction>
+	</HeaderUtilities>
+</Header>
 
-<style>
-	div {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-</style>
+<SideNav bind:isOpen={isSideNavOpen}>
+	<SideNavItems>
+		<SideNavLink href="/" text="Home" />
+		<SideNavMenu text="Products">
+			<SideNavMenuItem href="/products/youwave" text="YouWave" />
+			<SideNavMenuItem href="/products/spacexdata" text="SpaceX data" />
+		</SideNavMenu>
+		<SideNavLink href="/contacts" text="Contacts" />
+	</SideNavItems>
+</SideNav>
+
+<slot />
