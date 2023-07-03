@@ -1,12 +1,7 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
+/// <reference types="@sveltejs/adapter-cloudflare"/>
+
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface Platform {}
-	}
+	namespace App {}
 }
 
 export {};

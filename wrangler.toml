@@ -1,8 +1,0 @@
-name = "com"
-compatibility_date = "2023-06-23"
-routes = [
-	{ pattern = "com.chientrm.com", custom_domain = true }
-]
-main = "./.cloudflare/worker.js"
-site.bucket = "./.cloudflare/public"
-build.command = "npm run build"
