@@ -8,8 +8,20 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<header>
-  <h2>chientrm.com</h2>
-</header>
+<div>
+  <h2>
+    <a href="/">chientrm.com</a>
+  </h2>
+  <slot />
+</div>
 
-<slot />
+<style>
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 8pt;
+  }
+  h2 {
+    padding: 0 8pt;
+  }
+</style>
