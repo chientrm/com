@@ -1,14 +1,13 @@
 <script lang="ts">
   import '$lib/app.css';
-  import favicon from '$lib/assets/favicon.png';
-  import 'modern-normalize/modern-normalize.css';
   import logo from '$lib/assets/logo.svg';
+  import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
   export let data: LayoutData;
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href={logo} />
 </svelte:head>
 
 <content>
