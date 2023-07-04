@@ -4,8 +4,9 @@ import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (({ locals }) => {
-  const user = locals.user!,
+export const load = (({ locals, params }) => {
+  const { username } = params,
+    { user } = locals,
     colorMode = locals.colorMode;
   return { user, colorMode };
 }) satisfies PageServerLoad;

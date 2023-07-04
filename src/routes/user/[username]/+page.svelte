@@ -6,23 +6,23 @@
 <form method="POST" action="?/update">
   <table>
     <tr>
-      <td>Username</td>
+      <td>username:</td>
       <td>{data.user?.username}</td>
     </tr>
     <tr>
-      <td>Created at</td>
+      <td>created at:</td>
       <td>{data.user?.createdAt}</td>
     </tr>
     <tr>
-      <td>Color theme</td>
+      <td>color theme:</td>
       <td>
         <select name="colorMode" value={data.colorMode}>
-          <option value="os">OS default</option>
-          <option value="dark">Dark</option>
-          <option value="white">White</option>
+          <option value="os">os default</option>
+          <option value="dark">dark</option>
+          <option value="white">white</option>
         </select>
       </td>
     </tr>
   </table>
-  <button>Update</button>
+  <button>update</button>
 </form>

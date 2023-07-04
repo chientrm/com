@@ -1,6 +1,6 @@
 <script lang="ts">
   import '$lib/app.css';
-  import logo from '$lib/assets/logo.svg';
+  import logo from '$lib/assets/logo.png';
   import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
   export let data: LayoutData;
@@ -12,10 +12,13 @@
 
 <content>
   <header>
-    <a href="/">
-      <img src={logo} alt="Logo" />
-      chientrm
-    </a>
+    <div>
+      <a href="/">
+        <img src={logo} alt="Logo" />
+        chientrm
+      </a>
+      <a href="/ask">ask</a>
+    </div>
     {#if data.user}
       <div>
         <a href={`/user/${data.user.username}`}>{data.user.username}</a>
@@ -61,7 +64,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 4pt;
-    background-color: #00ff00;
+    background-color: darkgreen;
   }
   a,
   div {
