@@ -1,8 +1,6 @@
 /// <reference types="@sveltejs/adapter-cloudflare"/>
 /// <reference types="@cloudflare/workers-types"/>
 
-import type { colorModes } from '$lib/constants/color_modes';
-import { languages } from '$lib/constants/languages';
 import type { JWTPayload } from 'jose';
 
 declare global {
@@ -15,6 +13,7 @@ declare global {
       D1: D1Database;
       tz: string;
       user?: User;
+      colorMode: 'os' | 'dark' | 'white';
     }
     interface Platform {
       env: {

@@ -1,6 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 
 export const load = (({ locals }) => {
-  const { user } = locals;
-  return { user };
+  const { user, colorMode } = locals;
+  return { user, colorMode };
 }) satisfies LayoutServerLoad;

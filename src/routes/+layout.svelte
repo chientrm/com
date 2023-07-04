@@ -30,6 +30,30 @@
   <slot />
 </content>
 
+{#if data.colorMode === 'os'}
+  <style>
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: black;
+        color: white;
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      body {
+        background: white;
+        color: dark;
+      }
+    }
+  </style>
+{:else if data.colorMode === 'dark'}
+  <style>
+    body {
+      background: black;
+      color: white;
+    }
+  </style>
+{/if}
+
 <style>
   header {
     display: flex;
