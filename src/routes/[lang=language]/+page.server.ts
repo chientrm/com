@@ -10,7 +10,8 @@ const i18n: I18n<{ welcome: string }> = {
   }
 };
 
-export const load = (({ locals }) => {
-  const s = i18n[locals.lang];
-  return { s };
+export const load = (async ({ parent }) => {
+  const { l, c } = await parent(),
+    s = i18n[l];
+  return { s, c };
 }) satisfies PageServerLoad;

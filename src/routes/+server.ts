@@ -6,5 +6,5 @@ export const GET = (({ platform, cookies }) => {
   const cookieLang = cookies.get(COOKIE_LANG);
   const countryLang = platform?.cf?.country === 'VN' ? 'vi' : 'en';
   const lang = cookieLang ?? countryLang;
-  throw redirect(302, `${lang}/`);
+  throw redirect(302, `/${lang}`);
 }) satisfies RequestHandler;
