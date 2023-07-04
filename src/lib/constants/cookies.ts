@@ -1,2 +1,1 @@
-export const COOKIE_LANG = 'lang',
-  COOKIE_COLOR_MODE = 'color_mode';
+export const COOKIE_USER = 'com_user';

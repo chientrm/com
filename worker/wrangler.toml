@@ -3,5 +3,6 @@ main = "src/worker.js"
 compatibility_date = "2023-07-02"
 
 [[d1_databases]]
-binding="D1"
-database_id="D1"
+binding = "D1"
+database_name = "D1"
+database_id = "397d16c1-7730-4077-813b-2425adf4b65d"
