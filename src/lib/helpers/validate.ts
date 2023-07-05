@@ -12,5 +12,17 @@ const validate = async <TShape extends yup.ObjectShape>(
     result = yup.object(spec).validate(object);
   return result;
 };
+async function validate2<TShape extends yup.ObjectShape>(
+  request: Request,
+  spec: TShape
+) {
+  try {
+    const form = await validate(request, spec);
+    return { form };
+  } catch (e: any) {
+    const message = e.message as string;
+    return { message };
+  }
+}
 
-export { validate };
+export { validate, validate2 };

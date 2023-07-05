@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let message: string | null;
+  export let message: string | null | undefined;
 </script>
 
 <span>
