@@ -1,6 +1,6 @@
 <script lang="ts">
   import '$lib/app.css';
-  import logo from '$lib/assets/logo.png';
+  import logo from '$lib/assets/chientrm.png';
   import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
   export let data: LayoutData;
@@ -8,6 +8,14 @@
 
 <svelte:head>
   <link rel="icon" href={logo} />
+  <title>chientrm.com | you may find something useful here</title>
+  <meta name="description" content="just a bunch of random stuffs" />
+  <meta name="keywords" content="chientrm, blogs, tools" />
+  <meta name="author" content="chientrm" />
+  <meta property="og:title" content="chientrm.com" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://chientrm.com/" />
+  <meta property="og:image" content={`https://chientrm.com${logo}`} />
 </svelte:head>
 
 <content>
@@ -76,5 +84,6 @@
   }
   img {
     padding: 2pt;
+    width: 24pt;
   }
 </style>

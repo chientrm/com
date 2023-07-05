@@ -39,7 +39,7 @@ export const actions = {
       return fail(400, { loginMessage: 'invalid username or password' });
     }
     const { createdAt } = dbUser;
-    auth(cookies, { username, createdAt });
+    await auth(cookies, { username, createdAt });
     throw redirect(303, url.searchParams.get('redirectTo')!);
   },
   register: async ({ request, locals, cookies, url }) => {
@@ -66,7 +66,7 @@ export const actions = {
       )
         .bind(username, passwordHash)
         .first<{ createdAt: Date }>();
-      auth(cookies, { username, createdAt });
+      await auth(cookies, { username, createdAt });
     } catch (e: any) {
       if (
         e instanceof Error &&

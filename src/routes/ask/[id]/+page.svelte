@@ -50,6 +50,7 @@
 <style>
   div.replies {
     padding: 8pt;
+    padding-left: 16pt;
   }
   div.appbar {
     display: flex;
