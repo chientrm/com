@@ -1,10 +1,9 @@
 import { COOKIE_USER } from '$lib/constants/cookies';
-import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions = {
-  logout: ({ cookies }) => {
+  logout: ({ cookies, locals }) => {
     cookies.delete(COOKIE_USER);
-    throw redirect(303, '/');
+    locals.user = undefined;
   }
 } satisfies Actions;

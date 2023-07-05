@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
   import Error from '$lib/components/Error.svelte';
   import type { ActionData } from './$types';
   export let form: ActionData;
+  $: redirectTo = $page.url.searchParams.get('redirectTo') ?? '/';
 </script>
 
-<form method="POST" action="?/login">
+<form method="POST" action={`?/login&redirectTo=${redirectTo}`} use:enhance>
   <h3>login</h3>
   <Error message={form?.loginMessage} />
   <table>
@@ -33,7 +36,7 @@
 
 <a href="/reset_password">forgot your password?</a>
 
-<form method="POST" action="?/register">
+<form method="POST" action={`?/register&redirectTo=${redirectTo}`} use:enhance>
   <h3>create account</h3>
   <Error message={form?.registerMessage} />
   <table>

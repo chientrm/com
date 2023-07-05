@@ -4,28 +4,22 @@ import { hashPassword, validatePassword } from '$lib/helpers/password';
 import { validate } from '$lib/helpers/validate';
 import { fail, redirect } from '@sveltejs/kit';
 import { string } from 'yup';
-import type { Actions, PageServerLoad } from './$types';
-
-export const load = (({ locals }) => {
-  if (locals.user) {
-    throw redirect(303, '/');
-  }
-}) satisfies PageServerLoad;
+import type { Actions } from './$types';
 
 export const actions = {
-  login: async ({ request, locals, cookies }) => {
+  login: async ({ request, locals, cookies, url }) => {
+    console.log(url);
     try {
       const { username, password } = await validate(request, {
           username: string()
             .matches(
               /^[a-zA-Z0-9\-_]+$/,
-              'Usernames can only contain letters, digits, dashes and underscores'
+              'username can only contain letters, digits, dashes and underscores'
             )
-            .label('Username')
             .required()
             .min(2)
             .max(15),
-          password: string().label('Password').required().min(8).max(72)
+          password: string().required().min(8).max(72)
         }),
         dbUser = await locals.D1.prepare(
           'select createdAt, passwordHash from Com_User where username=?1'
@@ -33,7 +27,7 @@ export const actions = {
           .bind(username)
           .first<{ createdAt: Date; passwordHash: string }>();
       if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
-        throw new Error('Invalid user or password');
+        throw new Error('invalid user or password');
       }
       const { createdAt } = dbUser,
         jwt = await sign<App.User>({ username, createdAt });
@@ -42,9 +36,9 @@ export const actions = {
       const loginMessage = e.message;
       return fail(400, { loginMessage });
     }
-    throw redirect(303, '/');
+    throw redirect(303, url.searchParams.get('redirectTo')!);
   },
-  register: async ({ request, locals, cookies }) => {
+  register: async ({ request, locals, cookies, url }) => {
     try {
       const { username, password } = await validate(request, {
           username: string()
@@ -52,11 +46,10 @@ export const actions = {
               /^[a-zA-Z0-9\-_]+$/,
               'Usernames can only contain letters, digits, dashes and underscores'
             )
-            .label('Username')
             .required()
             .min(2)
             .max(15),
-          password: string().label('Password').required().min(8).max(72)
+          password: string().required().min(8).max(72)
         }),
         passwordHash = await hashPassword(password),
         { createdAt } = await locals.D1.prepare(
@@ -74,10 +67,10 @@ export const actions = {
           // @ts-ignore
           e.cause?.message.includes('UNIQUE constraint failed'))
       ) {
-        registerMessage = 'Email is already existed!';
+        registerMessage = 'email is already existed!';
       }
       return fail(400, { registerMessage });
     }
-    throw redirect(303, '/');
+    throw redirect(303, url.searchParams.get('redirectTo')!);
   }
 } satisfies Actions;

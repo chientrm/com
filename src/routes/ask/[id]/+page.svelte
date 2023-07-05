@@ -6,7 +6,7 @@
 <div>
   <p>{data.content}</p>
   <span>
-    by <a href={`/user/${data.username}`}>{data.username}</a> at {data.createdAt}
+    by <a href={`/user/${data.username}`}>{data.username}</a> at {data.date}
   </span>
 </div>
 

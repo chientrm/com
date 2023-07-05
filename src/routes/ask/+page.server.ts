@@ -1,4 +1,4 @@
-import { fromNow } from '$lib/helpers/time';
+import { fromNow } from '$lib/helpers/day';
 import type { PageServerLoad } from '../$types';
 
 export const load = (async ({ locals }) => {
