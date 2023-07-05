@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { invalidateAll } from '$app/navigation';
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
 
@@ -10,6 +11,7 @@
 </svelte:head>
 
 <a href="/ask/new">ask something</a>
+<button on:click={() => invalidateAll()}>refresh</button>
 <hr />
 
 <div>

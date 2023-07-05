@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { invalidateAll } from '$app/navigation';
   import Ask from '$lib/components/Ask.svelte';
   import Error from '$lib/components/Error.svelte';
   import type { ActionData, PageData } from './$types';
@@ -14,6 +15,7 @@
   username={data.username}
   fromNow={data.fromNow}
 />
+<button on:click={() => invalidateAll()}>refresh</button>
 
 <hr />
 
