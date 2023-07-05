@@ -13,6 +13,7 @@
   <meta name="keywords" content="chientrm, blogs, tools" />
   <meta name="author" content="chientrm" />
   <meta property="og:title" content="chientrm.com" />
+  <meta property="og:description" content="just a bunch of random stuffs" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://chientrm.com/" />
   <meta property="og:image" content={`https://chientrm.com${logo}`} />
