@@ -30,6 +30,7 @@
       <a href="/auth">Login</a>
     {/if}
   </header>
+  <hr />
   <slot />
 </content>
 

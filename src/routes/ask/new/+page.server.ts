@@ -11,7 +11,7 @@ export const load = (({ url }) => {
 export const actions = {
   default: async ({ request, locals }) => {
     const { form, message } = await validate2(request, {
-      content: string().required().min(6).max(5000)
+      content: string().required().max(5000)
     });
     if (message) {
       return fail(400, { message });
