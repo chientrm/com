@@ -2,9 +2,16 @@ import { COOKIE_USER } from '$lib/constants/cookies';
 import { sign } from '$lib/helpers/crypt';
 import { hashPassword, validatePassword } from '$lib/helpers/password';
 import { validate2 } from '$lib/helpers/validate';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import { string } from 'yup';
 import type { Actions } from './$types';
+
+const auth = async (cookies: Cookies, user: App.User) =>
+    cookies.set(COOKIE_USER, await sign(user), {
+      path: '/',
+      maxAge: 7 * 24 * 3600
+    }),
+  UNIQUE = 'UNIQUE constraint failed';
 
 export const actions = {
   login: async ({ request, locals, cookies, url }) => {
@@ -31,9 +38,8 @@ export const actions = {
     if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
       return fail(400, { loginMessage: 'invalid username or password' });
     }
-    const { createdAt } = dbUser,
-      jwt = await sign<App.User>({ username, createdAt });
-    cookies.set(COOKIE_USER, jwt);
+    const { createdAt } = dbUser;
+    auth(cookies, { username, createdAt });
     throw redirect(303, url.searchParams.get('redirectTo')!);
   },
   register: async ({ request, locals, cookies, url }) => {
@@ -56,18 +62,16 @@ export const actions = {
       passwordHash = await hashPassword(password);
     try {
       const { createdAt } = await locals.D1.prepare(
-          'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
-        )
-          .bind(username, passwordHash)
-          .first<{ createdAt: Date }>(),
-        jwt = await sign<App.User>({ username, createdAt });
-      cookies.set(COOKIE_USER, jwt);
+        'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
+      )
+        .bind(username, passwordHash)
+        .first<{ createdAt: Date }>();
+      auth(cookies, { username, createdAt });
     } catch (e: any) {
       if (
         e instanceof Error &&
-        (e.message.includes('UNIQUE constraint failed') ||
-          // @ts-ignore
-          e.cause?.message.includes('UNIQUE constraint failed'))
+        // @ts-ignore
+        (e.message.includes(UNIQUE) || e.cause?.message.includes(UNIQUE))
       ) {
         const registerMessage = 'username is already existed';
         return fail(400, { registerMessage });

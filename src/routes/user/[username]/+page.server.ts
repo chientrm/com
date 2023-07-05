@@ -20,7 +20,10 @@ export const actions = {
     const { colorMode } = await validate(request, {
       colorMode: string().required().oneOf(['os', 'dark', 'white'])
     });
-    cookies.set(COOKIE_COLORMODE, colorMode, { path: '/' });
+    cookies.set(COOKIE_COLORMODE, colorMode, {
+      path: '/',
+      maxAge: 365 * 24 * 3600
+    });
     throw redirect(303, '/');
   }
 } satisfies Actions;
