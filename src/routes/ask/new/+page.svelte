@@ -12,7 +12,7 @@
     <tr>
       <td>question:</td>
       <td>
-        <textarea name="content" value={data.content} />
+        <textarea name="content" value={data.content} maxlength="5000" />
       </td>
     </tr>
   </table>

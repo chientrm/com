@@ -29,7 +29,7 @@
     <tr>
       <td>reply:</td>
       <td>
-        <textarea name="reply" value={data.reply} />
+        <textarea name="reply" value={data.reply} maxlength="5000" />
       </td>
     </tr>
     <tr>
