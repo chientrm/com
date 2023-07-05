@@ -24,6 +24,5 @@
   div {
     display: flex;
     flex-direction: column;
-    gap: 16pt;
   }
 </style>

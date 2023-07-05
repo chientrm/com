@@ -22,6 +22,7 @@
     display: flex;
     flex-direction: row;
     gap: 8pt;
+    padding: 8pt;
   }
   div.col {
     display: flex;

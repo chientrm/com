@@ -45,8 +45,7 @@
 
 <style>
   .replies {
-    padding-left: 16pt;
-    gap: 16pt;
+    padding: 8pt;
   }
   div {
     display: flex;
