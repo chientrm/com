@@ -8,14 +8,18 @@
   export let form: ActionData;
 </script>
 
-<Ask
-  index={0}
-  id={data.id}
-  content={data.content}
-  username={data.username}
-  fromNow={data.fromNow}
-/>
-<button on:click={() => invalidateAll()}>refresh</button>
+<div class="appbar">
+  <Ask
+    index={0}
+    id={data.id}
+    content={data.content}
+    username={data.username}
+    fromNow={data.fromNow}
+  />
+  <div>
+    <button on:click={() => invalidateAll()}>refresh</button>
+  </div>
+</div>
 
 <hr />
 
@@ -44,11 +48,13 @@
 </form>
 
 <style>
-  .replies {
+  div.replies {
     padding: 8pt;
   }
-  div {
+  div.appbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 8pt;
   }
 </style>

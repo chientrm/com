@@ -10,8 +10,10 @@
   <title>Ask | chientrm.com</title>
 </svelte:head>
 
-<a href="/ask/new">ask something</a>
-<button on:click={() => invalidateAll()}>refresh</button>
+<div class="appbar">
+  <a href="/ask/new">ask something</a>
+  <button on:click={() => invalidateAll()}>refresh</button>
+</div>
 <hr />
 
 <div>
@@ -21,8 +23,10 @@
 </div>
 
 <style>
-  div {
+  div.appbar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 8pt;
   }
 </style>
