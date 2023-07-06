@@ -13,7 +13,6 @@
   {/if}
 
   <Ask
-    index={0}
     id={data.id}
     content={data.content}
     username={data.username}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let index: number;
+  export let index: number | null = null;
   export let id: number | string;
   export let content: string;
   export let username: string;
@@ -7,7 +7,11 @@
 </script>
 
 <div class="row">
-  <span class="id">{index + 1}.</span>
+  <span class="id">
+    {#if index !== null}
+      {index + 1}.
+    {/if}
+  </span>
   <div class="col">
     <a href={`/ask/${id}`}>{content}</a>
     <span class="ref">
