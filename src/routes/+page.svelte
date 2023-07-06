@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { fromNow } from '$lib/helpers/day';
+  import type { PageData } from './$types';
+  export let data: PageData;
 </script>
 
 <p>you may find something useful here</p>
@@ -8,9 +9,11 @@
 
 <h2>change logs</h2>
 
-<h3>{fromNow('Thu Jul  6 08:20:51 AM UTC 2023')}</h3>
-<ul>
-  <li>inbox</li>
-  <li>remove sus 1. head</li>
-  <li>ctrl + enter or alt + enter to submit form</li>
-</ul>
+{#each data.logs as { fromNow, changes }}
+  <h3>{fromNow}</h3>
+  <ul>
+    {#each changes as change}
+      <li>{change}</li>
+    {/each}
+  </ul>
+{/each}
