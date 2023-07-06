@@ -1,6 +1,5 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { invalidateAll } from '$app/navigation';
   import Ask from '$lib/components/Ask.svelte';
   import Error from '$lib/components/Error.svelte';
   import type { ActionData, PageData } from './$types';
@@ -8,18 +7,13 @@
   export let form: ActionData;
 </script>
 
-<div class="appbar">
-  <Ask
-    index={0}
-    id={data.id}
-    content={data.content}
-    username={data.username}
-    fromNow={data.fromNow}
-  />
-  <div>
-    <button on:click={() => invalidateAll()}>refresh</button>
-  </div>
-</div>
+<Ask
+  index={0}
+  id={data.id}
+  content={data.content}
+  username={data.username}
+  fromNow={data.fromNow}
+/>
 
 <hr />
 
@@ -51,11 +45,5 @@
   div.replies {
     padding: 8pt;
     padding-left: 16pt;
-  }
-  div.appbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 8pt;
   }
 </style>

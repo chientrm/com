@@ -3,6 +3,7 @@
   import logo from '$lib/assets/chientrm.png';
   import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
+  import { invalidateAll } from '$app/navigation';
   export let data: LayoutData;
 </script>
 
@@ -27,6 +28,9 @@
         chientrm
       </a>
       <a href="/ask">ask</a>
+    </div>
+    <div>
+      <button on:click={invalidateAll}>refresh</button>
     </div>
     {#if data.user}
       <div>
