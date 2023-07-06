@@ -20,8 +20,6 @@
     fromNow={data.fromNow}
   />
 
-  <hr />
-
   <div class="replies">
     {#each data.replies as { id, content, username, fromNow }, index}
       <Ask {index} {id} {content} {username} {fromNow} />
