@@ -7,6 +7,15 @@ dayjs.extend(relativeTime);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export const fromNow = (date: Date) => dayjs(date).fromNow(),
-  formatDate = (date: Date, tz: string, template: string) =>
-    dayjs(date).tz(tz).format(template);
+export const fromNow = (
+    date: string | number | dayjs.Dayjs | Date | null | undefined
+  ) => dayjs(date).fromNow(),
+  formatDate = (
+    date: string | number | dayjs.Dayjs | Date | null | undefined,
+    tz: string,
+    template: string
+  ) => dayjs(date).tz(tz).format(template),
+  addFromNow = <T extends { createdAt: Date }>(entry: T) => ({
+    ...entry,
+    fromNow: fromNow(entry.createdAt)
+  });

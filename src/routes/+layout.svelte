@@ -34,6 +34,7 @@
     </div>
     {#if data.user}
       <div>
+        <a href={'/inbox'}>inbox ({data.count})</a>
         <a href={`/user/${data.user.username}`}>{data.user.username}</a>
         <form method="POST" action="/?/logout">
           <button>logout</button>

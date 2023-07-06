@@ -9,7 +9,7 @@
 
 <div class="col">
   {#if data.parentId}
-    <a href={`/ask/${data.parentId}`}>← back</a>
+    <a href={`/ask/${data.parentId}`}>← parent</a>
   {/if}
 
   <Ask
