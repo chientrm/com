@@ -2,9 +2,11 @@
   import { enhance } from '$app/forms';
   import Ask from '$lib/components/Ask.svelte';
   import Error from '$lib/components/Error.svelte';
+  import { autoSubmit } from '$lib/helpers/form';
   import type { ActionData, PageData } from './$types';
   export let data: PageData;
   export let form: ActionData;
+  let f: HTMLFormElement;
 </script>
 
 <div class="col">
@@ -25,13 +27,18 @@
     {/each}
   </div>
 
-  <form method="POST" action="?/reply" use:enhance>
+  <form method="POST" action="?/reply" use:enhance bind:this={f}>
     <Error message={form?.message} />
     <table>
       <tr>
         <td>reply:</td>
         <td>
-          <textarea name="reply" value={data.reply} maxlength="5000" />
+          <textarea
+            name="reply"
+            value={data.reply}
+            maxlength="5000"
+            on:keydown={(e) => autoSubmit(f, e)}
+          />
         </td>
       </tr>
       <tr>
