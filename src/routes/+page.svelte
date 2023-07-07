@@ -6,6 +6,8 @@
 <p>you may find something useful here</p>
 
 <a href="/ask">wanna ask</a>
+<span>|</span>
+<a href="/counter">counter</a>
 
 <h2>change logs</h2>
 

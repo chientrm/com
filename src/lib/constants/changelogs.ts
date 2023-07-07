@@ -5,6 +5,10 @@ interface ChangeLog {
 
 export const changeLogs: ChangeLog[] = [
   {
+    createdAt: new Date('Fri Jul  7 03:54:28 AM UTC 2023'),
+    changes: ['counter']
+  },
+  {
     createdAt: new Date('Thu Jul  6 05:08:18 PM UTC 2023'),
     changes: ['merge inbox and account page']
   },
