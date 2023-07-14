@@ -3,7 +3,6 @@
   import logo from '$lib/assets/chientrm.png';
   import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
-  import { invalidateAll } from '$app/navigation';
   export let data: LayoutData;
 </script>
 
@@ -27,7 +26,7 @@
         <img src={logo} alt="Logo" />
         chientrm
       </a>
-      <a href="/ask">ask</a>
+      <a href="/ask">ask ({data.totalCount})</a>
     </div>
     {#if data.user}
       <div>
