@@ -13,7 +13,11 @@
     {/if}
   </span>
   <div class="col">
-    <a href={`/ask/${id}`}>{content}</a>
+    <a href={`/ask/${id}`}>
+      {#each content.split(/\r?\n/) as line}
+        {line} <br />
+      {/each}
+    </a>
     <span class="ref">
       by <a href={`/user/${username}`}>{username}</a>
       {fromNow}
