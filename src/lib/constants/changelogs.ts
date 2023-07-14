@@ -6,7 +6,7 @@ interface ChangeLog {
 export const changeLogs: ChangeLog[] = [
   {
     createdAt: new Date('Fri Jul 14 09:15:03 AM UTC 2023'),
-    changes: ['multiline ask']
+    changes: ['multiline ask', 'remove refresh button']
   },
   {
     createdAt: new Date('Fri Jul  7 03:54:28 AM UTC 2023'),

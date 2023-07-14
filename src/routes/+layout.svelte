@@ -29,9 +29,6 @@
       </a>
       <a href="/ask">ask</a>
     </div>
-    <div>
-      <button on:click={invalidateAll}>refresh</button>
-    </div>
     {#if data.user}
       <div>
         <a href={'/account'}>{data.user.username} ({data.count})</a>
