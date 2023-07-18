@@ -3,6 +3,12 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <meta name="description" content="just a bunch of random stuffs" />
+  <meta property="og:title" content="chientrm.com" />
+  <meta property="og:description" content="just a bunch of random stuffs" />
+</svelte:head>
+
 <p>you may find something useful here</p>
 
 <ol>

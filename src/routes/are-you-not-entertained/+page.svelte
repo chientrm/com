@@ -4,7 +4,15 @@
   import type { ActionData, PageData } from './$types';
   export let data: PageData;
   export let form: ActionData;
+  const text = 'Are you not entertained? Visit chientrm.com';
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 {#if data.reviewCount != null}
   <a href="are-you-not-entertained/review">Review ({data.reviewCount})</a>

@@ -8,6 +8,8 @@
 <svelte:head>
   <title>Counter | chientrm.com</title>
   <meta name="description" content="simple counter" />
+  <meta property="og:title" content="chientrm.com | Simple counter" />
+  <meta property="og:description" content="simple counter" />
 </svelte:head>
 
 <h3>clicked: {data.counters.length}</h3>

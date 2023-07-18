@@ -1,7 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
   export let data: PageData;
+  $: text = `User ${data.username} | chientrm.com`;
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 <table>
   <tr>

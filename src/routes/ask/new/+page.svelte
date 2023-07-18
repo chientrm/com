@@ -6,7 +6,15 @@
   export let form: ActionData;
   export let data: PageData;
   let f: HTMLFormElement;
+  const text = 'Ask something at chientrm.com';
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 <form method="POST" use:enhance bind:this={f}>
   <Error message={form?.message} />

@@ -5,7 +5,15 @@
   import type { ActionData } from './$types';
   export let form: ActionData;
   $: redirectTo = $page.url.searchParams.get('redirectTo') ?? '/';
+  const text = 'Create account or login at chientrm.com';
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 <form method="POST" action={`?/login&redirectTo=${redirectTo}`} use:enhance>
   <h3>login</h3>

@@ -2,7 +2,15 @@
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
+  const text = 'You account at chientrm.com';
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 <h3>settings</h3>
 <form method="POST" action="?/update">

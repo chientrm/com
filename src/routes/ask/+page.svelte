@@ -1,12 +1,15 @@
 <script lang="ts">
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
-
   export let data: PageData;
+  const text = 'Ask something at chientrm.com';
 </script>
 
 <svelte:head>
-  <title>Ask | chientrm.com</title>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
 </svelte:head>
 
 <a href="/ask/new">ask something</a>

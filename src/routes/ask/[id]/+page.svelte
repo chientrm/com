@@ -7,7 +7,15 @@
   export let data: PageData;
   export let form: ActionData;
   let f: HTMLFormElement;
+  $: text = data.content;
 </script>
+
+<svelte:head>
+  <title>{text}</title>
+  <meta name="description" content={text} />
+  <meta property="og:title" content={text} />
+  <meta property="og:description" content={text} />
+</svelte:head>
 
 <div class="col">
   {#if data.parentId}
