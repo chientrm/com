@@ -5,6 +5,10 @@ interface ChangeLog {
 
 export const changeLogs: ChangeLog[] = [
   {
+    createdAt: new Date('Tue Jul 18 12:10:38 PM UTC 2023'),
+    changes: ['are you not entertained?']
+  },
+  {
     createdAt: new Date('Fri Jul 14 09:15:03 AM UTC 2023'),
     changes: ['multiline ask', 'remove refresh button', 'total asks count']
   },

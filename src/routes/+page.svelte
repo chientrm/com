@@ -5,9 +5,17 @@
 
 <p>you may find something useful here</p>
 
-<a href="/ask">wanna ask</a>
-<span>|</span>
-<a href="/counter">counter</a>
+<ol>
+  <li>
+    <a href="/ask">wanna ask?</a>
+  </li>
+  <li>
+    <a href="/counter">counter</a>
+  </li>
+  <li>
+    <a href="/are-you-not-entertained">are you not entertained?</a>
+  </li>
+</ol>
 
 <h2>change logs</h2>
 

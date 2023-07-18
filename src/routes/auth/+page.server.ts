@@ -1,18 +1,17 @@
 import { COOKIE_USER } from '$lib/constants/cookies';
 import { sign } from '$lib/helpers/crypt';
 import { hashPassword, validatePassword } from '$lib/helpers/password';
+import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { fail, redirect, type Cookies } from '@sveltejs/kit';
 import { string } from 'yup';
 import type { Actions } from './$types';
 
 const auth = async (cookies: Cookies, user: App.User) =>
-    cookies.set(COOKIE_USER, await sign(user), {
-      path: '/',
-      maxAge: 7 * 24 * 3600
-    }),
-  UNIQUE = 'UNIQUE constraint failed';
-
+  cookies.set(COOKIE_USER, await sign(user), {
+    path: '/',
+    maxAge: 7 * 24 * 3600
+  });
 export const actions = {
   login: async ({ request, locals, cookies, url }) => {
     const { form, message: loginMessage } = await validate2(request, {
@@ -68,11 +67,7 @@ export const actions = {
         .first<{ createdAt: Date }>();
       await auth(cookies, { username, createdAt });
     } catch (e: any) {
-      if (
-        e instanceof Error &&
-        // @ts-ignore
-        (e.message.includes(UNIQUE) || e.cause?.message.includes(UNIQUE))
-      ) {
+      if (unique(e)) {
         const registerMessage = 'username is already existed';
         return fail(400, { registerMessage });
       }
