@@ -47,6 +47,8 @@ export const actions = {
       )
         .bind(url, username)
         .run();
+      console.log('SEB');
+      console.log(platform?.env.SEB);
       await sendEmail({
         seb: platform?.env.SEB,
         sebName: 'SEB',
