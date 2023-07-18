@@ -15,4 +15,6 @@
   <meta property="og:description" content={description} />
 </svelte:head>
 
+<h3>Are you not entertained?</h3>
+
 <slot />

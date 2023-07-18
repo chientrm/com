@@ -1,18 +1,16 @@
 import { adminUsername } from '$lib/constants/string';
-import { getTweet } from '$lib/helpers/tweet';
+import { getTweet } from '$lib/helpers/get_tweet';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ parent, locals }) => {
-  const { colorMode: _colorMode } = await parent(),
-    colorMode = _colorMode === 'white' ? 'white' : 'dark',
-    result = await locals.D1.prepare(
+export const load = (async ({ locals }) => {
+  const result = await locals.D1.prepare(
       'select url from Com_Ent where approvedAt is not null order by approvedAt'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet));
+    tweets = await Promise.all(urls.map(getTweet(locals.colorMode)));
   let reviewCount: number | null = null;
   if (locals.user?.username === adminUsername) {
     reviewCount = (
@@ -21,7 +19,7 @@ export const load = (async ({ parent, locals }) => {
       ).first<{ reviewCount: number }>()
     ).reviewCount;
   }
-  return { colorMode, tweets, reviewCount };
+  return { tweets, reviewCount };
 }) satisfies PageServerLoad;
 
 export const actions = {

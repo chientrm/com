@@ -1,5 +1,5 @@
 import { adminUsername } from '$lib/constants/string';
-import { getTweet } from '$lib/helpers/tweet';
+import { getTweet } from '$lib/helpers/get_tweet';
 import { validate } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
@@ -13,7 +13,7 @@ export const load = (async ({ locals }) => {
       'select url from Com_Ent where approvedAt is null order by createdAt'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet));
+    tweets = await Promise.all(urls.map(getTweet(locals.colorMode)));
   return { tweets };
 }) satisfies PageServerLoad;
 
