@@ -6,8 +6,8 @@
   export let form: ActionData;
 </script>
 
-{#if data.isAdmin}
-  <a href="are-you-not-entertained/review">Review</a>
+{#if data.reviewCount != null}
+  <a href="are-you-not-entertained/review">Review ({data.reviewCount})</a>
 {/if}
 
 <form method="POST" action="?/submit" use:enhance>
@@ -28,6 +28,8 @@
   <button>submit</button>
 </form>
 
-{#each data.tweets as { html }}
-  {@html html}
-{/each}
+<div>
+  {#each data.tweets as { html }}
+    {@html html}
+  {/each}
+</div>

@@ -12,9 +12,16 @@ export const load = (async ({ parent, locals }) => {
       'select url from Com_Ent where approvedAt is not null order by approvedAt'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet)),
-    isAdmin = locals.user?.username === adminUsername;
-  return { colorMode, tweets, isAdmin };
+    tweets = await Promise.all(urls.map(getTweet));
+  let reviewCount: number | null = null;
+  if (locals.user?.username === adminUsername) {
+    reviewCount = (
+      await locals.D1.prepare(
+        'select count(*) as reviewCount from Com_Ent where approvedAt is null'
+      ).first<{ reviewCount: number }>()
+    ).reviewCount;
+  }
+  return { colorMode, tweets, reviewCount };
 }) satisfies PageServerLoad;
 
 export const actions = {
