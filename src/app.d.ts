@@ -18,6 +18,7 @@ declare global {
     interface Platform {
       env: {
         D1: D1Database;
+        SEB: SendEmail;
       };
     }
     interface User extends JWTPayload {

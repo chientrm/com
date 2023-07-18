@@ -1,0 +1,11 @@
+name = "com"
+compatibility_date = "2021-11-12"
+build.command = "npm run build"
+
+main = "./.cloudflare/worker.js"
+site.bucket = "./.cloudflare/public"
+
+[[send_email]]
+type = "send_email"
+name = "SEB"
+destination_address = "chientrm@gmail.com"
