@@ -8,7 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals, url }) => {
   const result = await locals.D1.prepare(
-      'select url from Com_Ent where approvedAt is not null order by approvedAt'
+      'select url from Com_Ent where approvedAt is not null order by approvedAt desc'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
     tweets = await Promise.all(urls.map(getTweet(locals.colorMode))),

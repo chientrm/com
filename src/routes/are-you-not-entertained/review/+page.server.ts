@@ -10,7 +10,7 @@ export const load = (async ({ locals }) => {
     throw redirect(302, '/');
   }
   const result = await locals.D1.prepare(
-      'select url from Com_Ent where approvedAt is null order by createdAt'
+      'select url from Com_Ent where approvedAt is null order by createdAt desc'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
     tweets = await Promise.all(urls.map(getTweet(locals.colorMode)));
