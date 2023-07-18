@@ -11,6 +11,7 @@ declare global {
     type ColorMode = ColorModeTuple[number];
     interface Locals {
       D1: D1Database;
+      WORKER: Fetcher;
       tz: string;
       user?: User;
       colorMode: 'os' | 'dark' | 'white';
@@ -18,7 +19,7 @@ declare global {
     interface Platform {
       env: {
         D1: D1Database;
-        SEB: SendEmail;
+        WORKER: Fetcher;
       };
     }
     interface User extends JWTPayload {

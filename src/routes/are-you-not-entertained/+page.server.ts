@@ -3,7 +3,6 @@ import { getTweet } from '$lib/helpers/get_tweet';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
-import { sendEmail } from 'cf-workers-proxy';
 import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -47,17 +46,15 @@ export const actions = {
       )
         .bind(url, username)
         .run();
-      console.log('SEB');
-      console.log(platform?.env.SEB);
-      await sendEmail({
-        seb: platform?.env.SEB,
-        sebName: 'SEB',
-        name: 'chientrm',
-        addr: 'admin@chientrm.com',
-        recipent: 'chientrm@gmail.com',
-        subject: `${username} submited a tweet to chientrm.com`,
-        contentType: 'text/plain',
-        data: `${username}'ve just submited a tweet. Url : ${url}\nReview now: https://chientrm.com/are-you-not-entertained/review`
+      await locals.WORKER.fetch('http://whatever.fake/send_email', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: 'entertained',
+          addr: 'admin@chientrm.com',
+          recipent: 'chientrm@gmail.com',
+          subject: `${username} submited a tweet to chientrm.com`,
+          data: `${username}'ve just submited a tweet. Url : ${url}\nReview now: https://chientrm.com/are-you-not-entertained/review`
+        })
       });
     } catch (e) {
       if (unique(e)) {

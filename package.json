@@ -12,11 +12,11 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@chientrm/adapter-cloudflare": "^2.3.2",
+		"@sveltejs/adapter-cloudflare": "^2.3.1",
 		"@sveltejs/kit": "^1.22.1",
 		"@types/bcryptjs": "^2.4.2",
 		"bcryptjs": "^2.4.3",
-		"cf-workers-proxy": "^0.1.0",
+		"cf-workers-proxy": "^0.2.0",
 		"dayjs": "^1.11.9",
 		"jose": "^4.14.4",
 		"mdsvex": "^0.11.0",
