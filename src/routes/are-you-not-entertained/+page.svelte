@@ -15,7 +15,7 @@
     <tr>
       <td>Tweet url:</td>
       <td>
-        <input type="text" name="url" />
+        <input type="text" name="url" value={data.url} />
       </td>
     </tr>
     <tr>

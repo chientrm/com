@@ -19,6 +19,7 @@ CREATE TABLE Com_Counter(
 
 CREATE TABLE Com_Ent(
     url text PRIMARY KEY NOT NULL,
+    username text NOT NULL DEFAULT 'chientrm',
     approvedAt datetime,
     createdAt datetime DEFAULT CURRENT_TIMESTAMP
 );

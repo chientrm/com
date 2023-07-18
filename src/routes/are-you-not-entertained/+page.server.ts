@@ -2,15 +2,17 @@ import { adminUsername } from '$lib/constants/string';
 import { getTweet } from '$lib/helpers/get_tweet';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
+import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, url }) => {
   const result = await locals.D1.prepare(
       'select url from Com_Ent where approvedAt is not null order by approvedAt'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet(locals.colorMode)));
+    tweets = await Promise.all(urls.map(getTweet(locals.colorMode))),
+    _url = url.searchParams.get('url') ?? '';
   let reviewCount: number | null = null;
   if (locals.user?.username === adminUsername) {
     reviewCount = (
@@ -19,7 +21,7 @@ export const load = (async ({ locals }) => {
       ).first<{ reviewCount: number }>()
     ).reviewCount;
   }
-  return { tweets, reviewCount };
+  return { tweets, reviewCount, url: _url };
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -31,9 +33,18 @@ export const actions = {
       return { message };
     }
     const { url } = form!;
+    if (!locals.user) {
+      throw redirect(
+        303,
+        `/auth?redirectTo=/are-you-not-entertained?url=${url}`
+      );
+    }
+    const { username } = locals.user;
     try {
-      await locals.D1.prepare('insert into Com_Ent(url) values(?1)')
-        .bind(url)
+      await locals.D1.prepare(
+        'insert into Com_Ent(url, username) values(?1, ?2)'
+      )
+        .bind(url, username)
         .run();
     } catch (e) {
       if (unique(e)) {
