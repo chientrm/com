@@ -21,11 +21,12 @@ export const actions = {
       throw redirect(303, `/auth?redirectTo=/ask/new?content=${content}`);
     }
     const { username } = locals.user!,
-      { id } = await locals.D1.prepare(
+      result = await locals.D1.prepare(
         'insert into Com_Ask(username, content) values(?1, ?2) returning id'
       )
         .bind(username, content)
-        .first<{ id: number }>();
+        .first<{ id: number }>(),
+      { id } = result!;
     throw redirect(303, `/ask/${id}`);
   }
 } satisfies Actions;

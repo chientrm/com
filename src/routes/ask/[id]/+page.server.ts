@@ -6,7 +6,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ params, locals, url }) => {
   const { id } = params,
-    { username, parentId, content, createdAt } = await locals.D1.prepare(
+    result = await locals.D1.prepare(
       'select username, parentId, content, createdAt from Com_Ask where id=?1'
     )
       .bind(id)
@@ -16,6 +16,7 @@ export const load = (async ({ params, locals, url }) => {
         content: string;
         createdAt: Date;
       }>(),
+    { username, parentId, content, createdAt } = result!,
     repliesResult = await locals.D1.prepare(
       'select id, username, content, createdAt from Com_Ask where parentId=?1 order by createdAt'
     )

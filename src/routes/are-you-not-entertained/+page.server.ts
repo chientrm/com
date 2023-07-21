@@ -15,11 +15,10 @@ export const load = (async ({ locals, url }) => {
     _url = url.searchParams.get('url') ?? '';
   let reviewCount: number | null = null;
   if (locals.user?.username === adminUsername) {
-    reviewCount = (
-      await locals.D1.prepare(
-        'select count(*) as reviewCount from Com_Ent where approvedAt is null'
-      ).first<{ reviewCount: number }>()
-    ).reviewCount;
+    const result = await locals.D1.prepare(
+      'select count(*) as reviewCount from Com_Ent where approvedAt is null'
+    ).first<{ reviewCount: number }>();
+    reviewCount = result!.reviewCount;
   }
   return { tweets, reviewCount, url: _url };
 }) satisfies PageServerLoad;

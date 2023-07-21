@@ -27,6 +27,16 @@ declare global {
       createdAt: Date;
     }
   }
+
+  declare module '*?webp' {
+    const value: any;
+    export default value;
+  }
+
+  declare module '*&webp' {
+    const value: any;
+    export default value;
+  }
 }
 
 export { languages };

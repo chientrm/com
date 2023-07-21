@@ -1,7 +1,7 @@
 <script lang="ts">
+  import 'modern-normalize/modern-normalize.css';
   import '$lib/app.css';
   import logo from '$lib/assets/chientrm.png';
-  import 'modern-normalize/modern-normalize.css';
   import type { LayoutData } from './$types';
   export let data: LayoutData;
 </script>

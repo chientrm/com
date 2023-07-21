@@ -60,11 +60,12 @@ export const actions = {
     const { username, password } = form!,
       passwordHash = await hashPassword(password);
     try {
-      const { createdAt } = await locals.D1.prepare(
-        'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
-      )
-        .bind(username, passwordHash)
-        .first<{ createdAt: Date }>();
+      const result = await locals.D1.prepare(
+          'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
+        )
+          .bind(username, passwordHash)
+          .first<{ createdAt: Date }>(),
+        { createdAt } = result!;
       await auth(cookies, { username, createdAt });
     } catch (e: any) {
       if (unique(e)) {

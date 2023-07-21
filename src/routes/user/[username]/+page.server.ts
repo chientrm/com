@@ -6,11 +6,12 @@ export const load = (async ({ locals, params }) => {
   if (username === locals.user?.username) {
     throw redirect(303, '/account');
   }
-  const { createdAt } = await locals.D1.prepare(
+  const result = await locals.D1.prepare(
       'select createdAt from Com_User where username=?1'
     )
       .bind(username)
       .first<{ createdAt: Date }>(),
+    { createdAt } = result!,
     colorMode = locals.colorMode;
   return { username, createdAt, colorMode };
 }) satisfies PageServerLoad;

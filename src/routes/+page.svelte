@@ -21,6 +21,9 @@
   <li>
     <a href="/are-you-not-entertained">are you not entertained?</a>
   </li>
+  <li>
+    <a href="/globe">globe</a>
+  </li>
 </ol>
 
 <h2>change logs</h2>
