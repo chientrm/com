@@ -2,7 +2,6 @@
   import { OrbitControls } from '$lib/helpers/OrbitControls';
   import { frameLoop } from '$lib/helpers/frame_loop';
   import { GeoJsonGeometry } from '$lib/helpers/geo';
-  import { geoGraticule10 } from 'd3-geo';
   import { onMount } from 'svelte';
   import {
     LineBasicMaterial,
@@ -24,16 +23,15 @@
     }),
     borderMaterial = new LineBasicMaterial({ color: '#1da1f2' }),
     lineObjs = [
-      new LineSegments(
-        new GeoJsonGeometry({
-          geometry: geoGraticule10(),
-          radius: data.radius
-        }),
-        graticuleMaterial
-      ),
-      ...data.jsons.map(
-        (json) =>
-          new LineSegments(new GeoJsonGeometry({ json }), borderMaterial)
+      // new LineSegments(
+      //   new GeoJsonGeometry({
+      //     geometry: geoGraticule10(),
+      //     radius: data.radius
+      //   }),
+      //   graticuleMaterial
+      // ),
+      ...data.groups.map(
+        (group) => new LineSegments(new GeoJsonGeometry(group), borderMaterial)
       )
     ],
     camera = new PerspectiveCamera(45, 1, 1, 10000),

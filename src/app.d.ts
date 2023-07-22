@@ -38,14 +38,13 @@ declare global {
     export default value;
   }
 
-  interface ProcessedGeometry {
+  interface Group {
     vertices: number[];
     indices: number[];
-    radius: number;
   }
 
   declare module '*.geojson' {
-    const value: ProcessedGeometry[];
+    const value: Group[];
     export default value;
   }
 }
