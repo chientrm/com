@@ -1,6 +1,5 @@
 <script lang="ts">
-  import BoundaryLinesLowRes from '$lib/assets/geojson/WB_countries_Admin0_lowres.json';
-
+  import BoundaryLinesLowRes from '$lib/assets/geojson/WB_countries_Admin0_lowres.json?url';
   import { OrbitControls } from '$lib/helpers/OrbitControls';
   import { frameLoop } from '$lib/helpers/frame_loop';
   import { GeoJsonGeometry } from '$lib/helpers/geo';
@@ -28,18 +27,10 @@
       new LineSegments(
         new GeoJsonGeometry(geoGraticule10(), alt),
         graticuleMaterial
-      ),
-      ...(BoundaryLinesLowRes as FeatureCollection).features.map(
-        (feature) =>
-          new LineSegments(
-            new GeoJsonGeometry(feature.geometry, alt),
-            borderMaterial
-          )
       )
     ],
     camera = new PerspectiveCamera(45, 1, 1, 10000),
     scene = new Scene();
-  lineObjs.forEach((obj) => scene.add(obj));
   camera.position.z = 500;
 
   onMount(() => {
@@ -53,6 +44,18 @@
     const stop = frameLoop(() => {
       control.update();
       renderer.render(scene, camera);
+    });
+
+    import(BoundaryLinesLowRes).then((t) => {
+      (t.default as FeatureCollection).features.forEach((feature) => {
+        lineObjs.push(
+          new LineSegments(
+            new GeoJsonGeometry(feature.geometry, alt),
+            borderMaterial
+          )
+        );
+      });
+      lineObjs.forEach((obj) => scene.add(obj));
     });
 
     return () => {
