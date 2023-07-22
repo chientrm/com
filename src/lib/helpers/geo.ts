@@ -9,36 +9,63 @@ type Result = { vertices: number[]; indices: number[] };
 
 class GeoJsonGeometry extends BufferGeometry {
   radius: number;
-  constructor(geometry: Geometry, radius = 1, resolution = 5) {
+  indices: number[];
+  vertices: number[];
+  constructor({
+    geometry,
+    json,
+    radius,
+    resolution
+  }: {
+    geometry?: Geometry;
+    json?: { radius: number; indices: number[]; vertices: number[] };
+    radius?: number;
+    resolution?: number;
+  }) {
     super();
-    this.radius = radius;
+    if (json) {
+      this.vertices = json.vertices;
+      this.indices = json.indices;
+      this.radius = json.radius;
+    } else {
+      this.radius = radius!;
+      this.indices = [];
+      this.vertices = [];
+      const geo = geometry!;
 
-    const groups =
-      geometry.type === 'LineString'
-        ? genLineString(geometry.coordinates)
-        : geometry.type === 'MultiLineString'
-        ? genMultiLineString(geometry.coordinates)
-        : geometry.type === 'Polygon'
-        ? genPolygon(geometry.coordinates)
-        : geometry.type === 'MultiPolygon'
-        ? genMultiPolygon(geometry.coordinates)
-        : null;
-    if (groups === null) {
-      throw new Error();
+      const groups =
+        geo.type === 'LineString'
+          ? genLineString(geo.coordinates)
+          : geo.type === 'MultiLineString'
+          ? genMultiLineString(geo.coordinates)
+          : geo.type === 'Polygon'
+          ? genPolygon(geo.coordinates)
+          : geo.type === 'MultiPolygon'
+          ? genMultiPolygon(geo.coordinates)
+          : null;
+      if (groups === null) {
+        throw new Error();
+      }
+
+      let groupCount = 0;
+      groups.forEach((group) => {
+        const prevIndCnt = this.indices.length,
+          { indices, vertices } = this;
+        concatGroup({ indices, vertices }, group);
+        this.addGroup(
+          prevIndCnt,
+          this.indices.length - prevIndCnt,
+          groupCount++
+        );
+      });
     }
 
-    const indices: number[] = [],
-      vertices: number[] = [];
-    let groupCount = 0;
-    groups.forEach((group) => {
-      const prevIndCnt = indices.length;
-      concatGroup({ indices, vertices }, group);
-      this.addGroup(prevIndCnt, indices.length - prevIndCnt, groupCount++);
-    });
-
-    indices.length && this.setIndex(indices);
-    vertices.length &&
-      this.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+    this.indices.length && this.setIndex(this.indices);
+    this.vertices.length &&
+      this.setAttribute(
+        'position',
+        new Float32BufferAttribute(this.vertices, 3)
+      );
 
     function genLineString(line: Position[]) {
       const coords3d = interpolateLine(line, resolution).map(([lng, lat]) =>
@@ -122,6 +149,19 @@ class GeoJsonGeometry extends BufferGeometry {
 
       return groups;
     }
+  }
+
+  toJson() {
+    const { vertices, indices, radius } = this;
+    return { vertices, indices, radius };
+  }
+
+  static fromJson(json: {
+    vertices: number[];
+    indices: number[];
+    radius: number;
+  }) {
+    return new GeoJsonGeometry({ json });
   }
 }
 

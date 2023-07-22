@@ -37,6 +37,17 @@ declare global {
     const value: any;
     export default value;
   }
+
+  interface ProcessedGeometry {
+    vertices: number[];
+    indices: number[];
+    radius: number;
+  }
+
+  declare module '*.geojson' {
+    const value: ProcessedGeometry[];
+    export default value;
+  }
 }
 
 export { languages };

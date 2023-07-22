@@ -1,5 +1,5 @@
 <script lang="ts">
-  import BoundaryLinesLowRes from '$lib/assets/geojson/WB_countries_Admin0_lowres.json';
+  import BoundaryLinesLowRes from '$lib/assets/geojson/WB_countries_Admin0_lowres.geojson';
   import { OrbitControls } from '$lib/helpers/OrbitControls';
   import { frameLoop } from '$lib/helpers/frame_loop';
   import { GeoJsonGeometry } from '$lib/helpers/geo';
