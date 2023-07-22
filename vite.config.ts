@@ -3,10 +3,5 @@ import { defineConfig } from 'vite';
 import { imagetools } from 'vite-imagetools';
 
 export default defineConfig({
-  plugins: [sveltekit(), imagetools()],
-  build: {
-    rollupOptions: {
-      external: ['cloudflare:email']
-    }
-  }
+  plugins: [sveltekit(), imagetools()]
 });
