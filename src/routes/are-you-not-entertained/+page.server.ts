@@ -45,7 +45,7 @@ export const actions = {
       )
         .bind(url, username)
         .run();
-      await locals.WORKER.fetch('http://whatever.fake/send_email', {
+      locals.WORKER.fetch('http://whatever.fake/send_email', {
         method: 'POST',
         body: JSON.stringify({
           name: 'entertained',
