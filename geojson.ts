@@ -1,6 +1,6 @@
 import { dataToEsm } from '@rollup/pluginutils';
 import { createHash } from 'crypto';
-import { geoDistance, geoInterpolate } from 'd3-geo';
+import { geoDistance, geoGraticule10, geoInterpolate } from 'd3-geo';
 import earcut from 'earcut';
 import fs from 'fs';
 import type { FeatureCollection, Geometry, Position } from 'geojson';
@@ -193,7 +193,12 @@ export const geoJson = (
   let viteConfig: ResolvedConfig;
   let basePath: string;
 
-  const generatedGeojson = new Map<string, string>();
+  const generatedGeojson = new Map<string, string>(),
+    graticule10 = 'graticule10';
+  generatedGeojson.set(
+    graticule10,
+    JSON.stringify([parse(geoGraticule10(), radius, resolution)])
+  );
 
   return {
     name: 'vite-geojson',
@@ -202,28 +207,46 @@ export const geoJson = (
       viteConfig = config;
       basePath = createBasePath(viteConfig.base);
     },
+    resolveId(source, importer, options) {
+      if (source.startsWith('vite-geojson:')) {
+        return source;
+      }
+    },
     load(id, options) {
       if (!/\.geojson$/.test(id)) {
         return null;
       }
-      const srcURL = parseURL(id),
-        raw = fs.readFileSync(srcURL).toString('utf-8'),
-        collection = JSON.parse(raw) as FeatureCollection,
-        groups: Group[] = collection.features.map(({ geometry }) =>
-          parse(geometry, radius, resolution)
-        ),
-        groupsString = JSON.stringify(groups);
-      if (this.meta.watchMode) {
-        const id = generateId(srcURL);
-        generatedGeojson.set(id, groupsString);
-        return dataToEsm(basePath + id);
+      if (id === `vite-geojson:${graticule10}.geojson`) {
+        if (this.meta.watchMode) {
+          return dataToEsm(basePath + graticule10);
+        } else {
+          const fileHandle = this.emitFile({
+            name: `graticule10.json`,
+            source: generatedGeojson.get(graticule10),
+            type: 'asset'
+          });
+          return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
+        }
       } else {
-        const fileHandle = this.emitFile({
-          name: basename(srcURL.pathname, extname(srcURL.pathname)) + `.json`,
-          source: JSON.stringify(groups),
-          type: 'asset'
-        });
-        return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
+        const srcURL = parseURL(id),
+          raw = fs.readFileSync(srcURL).toString('utf-8'),
+          collection = JSON.parse(raw) as FeatureCollection,
+          groups: Group[] = collection.features.map(({ geometry }) =>
+            parse(geometry, radius, resolution)
+          ),
+          groupsString = JSON.stringify(groups);
+        if (this.meta.watchMode) {
+          const id = generateId(srcURL);
+          generatedGeojson.set(id, groupsString);
+          return dataToEsm(basePath + id);
+        } else {
+          const fileHandle = this.emitFile({
+            name: basename(srcURL.pathname, extname(srcURL.pathname)) + `.json`,
+            source: JSON.stringify(groups),
+            type: 'asset'
+          });
+          return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
+        }
       }
     },
     configureServer(server) {

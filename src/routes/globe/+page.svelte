@@ -16,10 +16,22 @@
 
   let canvas: HTMLCanvasElement;
 
-  const borderMaterial = new LineBasicMaterial({ color: '#1da1f2' }),
-    lineObjs = data.groups.map(
-      (group) => new LineSegments(new GeoJsonGeometry(group), borderMaterial)
-    ),
+  const graticuleMaterial = new LineBasicMaterial({
+      color: 'white',
+      opacity: 0.1,
+      transparent: true
+    }),
+    borderMaterial = new LineBasicMaterial({ color: '#1da1f2' }),
+    lineObjs = [
+      new LineSegments(
+        new GeoJsonGeometry(data.graticule[0]),
+        graticuleMaterial
+      ),
+      ...data.countries.map(
+        (country) =>
+          new LineSegments(new GeoJsonGeometry(country), borderMaterial)
+      )
+    ],
     camera = new PerspectiveCamera(45, 1, 1, 10000),
     scene = new Scene();
 
