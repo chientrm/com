@@ -2,6 +2,7 @@
   import { OrbitControls } from '$lib/helpers/OrbitControls';
   import { frameLoop } from '$lib/helpers/frame_loop';
   import { GeoJsonGeometry } from '$lib/helpers/geo';
+  import type { GeoJsonProperties } from 'geojson';
   import { onMount } from 'svelte';
   import {
     Color,
@@ -61,6 +62,8 @@
   lineObjs.forEach((obj) => scene.add(obj));
   scene.background = backgroundColor;
 
+  let properties: GeoJsonProperties | undefined = undefined;
+
   onMount(() => {
     const renderer = new WebGLRenderer({ canvas });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -81,8 +84,24 @@
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects([sphere]);
         if (intersects.length > 0) {
-          const point = intersects[0].point;
-          console.log(point);
+          const point = intersects[0].point,
+            x = point.x,
+            y = point.y,
+            z = point.z,
+            formData = new FormData();
+          formData.append('x', x.toString());
+          formData.append('y', y.toString());
+          formData.append('z', z.toString());
+          fetch('/globe/get_id', { method: 'POST', body: formData })
+            .then((res) =>
+              res.json<{
+                id: number | undefined;
+                properties: GeoJsonProperties | undefined;
+              }>()
+            )
+            .then((data) => {
+              properties = data.properties;
+            });
         }
       },
       false
@@ -108,3 +127,7 @@
 </svelte:head>
 
 <canvas bind:this={canvas} />
+
+<div>
+  {properties?.NAME_EN}
+</div>
