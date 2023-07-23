@@ -32,11 +32,10 @@
           new LineSegments(new GeoJsonGeometry(country), borderMaterial)
       )
     ],
-    camera = new PerspectiveCamera(45, 1, 1, 10000),
-    scene = new Scene();
-
-  lineObjs.forEach((obj) => scene.add(obj));
+    scene = new Scene(),
+    camera = new PerspectiveCamera(45, 1, 1, 10000);
   camera.position.z = 500;
+  lineObjs.forEach((obj) => scene.add(obj));
 
   onMount(() => {
     const renderer = new WebGLRenderer({ canvas });
@@ -45,6 +44,7 @@
 
     const control = new OrbitControls(camera, renderer.domElement);
     control.enableDamping = true;
+    control.enablePan = false;
 
     const stop = frameLoop(() => {
       control.update();
