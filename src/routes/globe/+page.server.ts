@@ -1,7 +1,8 @@
-import groups from '$lib/assets/geojson/WB_countries_Admin0_lowres.geojson';
 import type { PageServerLoad } from './$types';
 
-export const load = (() => {
-  const radius = 150;
+export const load = (async ({ fetch }) => {
+  const { radius, groups } = await fetch('/globe/data.json').then((res) =>
+    res.json<{ radius: number; groups: Group[] }>()
+  );
   return { radius, groups };
 }) satisfies PageServerLoad;

@@ -43,8 +43,13 @@ declare global {
     indices: number[];
   }
 
+  interface TypedGroup {
+    indices: string;
+    vertices: string;
+  }
+
   declare module '*.geojson' {
-    const value: Group[];
+    const value: TypedGroup[];
     export default value;
   }
 }

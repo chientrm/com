@@ -170,13 +170,13 @@ const parse = (
   groups.forEach((group) => {
     concatGroup(result, group);
   });
-  result.vertices = result.vertices.map(reduceToX(precision));
+  // result.vertices = result.vertices.map(reduceToX(precision));
   return result;
 };
 
-function reduceToX(precision: number) {
-  return (value: number) => parseFloat(value.toFixed(precision));
-}
+// function reduceToX(precision: number) {
+//   return (value: number) => parseFloat(value.toFixed(precision));
+// }
 
 export const geoJson = (
   {
@@ -194,11 +194,22 @@ export const geoJson = (
     transform(code, id, options) {
       if (fileRegex.test(id)) {
         const collection = JSON.parse(code) as FeatureCollection,
-          object: Group[] = collection.features.map(({ geometry }) =>
+          groups: Group[] = collection.features.map(({ geometry }) =>
             parse(geometry, radius, resolution, precision)
           ),
-          json = JSON.stringify(object),
-          result = { code: `export default ${json}`, map: null };
+          result = {
+            code: `export default [${groups.map(({ vertices, indices }) => {
+              return `{
+              indices: "${Buffer.from(
+                Uint16Array.from(indices).buffer
+              ).toString('base64')}",
+              vertices: "${Buffer.from(
+                Float32Array.from(vertices).buffer
+              ).toString('base64')}"
+            }`;
+            })}]`,
+            map: null
+          };
         return result;
       }
     }
