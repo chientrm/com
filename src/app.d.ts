@@ -38,14 +38,18 @@ declare global {
     export default value;
   }
 
+  interface Country {
+    group: Group;
+    properties: CountryProperties;
+  }
+
+  interface CountryProperties {
+    name: string;
+  }
+
   interface Group {
     vertices: number[];
     indices: number[];
-  }
-
-  interface TypedGroup {
-    indices: string;
-    vertices: string;
   }
 
   declare module '*.geojson' {

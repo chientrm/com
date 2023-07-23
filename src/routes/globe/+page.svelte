@@ -4,10 +4,16 @@
   import { GeoJsonGeometry } from '$lib/helpers/geo';
   import { onMount } from 'svelte';
   import {
+    Color,
     LineBasicMaterial,
     LineSegments,
+    Mesh,
+    MeshBasicMaterial,
     PerspectiveCamera,
+    Raycaster,
     Scene,
+    SphereGeometry,
+    Vector2,
     WebGLRenderer
   } from 'three';
   import type { PageData } from './$types';
@@ -16,26 +22,44 @@
 
   let canvas: HTMLCanvasElement;
 
-  const graticuleMaterial = new LineBasicMaterial({
-      color: 'white',
+  const backgroundColor =
+      data.colorMode === 'white' ? new Color(0xffffff) : new Color(0),
+    graticuleColor =
+      data.colorMode === 'white' ? new Color(0) : new Color(0xffffff),
+    graticuleMaterial = new LineBasicMaterial({
+      color: graticuleColor,
       opacity: 0.1,
       transparent: true
     }),
     borderMaterial = new LineBasicMaterial({ color: '#1da1f2' }),
     lineObjs = [
       new LineSegments(
-        new GeoJsonGeometry(data.graticule[0]),
+        new GeoJsonGeometry({ name: '' }, data.graticule[0]),
         graticuleMaterial
       ),
       ...data.countries.map(
-        (country) =>
-          new LineSegments(new GeoJsonGeometry(country), borderMaterial)
+        ({ properties, group }) =>
+          new LineSegments(
+            new GeoJsonGeometry(properties, group),
+            borderMaterial
+          )
       )
     ],
+    sphere = new Mesh(
+      new SphereGeometry(data.radius, data.radius, data.radius),
+      new MeshBasicMaterial({ color: backgroundColor })
+    ),
     scene = new Scene(),
-    camera = new PerspectiveCamera(45, 1, 1, 10000);
+    camera = new PerspectiveCamera(45, 1, 1, 10000),
+    raycaster = new Raycaster(),
+    mouse = new Vector2(0, 0);
+  raycaster.params.Points = { threshold: 3 };
   camera.position.z = 500;
+
+  scene.add(sphere);
+
   lineObjs.forEach((obj) => scene.add(obj));
+  scene.background = backgroundColor;
 
   onMount(() => {
     const renderer = new WebGLRenderer({ canvas });
@@ -45,6 +69,23 @@
     const control = new OrbitControls(camera, renderer.domElement);
     control.enableDamping = true;
     control.enablePan = false;
+
+    canvas.addEventListener(
+      'mousedown',
+      (e) => {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        mouse.setX(((e.clientX - rect.left) / canvas.clientWidth) * 2 - 1);
+        mouse.setY(-((e.clientY - rect.top) / canvas.clientWidth) * 2 + 1);
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects([sphere]);
+        if (intersects.length > 0) {
+          const { index } = intersects[0];
+        }
+      },
+      false
+    );
 
     const stop = frameLoop(() => {
       control.update();

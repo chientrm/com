@@ -231,18 +231,21 @@ export const geoJson = (
         const srcURL = parseURL(id),
           raw = fs.readFileSync(srcURL).toString('utf-8'),
           collection = JSON.parse(raw) as FeatureCollection,
-          groups: Group[] = collection.features.map(({ geometry }) =>
-            parse(geometry, radius, resolution)
+          countries: Country[] = collection.features.map(
+            ({ geometry, properties }) => ({
+              group: parse(geometry, radius, resolution),
+              properties: { name: properties!['NAME_EN'] }
+            })
           ),
-          groupsString = JSON.stringify(groups);
+          countriesString = JSON.stringify(countries);
         if (this.meta.watchMode) {
           const id = generateId(srcURL);
-          generatedGeojson.set(id, groupsString);
+          generatedGeojson.set(id, countriesString);
           return dataToEsm(basePath + id);
         } else {
           const fileHandle = this.emitFile({
             name: basename(srcURL.pathname, extname(srcURL.pathname)) + `.json`,
-            source: JSON.stringify(groups),
+            source: JSON.stringify(countries),
             type: 'asset'
           });
           return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
