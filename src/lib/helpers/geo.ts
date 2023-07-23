@@ -1,6 +1,6 @@
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 
-class GeoJsonGeometry extends BufferGeometry {
+export class GeoJsonGeometry extends BufferGeometry {
   constructor(group: Group) {
     super();
     group.indices.length && this.setIndex(group.indices);
@@ -11,5 +11,3 @@ class GeoJsonGeometry extends BufferGeometry {
       );
   }
 }
-
-export { GeoJsonGeometry };

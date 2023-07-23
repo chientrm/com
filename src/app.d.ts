@@ -49,7 +49,7 @@ declare global {
   }
 
   declare module '*.geojson' {
-    const value: TypedGroup[];
+    const value: string;
     export default value;
   }
 }

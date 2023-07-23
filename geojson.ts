@@ -1,9 +1,11 @@
+import { dataToEsm } from '@rollup/pluginutils';
+import { createHash } from 'crypto';
 import { geoDistance, geoInterpolate } from 'd3-geo';
 import earcut from 'earcut';
+import fs from 'fs';
 import type { FeatureCollection, Geometry, Position } from 'geojson';
-import type { Plugin } from 'vite';
-
-const fileRegex = /\.(geojson)$/;
+import { basename, extname } from 'node:path';
+import type { Plugin, ResolvedConfig } from 'vite';
 
 function interpolateLine(positions: Position[] = [], maxDegDistance = 1) {
   const result: Position[] = [];
@@ -145,12 +147,7 @@ function genMultiPolygon(
   return groups;
 }
 
-const parse = (
-  geometry: Geometry,
-  radius: number,
-  resolution: number,
-  precision: number
-) => {
+const parse = (geometry: Geometry, radius: number, resolution: number) => {
   const groups =
     geometry.type === 'LineString'
       ? genLineString(geometry.coordinates, radius, resolution)
@@ -164,54 +161,83 @@ const parse = (
   if (groups === null) {
     throw new Error();
   }
-
   const result: Group = { vertices: [], indices: [] };
-
   groups.forEach((group) => {
     concatGroup(result, group);
   });
-  // result.vertices = result.vertices.map(reduceToX(precision));
   return result;
 };
 
-// function reduceToX(precision: number) {
-//   return (value: number) => parseFloat(value.toFixed(precision));
-// }
+function createBasePath(base?: string) {
+  return (base?.replace(/\/$/, '') || '') + '/@vite-geojson/';
+}
+
+function parseURL(rawURL: string) {
+  return new URL(rawURL.replace(/#/g, '%23'), 'file://');
+}
+
+function generateId(url: URL) {
+  const baseURL = url.host
+    ? new URL(url.origin + url.pathname)
+    : new URL(url.protocol + url.pathname);
+
+  return createHash('sha1').update(baseURL.href).digest('hex');
+}
 
 export const geoJson = (
-  {
-    radius,
-    resolution,
-    precision
-  }: { radius: number; resolution: number; precision: number } = {
+  { radius, resolution }: { radius: number; resolution: number } = {
     radius: 150,
-    resolution: 1,
-    precision: 2
+    resolution: 1
   }
 ): Plugin => {
+  let viteConfig: ResolvedConfig;
+  let basePath: string;
+
+  const generatedGeojson = new Map<string, string>();
+
   return {
-    name: 'geoJson',
-    transform(code, id, options) {
-      if (fileRegex.test(id)) {
-        const collection = JSON.parse(code) as FeatureCollection,
-          groups: Group[] = collection.features.map(({ geometry }) =>
-            parse(geometry, radius, resolution, precision)
-          ),
-          result = {
-            code: `export default [${groups.map(({ vertices, indices }) => {
-              return `{
-              indices: "${Buffer.from(
-                Uint16Array.from(indices).buffer
-              ).toString('base64')}",
-              vertices: "${Buffer.from(
-                Float32Array.from(vertices).buffer
-              ).toString('base64')}"
-            }`;
-            })}]`,
-            map: null
-          };
-        return result;
+    name: 'vite-geojson',
+    enforce: 'pre',
+    configResolved(config) {
+      viteConfig = config;
+      basePath = createBasePath(viteConfig.base);
+    },
+    load(id, options) {
+      if (!/\.geojson$/.test(id)) {
+        return null;
       }
+      const srcURL = parseURL(id),
+        raw = fs.readFileSync(srcURL).toString('utf-8'),
+        collection = JSON.parse(raw) as FeatureCollection,
+        groups: Group[] = collection.features.map(({ geometry }) =>
+          parse(geometry, radius, resolution)
+        ),
+        groupsString = JSON.stringify(groups);
+      if (this.meta.watchMode) {
+        const id = generateId(srcURL);
+        generatedGeojson.set(id, groupsString);
+        return dataToEsm(basePath + id);
+      } else {
+        const fileHandle = this.emitFile({
+          name: basename(srcURL.pathname, extname(srcURL.pathname)) + `.json`,
+          source: JSON.stringify(groups),
+          type: 'asset'
+        });
+        return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
+      }
+    },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url?.startsWith(basePath)) {
+          const [, id] = req.url.split(basePath),
+            geojson = generatedGeojson.get(id)!;
+          res.setHeader('Content-Type', `application/json`);
+          res.setHeader('Cache-Control', 'max-age=360000');
+          res.end(geojson);
+        } else {
+          next();
+        }
+      });
     }
   };
 };
