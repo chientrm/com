@@ -81,7 +81,8 @@
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObjects([sphere]);
         if (intersects.length > 0) {
-          const { index } = intersects[0];
+          const point = intersects[0].point;
+          console.log(point);
         }
       },
       false
