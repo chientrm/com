@@ -3,6 +3,8 @@
   import '$lib/app.css';
   import logo from '$lib/assets/chientrm.png';
   import type { LayoutData } from './$types';
+  import { navigating } from '$app/stores';
+  import Navigating from '$lib/components/Navigating.svelte';
   export let data: LayoutData;
 </script>
 
@@ -15,6 +17,10 @@
   <meta property="og:url" content="https://chientrm.com/" />
   <meta property="og:image" content={`https://chientrm.com${logo}`} />
 </svelte:head>
+
+{#if $navigating}
+  <Navigating />
+{/if}
 
 <content>
   <header>

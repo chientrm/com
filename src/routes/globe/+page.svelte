@@ -46,4 +46,11 @@
   });
 </script>
 
+<svelte:head>
+  <title>Counter | chientrm.com</title>
+  <meta name="description" content="globe" />
+  <meta property="og:title" content="chientrm.com | globe" />
+  <meta property="og:description" content="globe" />
+</svelte:head>
+
 <canvas bind:this={canvas} />
