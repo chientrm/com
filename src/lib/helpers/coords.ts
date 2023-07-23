@@ -1,26 +1,21 @@
-const radian = 180 / Math.PI;
+const RAD2DEG = 180 / Math.PI,
+  DEG2RAD = Math.PI / 180;
 
-const EPSILON = 1e-5;
+export function polarToCartesian(lng: number, lat: number, radius: number) {
+  const phi = (90 - lat) * DEG2RAD,
+    theta = (lng + 180) * DEG2RAD;
 
-export function polar2Cartesian(lng: number, lat: number, r = 0) {
-  const phi = ((90.0 - lat) * Math.PI) / 180.0;
-  const theta = ((90.0 - lng) * Math.PI) / 180.0;
-  return [
-    r * Math.sin(phi) * Math.cos(theta), // x
-    r * Math.cos(phi), // y
-    r * Math.sin(phi) * Math.sin(theta) // z
-  ];
+  return {
+    x: -(radius * Math.sin(phi) * Math.sin(theta)),
+    y: radius * Math.cos(phi),
+    z: radius * Math.sin(phi) * Math.cos(theta)
+  };
 }
 
-export function cartesian2Polar(x: number, y: number, z: number) {
-  const r = Math.sqrt(x * x + y * y + z * z);
-  if (r < EPSILON) return [NaN, NaN];
-  const cylinderX = Math.sqrt(x * x + z * z),
-    cylinderY = y,
-    phi = Math.atan2(cylinderY, cylinderX),
-    theta = Math.atan2(x, z),
-    lng = 180.0 - (phi * 180.0) / Math.PI,
-    _lat = (theta * 180.0) / Math.PI,
-    lat = _lat > 90 ? _lat - 180 : _lat;
+export function cartesianToPolar(coord: { x: number; y: number; z: number }) {
+  const lng = Math.atan2(coord.x, -coord.z) * RAD2DEG,
+    length = Math.sqrt(coord.x * coord.x + coord.z * coord.z),
+    lat = Math.atan2(coord.y, length) * RAD2DEG;
+
   return [lng, lat];
 }
