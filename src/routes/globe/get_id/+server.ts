@@ -6,7 +6,7 @@ import PolygonLookup from 'polygon-lookup';
 import { number } from 'yup';
 import type { RequestHandler } from './$types';
 
-export const POST = (async ({ request, fetch }) => {
+export const POST = (async ({ request }) => {
   const { x, y, z } = await validate(request, {
       x: number().required(),
       y: number().required(),
@@ -14,10 +14,7 @@ export const POST = (async ({ request, fetch }) => {
     }),
     polygonLookup = new PolygonLookup(countries_data),
     [lng, lat] = cartesianToPolar({ x, y, z }),
-    newLng = -(lng + 180),
-    feature =
-      polygonLookup.search(newLng, lat) ??
-      polygonLookup.search(newLng + 360, lat);
+    feature = polygonLookup.search(-lng, lat);
   if (feature) {
     const { id, properties } = feature;
     return json({ id, properties });

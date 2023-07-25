@@ -1,10 +1,7 @@
 import { dataToEsm } from '@rollup/pluginutils';
-import { createHash } from 'crypto';
 import { geoDistance, geoGraticule10, geoInterpolate } from 'd3-geo';
 import earcut from 'earcut';
-import fs from 'fs';
-import type { FeatureCollection, Geometry, Position } from 'geojson';
-import { basename, extname } from 'node:path';
+import type { Geometry, Position } from 'geojson';
 import type { Plugin, ResolvedConfig } from 'vite';
 
 function interpolateLine(positions: Position[] = [], maxDegDistance = 1) {
@@ -87,76 +84,12 @@ function genMultiLineString(
   return [result];
 }
 
-function genPolygon(coords: Position[][], radius: number, resolution: number) {
-  const coords3d = coords.map((coordsSegment) =>
-    interpolateLine(coordsSegment, resolution).map(([lng, lat]) =>
-      polar2Cartesian(lat, lng, radius)
-    )
-  );
-
-  // Each point generates 3 vertice items (x,y,z).
-  const { vertices, holes } = earcut.flatten(coords3d);
-
-  const firstHoleIdx = holes[0] || Infinity;
-  const outerVertices = vertices.slice(0, firstHoleIdx * 3);
-  const holeVertices = vertices.slice(firstHoleIdx * 3);
-
-  const holesIdx = new Set(holes);
-
-  const numPoints = Math.round(vertices.length / 3);
-
-  const outerIndices = [],
-    holeIndices = [];
-  for (let vIdx = 1; vIdx < numPoints; vIdx++) {
-    if (!holesIdx.has(vIdx)) {
-      if (vIdx < firstHoleIdx) {
-        outerIndices.push(vIdx - 1, vIdx);
-      } else {
-        holeIndices.push(vIdx - 1 - firstHoleIdx, vIdx - firstHoleIdx);
-      }
-    }
-  }
-
-  const groups = [{ indices: outerIndices, vertices: outerVertices }];
-
-  if (holes.length) {
-    groups.push({ indices: holeIndices, vertices: holeVertices });
-  }
-
-  return groups;
-}
-
-function genMultiPolygon(
-  coords: Position[][][],
-  radius: number,
-  resolution: number
-) {
-  const outer: Group = { vertices: [], indices: [] };
-  const holes: Group = { vertices: [], indices: [] };
-
-  coords
-    .map((c) => genPolygon(c, radius, resolution))
-    .forEach(([newOuter, newHoles]) => {
-      concatGroup(outer, newOuter);
-      newHoles && concatGroup(holes, newHoles);
-    });
-
-  const groups = [outer];
-  holes.vertices.length && groups.push(holes);
-
-  return groups;
-}
-
 const parse = (geometry: Geometry, radius: number, resolution: number) => {
   const groups =
     geometry.type === 'LineString'
       ? genLineString(geometry.coordinates, radius, resolution)
       : geometry.type === 'MultiLineString'
       ? genMultiLineString(geometry.coordinates, radius, resolution)
-      : geometry.type === 'Polygon'
-      ? genPolygon(geometry.coordinates, radius, resolution)
-      : geometry.type === 'MultiPolygon'
-      ? genMultiPolygon(geometry.coordinates, radius, resolution)
       : null;
   if (groups === null) {
     throw new Error();
@@ -170,18 +103,6 @@ const parse = (geometry: Geometry, radius: number, resolution: number) => {
 
 function createBasePath(base?: string) {
   return (base?.replace(/\/$/, '') || '') + '/@vite-geojson/';
-}
-
-function parseURL(rawURL: string) {
-  return new URL(rawURL.replace(/#/g, '%23'), 'file://');
-}
-
-function generateId(url: URL) {
-  const baseURL = url.host
-    ? new URL(url.origin + url.pathname)
-    : new URL(url.protocol + url.pathname);
-
-  return createHash('sha1').update(baseURL.href).digest('hex');
 }
 
 export const geoJson = (
@@ -207,45 +128,19 @@ export const geoJson = (
       viteConfig = config;
       basePath = createBasePath(viteConfig.base);
     },
-    resolveId(source, importer, options) {
+    resolveId(source) {
       if (source.startsWith('vite-geojson:')) {
         return source;
       }
     },
-    load(id, options) {
-      if (!/\.geojson$/.test(id)) {
-        return null;
-      }
-      if (id === `vite-geojson:${graticule10}.geojson`) {
+    load(id) {
+      if (id === `vite-geojson:${graticule10}`) {
         if (this.meta.watchMode) {
           return dataToEsm(basePath + graticule10);
         } else {
           const fileHandle = this.emitFile({
             name: `graticule10.json`,
             source: generatedGeojson.get(graticule10),
-            type: 'asset'
-          });
-          return dataToEsm(`__VITE_ASSET__${fileHandle}__`);
-        }
-      } else {
-        const srcURL = parseURL(id),
-          raw = fs.readFileSync(srcURL).toString('utf-8'),
-          collection = JSON.parse(raw) as FeatureCollection,
-          countries: Country[] = collection.features.map(
-            ({ geometry, properties }) => ({
-              group: parse(geometry, radius, resolution),
-              properties: { name: properties!['NAME_EN'] }
-            })
-          ),
-          countriesString = JSON.stringify(countries);
-        if (this.meta.watchMode) {
-          const id = generateId(srcURL);
-          generatedGeojson.set(id, countriesString);
-          return dataToEsm(basePath + id);
-        } else {
-          const fileHandle = this.emitFile({
-            name: basename(srcURL.pathname, extname(srcURL.pathname)) + `.json`,
-            source: JSON.stringify(countries),
             type: 'asset'
           });
           return dataToEsm(`__VITE_ASSET__${fileHandle}__`);

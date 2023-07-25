@@ -5,10 +5,6 @@ import type { JWTPayload } from 'jose';
 
 declare global {
   namespace App {
-    type LanguageTuple = typeof languages;
-    type Language = LanguageTuple[number];
-    type ColorModeTuple = typeof colorModes;
-    type ColorMode = ColorModeTuple[number];
     interface Locals {
       D1: D1Database;
       WORKER: Fetcher;
@@ -56,6 +52,11 @@ declare global {
     const value: string;
     export default value;
   }
+
+  declare module 'vite-geojson:*' {
+    const value: string;
+    export default value;
+  }
 }
 
-export { languages };
+export { Group };
