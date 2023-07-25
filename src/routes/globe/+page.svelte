@@ -50,6 +50,10 @@
       new SphereGeometry(data.radius, data.radius, data.radius),
       new MeshBasicMaterial({ color: backgroundColor })
     ),
+    mouseSphere = new Mesh(
+      new SphereGeometry(3, 3, 3),
+      new MeshBasicMaterial({ color: 'white' })
+    ),
     scene = new Scene(),
     camera = new PerspectiveCamera(45, 1, 1, 10000),
     raycaster = new Raycaster(),
@@ -58,6 +62,7 @@
   camera.position.z = 500;
 
   scene.add(sphere);
+  scene.add(mouseSphere);
 
   lineObjs.forEach((obj) => scene.add(obj));
   scene.background = backgroundColor;
@@ -87,21 +92,22 @@
           const point = intersects[0].point,
             x = point.x,
             y = point.y,
-            z = point.z,
-            formData = new FormData();
-          formData.append('x', x.toString());
-          formData.append('y', y.toString());
-          formData.append('z', z.toString());
-          fetch('/globe/get_id', { method: 'POST', body: formData })
-            .then((res) =>
-              res.json<{
-                id: number | undefined;
-                properties: GeoJsonProperties | undefined;
-              }>()
-            )
-            .then((data) => {
-              properties = data.properties;
-            });
+            z = point.z;
+          // formData = new FormData();
+          // formData.append('x', x.toString());
+          // formData.append('y', y.toString());
+          // formData.append('z', z.toString());
+          // fetch('/globe/get_id', { method: 'POST', body: formData })
+          //   .then((res) =>
+          //     res.json<{
+          //       id: number | undefined;
+          //       properties: GeoJsonProperties | undefined;
+          //     }>()
+          //   )
+          //   .then((data) => {
+          //     properties = data.properties;
+          //   });
+          mouseSphere.position.set(x, y, z);
         }
       },
       false
