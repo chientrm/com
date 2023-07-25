@@ -1,9 +1,8 @@
-import countriesUrl from '$lib/assets/geojson/WB_countries_Admin0_lowres.json?url';
+import { countries_data } from '$lib/constants/countries_data';
 import { cartesianToPolar } from '$lib/helpers/coords';
 import { validate } from '$lib/helpers/validate';
 import { json } from '@sveltejs/kit';
-import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
-import type { FeatureCollection } from 'geojson';
+import PolygonLookup from 'polygon-lookup';
 import { number } from 'yup';
 import type { RequestHandler } from './$types';
 
@@ -13,22 +12,15 @@ export const POST = (async ({ request, fetch }) => {
       y: number().required(),
       z: number().required()
     }),
-    collection = await fetch(countriesUrl).then((res) =>
-      res.json<FeatureCollection>()
-    ),
-    [lng, lat] = cartesianToPolar({ x, y, z });
-  for (const feature of collection.features) {
-    if (
-      booleanPointInPolygon(
-        [lng, lat],
-        // @ts-ignore
-        feature
-      )
-    ) {
-      const id = feature.id!,
-        properties = feature.properties;
-      return json({ id, properties });
-    }
+    polygonLookup = new PolygonLookup(countries_data),
+    [lng, lat] = cartesianToPolar({ x, y, z }),
+    newLng = -(lng + 180),
+    feature =
+      polygonLookup.search(newLng, lat) ??
+      polygonLookup.search(newLng + 360, lat);
+  if (feature) {
+    const { id, properties } = feature;
+    return json({ id, properties });
   }
   return json({});
 }) satisfies RequestHandler;

@@ -51,7 +51,7 @@
       new MeshBasicMaterial({ color: backgroundColor })
     ),
     mouseSphere = new Mesh(
-      new SphereGeometry(3, 3, 3),
+      new SphereGeometry(3, 20, 20),
       new MeshBasicMaterial({ color: 'white' })
     ),
     scene = new Scene(),
@@ -92,21 +92,19 @@
           const point = intersects[0].point,
             x = point.x,
             y = point.y,
-            z = point.z;
-          // formData = new FormData();
-          // formData.append('x', x.toString());
-          // formData.append('y', y.toString());
-          // formData.append('z', z.toString());
-          // fetch('/globe/get_id', { method: 'POST', body: formData })
-          //   .then((res) =>
-          //     res.json<{
-          //       id: number | undefined;
-          //       properties: GeoJsonProperties | undefined;
-          //     }>()
-          //   )
-          //   .then((data) => {
-          //     properties = data.properties;
-          //   });
+            z = point.z,
+            formData = new FormData();
+          formData.append('x', x.toString());
+          formData.append('y', y.toString());
+          formData.append('z', z.toString());
+          fetch('/globe/get_id', { method: 'POST', body: formData })
+            .then((res) =>
+              res.json<{
+                id: number | undefined;
+                properties: GeoJsonProperties | undefined;
+              }>()
+            )
+            .then((data) => (properties = data.properties));
           mouseSphere.position.set(x, y, z);
         }
       },
@@ -135,5 +133,5 @@
 <canvas bind:this={canvas} />
 
 <div>
-  {properties?.NAME_EN}
+  {properties?.name ?? ''}
 </div>
