@@ -1,7 +1,8 @@
-import { countries_data } from '$lib/constants/countries_data';
+import smallMap from '$lib/assets/geojson/small_map.json';
 import { cartesianToPolar } from '$lib/helpers/coords';
 import { validate } from '$lib/helpers/validate';
 import { json } from '@sveltejs/kit';
+import type { FeatureCollection } from 'geojson';
 import PolygonLookup from 'polygon-lookup';
 import { number } from 'yup';
 import type { RequestHandler } from './$types';
@@ -12,7 +13,7 @@ export const POST = (async ({ request }) => {
       y: number().required(),
       z: number().required()
     }),
-    polygonLookup = new PolygonLookup(countries_data),
+    polygonLookup = new PolygonLookup(smallMap as FeatureCollection),
     [lng, lat] = cartesianToPolar({ x, y, z }),
     feature = polygonLookup.search(-lng, lat);
   if (feature) {

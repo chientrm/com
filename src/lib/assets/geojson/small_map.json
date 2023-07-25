@@ -1,13 +1,11 @@
-import type { FeatureCollection } from 'geojson';
-
-export const countries_data: FeatureCollection = {
-  type: 'FeatureCollection',
-  features: [
+{
+  "type": "FeatureCollection",
+  "features": [
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [74.92, 37.24],
@@ -46,14 +44,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Afghanistan' },
-      id: 'AF'
+      "properties": { "name": "Afghanistan" },
+      "id": "AF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [19.44, 41.02],
@@ -70,14 +68,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Albania' },
-      id: 'AL'
+      "properties": { "name": "Albania" },
+      "id": "AL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [2.96, 36.8],
@@ -114,14 +112,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Algeria' },
-      id: 'DZ'
+      "properties": { "name": "Algeria" },
+      "id": "DZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-170.64, -14.29],
@@ -140,14 +138,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Samoa' },
-      id: 'WS'
+      "properties": { "name": "Samoa" },
+      "id": "WS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [1.78, 42.57],
@@ -158,14 +156,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Andorra' },
-      id: 'AD'
+      "properties": { "name": "Andorra" },
+      "id": "AD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [14, -5.85],
@@ -207,14 +205,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Angola' },
-      id: 'AO'
+      "properties": { "name": "Angola" },
+      "id": "AO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-61.69, 17.02],
@@ -233,14 +231,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Antigua and Barbuda' },
-      id: 'AG'
+      "properties": { "name": "Antigua and Barbuda" },
+      "id": "AG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [45.08, 39.77],
@@ -284,14 +282,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Azerbaijan' },
-      id: 'AZ'
+      "properties": { "name": "Azerbaijan" },
+      "id": "AZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-68.26, -52.99],
@@ -394,14 +392,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Argentina' },
-      id: 'AR'
+      "properties": { "name": "Argentina" },
+      "id": "AR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [145.11, -40.82],
@@ -537,14 +535,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Australia' },
-      id: 'AU'
+      "properties": { "name": "Australia" },
+      "id": "AU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [13.83, 48.77],
@@ -568,14 +566,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Austria' },
-      id: 'AT'
+      "properties": { "name": "Austria" },
+      "id": "AT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-73.04, 21.14],
@@ -620,14 +618,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bahamas, The' },
-      id: 'BS'
+      "properties": { "name": "Bahamas, The" },
+      "id": "BS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [50.53, 26.23],
@@ -638,14 +636,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bahrain' },
-      id: 'BH'
+      "properties": { "name": "Bahrain" },
+      "id": "BH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [90.76, 22.06],
@@ -693,14 +691,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bangladesh' },
-      id: 'BD'
+      "properties": { "name": "Bangladesh" },
+      "id": "BD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [45.15, 41.2],
@@ -726,14 +724,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Armenia' },
-      id: 'AM'
+      "properties": { "name": "Armenia" },
+      "id": "AM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-59.53, 13.05],
@@ -744,14 +742,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Barbados' },
-      id: 'BB'
+      "properties": { "name": "Barbados" },
+      "id": "BB"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [4.3, 51.26],
@@ -771,14 +769,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Belgium' },
-      id: 'BE'
+      "properties": { "name": "Belgium" },
+      "id": "BE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-64.78, 32.27],
@@ -789,14 +787,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bermuda' },
-      id: 'BM'
+      "properties": { "name": "Bermuda" },
+      "id": "BM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [90.47, 28.07],
@@ -810,14 +808,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bhutan' },
-      id: 'BT'
+      "properties": { "name": "Bhutan" },
+      "id": "BT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-65.19, -22.09],
@@ -854,14 +852,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bolivia' },
-      id: 'BO'
+      "properties": { "name": "Bolivia" },
+      "id": "BO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [17.65, 42.89],
@@ -877,14 +875,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bosnia and Herzegovina' },
-      id: 'BA'
+      "properties": { "name": "Bosnia and Herzegovina" },
+      "id": "BA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [26.96, -23.75],
@@ -909,14 +907,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Botswana' },
-      id: 'BW'
+      "properties": { "name": "Botswana" },
+      "id": "BW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [3.36, -54.46],
@@ -927,14 +925,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bouvet Island' },
-      id: 'BV'
+      "properties": { "name": "Bouvet Island" },
+      "id": "BV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-51.9, -1.48],
@@ -1092,14 +1090,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Brazil' },
-      id: 'BR'
+      "properties": { "name": "Brazil" },
+      "id": "BR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-88.38, 18.48],
@@ -1113,14 +1111,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Belize' },
-      id: 'BZ'
+      "properties": { "name": "Belize" },
+      "id": "BZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [72.49, -7.38],
@@ -1131,14 +1129,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'British Indian Ocean Territory' },
-      id: 'IO'
+      "properties": { "name": "British Indian Ocean Territory" },
+      "id": "IO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [161.55, -10.28],
@@ -1190,14 +1188,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Solomon Islands' },
-      id: 'SB'
+      "properties": { "name": "Solomon Islands" },
+      "id": "SB"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-64.42, 18.44],
@@ -1208,14 +1206,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'British Virgin Islands' },
-      id: 'VG'
+      "properties": { "name": "British Virgin Islands" },
+      "id": "VG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [115.22, 4.8],
@@ -1236,14 +1234,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Brunei' },
-      id: 'BN'
+      "properties": { "name": "Brunei" },
+      "id": "BN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [27.88, 42.84],
@@ -1266,14 +1264,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Bulgaria' },
-      id: 'BG'
+      "properties": { "name": "Bulgaria" },
+      "id": "BG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [97.81, 28.34],
@@ -1335,14 +1333,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Burma' },
-      id: 'MM'
+      "properties": { "name": "Burma" },
+      "id": "MM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [29.23, -3.75],
@@ -1357,14 +1355,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Burundi' },
-      id: 'BI'
+      "properties": { "name": "Burundi" },
+      "id": "BI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [26.61, 55.67],
@@ -1390,14 +1388,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Belarus' },
-      id: 'BY'
+      "properties": { "name": "Belarus" },
+      "id": "BY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [107.49, 14.45],
@@ -1421,14 +1419,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cambodia' },
-      id: 'KH'
+      "properties": { "name": "Cambodia" },
+      "id": "KH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [14.58, 12.74],
@@ -1461,14 +1459,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cameroon' },
-      id: 'CM'
+      "properties": { "name": "Cameroon" },
+      "id": "CM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-127.23, 50.64],
@@ -2500,14 +2498,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Canada' },
-      id: 'CA'
+      "properties": { "name": "Canada" },
+      "id": "CA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-24.37, 14.81],
@@ -2550,14 +2548,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cape Verde' },
-      id: 'CV'
+      "properties": { "name": "Cape Verde" },
+      "id": "CV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-81.1, 19.31],
@@ -2568,14 +2566,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cayman Islands' },
-      id: 'KY'
+      "properties": { "name": "Cayman Islands" },
+      "id": "KY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [19.06, 8.58],
@@ -2605,14 +2603,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Central African Republic' },
-      id: 'CF'
+      "properties": { "name": "Central African Republic" },
+      "id": "CF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [80.27, 9.78],
@@ -2632,14 +2630,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Sri Lanka' },
-      id: 'LK'
+      "properties": { "name": "Sri Lanka" },
+      "id": "LK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [14.5, 13],
@@ -2672,14 +2670,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Chad' },
-      id: 'TD'
+      "properties": { "name": "Chad" },
+      "id": "TD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-68.4, -54.96],
@@ -3093,14 +3091,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Chile' },
-      id: 'CL'
+      "properties": { "name": "Chile" },
+      "id": "CL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [110.72, 20.06],
@@ -3286,14 +3284,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'China' },
-      id: 'CN'
+      "properties": { "name": "China" },
+      "id": "CN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [121.73, 25.14],
@@ -3306,14 +3304,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Taiwan' },
-      id: 'TW'
+      "properties": { "name": "Taiwan" },
+      "id": "TW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [105.7, -10.51],
@@ -3324,14 +3322,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Christmas Island' },
-      id: 'CX'
+      "properties": { "name": "Christmas Island" },
+      "id": "CX"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [96.86, -12.2],
@@ -3342,14 +3340,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cocos (Keeling) Islands' },
-      id: 'CC'
+      "properties": { "name": "Cocos (Keeling) Islands" },
+      "id": "CC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-71.56, 12.45],
@@ -3405,14 +3403,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Colombia' },
-      id: 'CO'
+      "properties": { "name": "Colombia" },
+      "id": "CO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [44.49, -12.09],
@@ -3431,14 +3429,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Comoros' },
-      id: 'KM'
+      "properties": { "name": "Comoros" },
+      "id": "KM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [45.2, -12.85],
@@ -3449,14 +3447,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mayotte' },
-      id: 'YT'
+      "properties": { "name": "Mayotte" },
+      "id": "YT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [12.78, -4.39],
@@ -3492,14 +3490,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Congo, Republic of the' },
-      id: 'CG'
+      "properties": { "name": "Congo, Republic of the" },
+      "id": "CG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [25.89, 5.19],
@@ -3558,14 +3556,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Congo, Democratic Republic of the' },
-      id: 'CD'
+      "properties": { "name": "Congo, Democratic Republic of the" },
+      "id": "CD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-157.89, -21.94],
@@ -3592,14 +3590,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cook Islands' },
-      id: 'CK'
+      "properties": { "name": "Cook Islands" },
+      "id": "CK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-85.09, 11.01],
@@ -3617,14 +3615,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Costa Rica' },
-      id: 'CR'
+      "properties": { "name": "Costa Rica" },
+      "id": "CR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [17.3, 43.01],
@@ -3685,14 +3683,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Croatia' },
-      id: 'HR'
+      "properties": { "name": "Croatia" },
+      "id": "HR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-82.55, 21.57],
@@ -3727,14 +3725,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cuba' },
-      id: 'CU'
+      "properties": { "name": "Cuba" },
+      "id": "CU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [33.65, 35.35],
@@ -3746,14 +3744,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Cyprus' },
-      id: 'CY'
+      "properties": { "name": "Cyprus" },
+      "id": "CY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [14.7, 48.58],
@@ -3771,14 +3769,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Czech Republic' },
-      id: 'CZ'
+      "properties": { "name": "Czech Republic" },
+      "id": "CZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [2.48, 6.34],
@@ -3797,14 +3795,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Benin' },
-      id: 'BJ'
+      "properties": { "name": "Benin" },
+      "id": "BJ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [10.75, 55.48],
@@ -3874,14 +3872,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Denmark' },
-      id: 'DK'
+      "properties": { "name": "Denmark" },
+      "id": "DK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-61.36, 15.2],
@@ -3892,14 +3890,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Dominica' },
-      id: 'DM'
+      "properties": { "name": "Dominica" },
+      "id": "DM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-70.78, 19.85],
@@ -3916,14 +3914,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Dominican Republic' },
-      id: 'DO'
+      "properties": { "name": "Dominican Republic" },
+      "id": "DO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-91.22, -0.01],
@@ -3960,14 +3958,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Ecuador' },
-      id: 'EC'
+      "properties": { "name": "Ecuador" },
+      "id": "EC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-89.34, 14.42],
@@ -3981,14 +3979,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'El Salvador' },
-      id: 'SV'
+      "properties": { "name": "El Salvador" },
+      "id": "SV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [10.03, 2.17],
@@ -4002,14 +4000,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Equatorial Guinea' },
-      id: 'GQ'
+      "properties": { "name": "Equatorial Guinea" },
+      "id": "GQ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [36.54, 14.26],
@@ -4043,14 +4041,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Ethiopia' },
-      id: 'ET'
+      "properties": { "name": "Ethiopia" },
+      "id": "ET"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [38.8, 17.65],
@@ -4072,14 +4070,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Eritrea' },
-      id: 'ER'
+      "properties": { "name": "Eritrea" },
+      "id": "ER"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [22.99, 58.6],
@@ -4114,14 +4112,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Estonia' },
-      id: 'EE'
+      "properties": { "name": "Estonia" },
+      "id": "EE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-7.05, 62.07],
@@ -4148,14 +4146,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Faroe Islands' },
-      id: 'FO'
+      "properties": { "name": "Faroe Islands" },
+      "id": "FO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-59.21, -51.41],
@@ -4176,14 +4174,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Falkland Islands (Islas Malvinas)' },
-      id: 'FK'
+      "properties": { "name": "Falkland Islands (Islas Malvinas)" },
+      "id": "FK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-37.5, -54.01],
@@ -4194,14 +4192,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'South Georgia South Sandwich Islands' },
-      id: 'GS'
+      "properties": { "name": "South Georgia South Sandwich Islands" },
+      "id": "GS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [179.96, -16.2],
@@ -4222,14 +4220,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Fiji' },
-      id: 'FJ'
+      "properties": { "name": "Fiji" },
+      "id": "FJ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [28.17, 69.91],
@@ -4271,14 +4269,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Finland' },
-      id: 'FI'
+      "properties": { "name": "Finland" },
+      "id": "FI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [20.08, 60.35],
@@ -4289,14 +4287,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Aland Islands' },
-      id: 'AX'
+      "properties": { "name": "Aland Islands" },
+      "id": "AX"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [9.45, 42.68],
@@ -4360,14 +4358,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'France' },
-      id: 'FR'
+      "properties": { "name": "France" },
+      "id": "FR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-53.49, 5.57],
@@ -4386,14 +4384,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'French Guiana' },
-      id: 'GF'
+      "properties": { "name": "French Guiana" },
+      "id": "GF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-149.21, -17.73],
@@ -4428,14 +4426,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'French Polynesia' },
-      id: 'PF'
+      "properties": { "name": "French Polynesia" },
+      "id": "PF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [69, -48.8],
@@ -4449,14 +4447,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'French Southern and Antarctic Lands' },
-      id: 'TF'
+      "properties": { "name": "French Southern and Antarctic Lands" },
+      "id": "TF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [42.87, 11.59],
@@ -4472,14 +4470,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Djibouti' },
-      id: 'DJ'
+      "properties": { "name": "Djibouti" },
+      "id": "DJ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [12.52, 2.28],
@@ -4512,14 +4510,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Gabon' },
-      id: 'GA'
+      "properties": { "name": "Gabon" },
+      "id": "GA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [41.55, 42.41],
@@ -4538,14 +4536,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Georgia' },
-      id: 'GE'
+      "properties": { "name": "Georgia" },
+      "id": "GE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-16.73, 13.45],
@@ -4567,14 +4565,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Gambia, The' },
-      id: 'GM'
+      "properties": { "name": "Gambia, The" },
+      "id": "GM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [34.33, 31.26],
@@ -4601,14 +4599,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Palestine' },
-      id: 'PS'
+      "properties": { "name": "Palestine" },
+      "id": "PS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [10.98, 54.38],
@@ -4647,14 +4645,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Germany' },
-      id: 'DE'
+      "properties": { "name": "Germany" },
+      "id": "DE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [0.64, 5.85],
@@ -4688,14 +4686,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Ghana' },
-      id: 'GH'
+      "properties": { "name": "Ghana" },
+      "id": "GH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-5.33, 36.16],
@@ -4706,14 +4704,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Gibraltar' },
-      id: 'GI'
+      "properties": { "name": "Gibraltar" },
+      "id": "GI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [175.59, -1.92],
@@ -4764,14 +4762,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Kiribati' },
-      id: 'KI'
+      "properties": { "name": "Kiribati" },
+      "id": "KI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [23.86, 35.52],
@@ -4831,14 +4829,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Greece' },
-      id: 'GR'
+      "properties": { "name": "Greece" },
+      "id": "GR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-52.69, 69.92],
@@ -5184,14 +5182,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Greenland' },
-      id: 'GL'
+      "properties": { "name": "Greenland" },
+      "id": "GL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-61.75, 12],
@@ -5210,14 +5208,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Grenada' },
-      id: 'GD'
+      "properties": { "name": "Grenada" },
+      "id": "GD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-61.35, 16.33],
@@ -5228,14 +5226,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guadeloupe' },
-      id: 'GP'
+      "properties": { "name": "Guadeloupe" },
+      "id": "GP"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [144.71, 13.23],
@@ -5246,14 +5244,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guam' },
-      id: 'GU'
+      "properties": { "name": "Guam" },
+      "id": "GU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-90.63, 13.93],
@@ -5274,14 +5272,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guatemala' },
-      id: 'GT'
+      "properties": { "name": "Guatemala" },
+      "id": "GT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-13.6, 9.73],
@@ -5313,14 +5311,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guinea' },
-      id: 'GN'
+      "properties": { "name": "Guinea" },
+      "id": "GN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-59.79, 8.34],
@@ -5349,14 +5347,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guyana' },
-      id: 'GY'
+      "properties": { "name": "Guyana" },
+      "id": "GY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-72.67, 19.92],
@@ -5372,14 +5370,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Haiti' },
-      id: 'HT'
+      "properties": { "name": "Haiti" },
+      "id": "HT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [73.77, -53.13],
@@ -5390,14 +5388,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Heard Island and McDonald Islands' },
-      id: 'HM'
+      "properties": { "name": "Heard Island and McDonald Islands" },
+      "id": "HM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [12.45, 41.9],
@@ -5408,14 +5406,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Holy See (Vatican City)' },
-      id: 'VA'
+      "properties": { "name": "Holy See (Vatican City)" },
+      "id": "VA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-85.84, 16.01],
@@ -5434,14 +5432,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Honduras' },
-      id: 'HN'
+      "properties": { "name": "Honduras" },
+      "id": "HN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [114.25, 22.2],
@@ -5468,14 +5466,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Hong Kong' },
-      id: 'HK'
+      "properties": { "name": "Hong Kong" },
+      "id": "HK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [18.82, 45.91],
@@ -5497,14 +5495,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Hungary' },
-      id: 'HU'
+      "properties": { "name": "Hungary" },
+      "id": "HU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-15.07, 66.14],
@@ -5546,14 +5544,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Iceland' },
-      id: 'IS'
+      "properties": { "name": "Iceland" },
+      "id": "IS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [78.08, 35.45],
@@ -5656,14 +5654,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'India' },
-      id: 'IN'
+      "properties": { "name": "India" },
+      "id": "IN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [120.03, -9.38],
@@ -6050,14 +6048,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Indonesia' },
-      id: 'ID'
+      "properties": { "name": "Indonesia" },
+      "id": "ID"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [45, 39.42],
@@ -6114,14 +6112,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Iran' },
-      id: 'IR'
+      "properties": { "name": "Iran" },
+      "id": "IR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [45.8, 34.91],
@@ -6150,14 +6148,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Iraq' },
-      id: 'IQ'
+      "properties": { "name": "Iraq" },
+      "id": "IQ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-7.41, 54.95],
@@ -6186,14 +6184,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Ireland' },
-      id: 'IE'
+      "properties": { "name": "Ireland" },
+      "id": "IE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [35.26, 31.79],
@@ -6221,14 +6219,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Israel' },
-      id: 'IL'
+      "properties": { "name": "Israel" },
+      "id": "IL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [15.53, 38.14],
@@ -6300,14 +6298,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Italy' },
-      id: 'IT'
+      "properties": { "name": "Italy" },
+      "id": "IT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-4.79, 5.17],
@@ -6334,14 +6332,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: "Cote d'Ivoire" },
-      id: 'CI'
+      "properties": { "name": "Cote d'Ivoire" },
+      "id": "CI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-77.13, 17.88],
@@ -6353,14 +6351,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Jamaica' },
-      id: 'JM'
+      "properties": { "name": "Jamaica" },
+      "id": "JM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [131.21, 33.6],
@@ -6459,14 +6457,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Japan' },
-      id: 'JP'
+      "properties": { "name": "Japan" },
+      "id": "JP"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [69.19, 55.34],
@@ -6559,14 +6557,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Kazakhstan' },
-      id: 'KZ'
+      "properties": { "name": "Kazakhstan" },
+      "id": "KZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [34.96, 29.36],
@@ -6586,14 +6584,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Jordan' },
-      id: 'JO'
+      "properties": { "name": "Jordan" },
+      "id": "JO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [35.94, 4.62],
@@ -6617,14 +6615,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Kenya' },
-      id: 'KE'
+      "properties": { "name": "Kenya" },
+      "id": "KE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [130.64, 42.41],
@@ -6654,14 +6652,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Korea, North' },
-      id: 'KP'
+      "properties": { "name": "Korea, North" },
+      "id": "KP"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [128.53, 38.33],
@@ -6679,14 +6677,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Korea, South' },
-      id: 'KR'
+      "properties": { "name": "Korea, South" },
+      "id": "KR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [47.93, 30.02],
@@ -6701,14 +6699,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Kuwait' },
-      id: 'KW'
+      "properties": { "name": "Kuwait" },
+      "id": "KW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [80.23, 42.2],
@@ -6736,14 +6734,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Kyrgyzstan' },
-      id: 'KG'
+      "properties": { "name": "Kyrgyzstan" },
+      "id": "KG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [107.55, 14.71],
@@ -6781,14 +6779,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Laos' },
-      id: 'LA'
+      "properties": { "name": "Laos" },
+      "id": "LA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [35.62, 33.25],
@@ -6800,14 +6798,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Lebanon' },
-      id: 'LB'
+      "properties": { "name": "Lebanon" },
+      "id": "LB"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [27.56, -30.4],
@@ -6821,14 +6819,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Lesotho' },
-      id: 'LS'
+      "properties": { "name": "Lesotho" },
+      "id": "LS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [21.07, 56.44],
@@ -6849,14 +6847,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Latvia' },
-      id: 'LV'
+      "properties": { "name": "Latvia" },
+      "id": "LV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-10.81, 6.4],
@@ -6873,14 +6871,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Liberia' },
-      id: 'LR'
+      "properties": { "name": "Liberia" },
+      "id": "LR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [9.95, 27.82],
@@ -6914,14 +6912,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Libya' },
-      id: 'LY'
+      "properties": { "name": "Libya" },
+      "id": "LY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [9.53, 47.27],
@@ -6932,14 +6930,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Liechtenstein' },
-      id: 'LI'
+      "properties": { "name": "Liechtenstein" },
+      "id": "LI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [25, 56.3],
@@ -6958,14 +6956,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Lithuania' },
-      id: 'LT'
+      "properties": { "name": "Lithuania" },
+      "id": "LT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [6.03, 50.18],
@@ -6977,14 +6975,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Luxembourg' },
-      id: 'LU'
+      "properties": { "name": "Luxembourg" },
+      "id": "LU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [113.53, 22.19],
@@ -6995,14 +6993,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Macau' },
-      id: 'MO'
+      "properties": { "name": "Macau" },
+      "id": "MO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [49.36, -12.09],
@@ -7031,14 +7029,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Madagascar' },
-      id: 'MG'
+      "properties": { "name": "Madagascar" },
+      "id": "MG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [34.73, -12.1],
@@ -7081,14 +7079,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Malawi' },
-      id: 'MW'
+      "properties": { "name": "Malawi" },
+      "id": "MW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [100.65, 6.45],
@@ -7139,14 +7137,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Malaysia' },
-      id: 'MY'
+      "properties": { "name": "Malaysia" },
+      "id": "MY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [73.18, -0.69],
@@ -7197,14 +7195,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Maldives' },
-      id: 'MV'
+      "properties": { "name": "Maldives" },
+      "id": "MV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-8.53, 11.49],
@@ -7244,14 +7242,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mali' },
-      id: 'ML'
+      "properties": { "name": "Mali" },
+      "id": "ML"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [14.56, 35.82],
@@ -7270,14 +7268,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Malta' },
-      id: 'MT'
+      "properties": { "name": "Malta" },
+      "id": "MT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-60.86, 14.4],
@@ -7288,14 +7286,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Martinique' },
-      id: 'MQ'
+      "properties": { "name": "Martinique" },
+      "id": "MQ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-6.66, 26.13],
@@ -7327,14 +7325,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mauritania' },
-      id: 'MR'
+      "properties": { "name": "Mauritania" },
+      "id": "MR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [57.57, -20.51],
@@ -7345,14 +7343,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mauritius' },
-      id: 'MU'
+      "properties": { "name": "Mauritius" },
+      "id": "MU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-113.05, 31.97],
@@ -7431,14 +7429,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mexico' },
-      id: 'MX'
+      "properties": { "name": "Mexico" },
+      "id": "MX"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [7.44, 43.76],
@@ -7449,14 +7447,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Monaco' },
-      id: 'MC'
+      "properties": { "name": "Monaco" },
+      "id": "MC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [91.02, 46.6],
@@ -7497,14 +7495,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mongolia' },
-      id: 'MN'
+      "properties": { "name": "Mongolia" },
+      "id": "MN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [28.12, 46.85],
@@ -7520,14 +7518,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Moldova' },
-      id: 'MD'
+      "properties": { "name": "Moldova" },
+      "id": "MD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [18.46, 42.57],
@@ -7542,14 +7540,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Montenegro' },
-      id: 'ME'
+      "properties": { "name": "Montenegro" },
+      "id": "ME"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-62.17, 16.67],
@@ -7560,14 +7558,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Montserrat' },
-      id: 'MS'
+      "properties": { "name": "Montserrat" },
+      "id": "MS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-9.05, 32.73],
@@ -7592,14 +7590,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Morocco' },
-      id: 'MA'
+      "properties": { "name": "Morocco" },
+      "id": "MA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [40.5, -11.03],
@@ -7656,14 +7654,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Mozambique' },
-      id: 'MZ'
+      "properties": { "name": "Mozambique" },
+      "id": "MZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [56.04, 24.94],
@@ -7697,14 +7695,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Oman' },
-      id: 'OM'
+      "properties": { "name": "Oman" },
+      "id": "OM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [23.28, -17.66],
@@ -7735,14 +7733,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Namibia' },
-      id: 'NA'
+      "properties": { "name": "Namibia" },
+      "id": "NA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [166.93, -0.55],
@@ -7753,14 +7751,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Nauru' },
-      id: 'NR'
+      "properties": { "name": "Nauru" },
+      "id": "NR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [82.07, 27.91],
@@ -7778,14 +7776,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Nepal' },
-      id: 'NP'
+      "properties": { "name": "Nepal" },
+      "id": "NP"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [3.76, 51.35],
@@ -7850,14 +7848,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Netherlands' },
-      id: 'NL'
+      "properties": { "name": "Netherlands" },
+      "id": "NL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-68.2, 12.22],
@@ -7876,14 +7874,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Netherlands Antilles' },
-      id: 'AN'
+      "properties": { "name": "Netherlands Antilles" },
+      "id": "AN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-69.88, 12.41],
@@ -7894,14 +7892,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Aruba' },
-      id: 'AW'
+      "properties": { "name": "Aruba" },
+      "id": "AW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [164.32, -20.33],
@@ -7913,14 +7911,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'New Caledonia' },
-      id: 'NC'
+      "properties": { "name": "New Caledonia" },
+      "id": "NC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [167.42, -16.11],
@@ -7941,14 +7939,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Vanuatu' },
-      id: 'VU'
+      "properties": { "name": "Vanuatu" },
+      "id": "VU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [172.86, -40.51],
@@ -8003,14 +8001,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'New Zealand' },
-      id: 'NZ'
+      "properties": { "name": "New Zealand" },
+      "id": "NZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-83.24, 14.98],
@@ -8027,14 +8025,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Nicaragua' },
-      id: 'NI'
+      "properties": { "name": "Nicaragua" },
+      "id": "NI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [4.25, 18.65],
@@ -8070,14 +8068,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Niger' },
-      id: 'NE'
+      "properties": { "name": "Niger" },
+      "id": "NE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [5.87, 13.75],
@@ -8115,14 +8113,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Nigeria' },
-      id: 'NG'
+      "properties": { "name": "Nigeria" },
+      "id": "NG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-169.89, -19.15],
@@ -8133,14 +8131,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Niue' },
-      id: 'NU'
+      "properties": { "name": "Niue" },
+      "id": "NU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [167.96, -29.08],
@@ -8151,14 +8149,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Norfolk Island' },
-      id: 'NF'
+      "properties": { "name": "Norfolk Island" },
+      "id": "NF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [13.97, 68.24],
@@ -8405,14 +8403,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Norway' },
-      id: 'NO'
+      "properties": { "name": "Norway" },
+      "id": "NO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [145.28, 14.16],
@@ -8455,14 +8453,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Northern Mariana Islands' },
-      id: 'MP'
+      "properties": { "name": "Northern Mariana Islands" },
+      "id": "MP"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [163.01, 5.26],
@@ -8489,14 +8487,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Micronesia, Federated States of' },
-      id: 'FM'
+      "properties": { "name": "Micronesia, Federated States of" },
+      "id": "FM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [168.77, 7.3],
@@ -8523,14 +8521,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Marshall Islands' },
-      id: 'MH'
+      "properties": { "name": "Marshall Islands" },
+      "id": "MH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [134.56, 7.37],
@@ -8541,14 +8539,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Palau' },
-      id: 'PW'
+      "properties": { "name": "Palau" },
+      "id": "PW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [74.82, 37.02],
@@ -8596,14 +8594,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Pakistan' },
-      id: 'PK'
+      "properties": { "name": "Pakistan" },
+      "id": "PK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-79.46, 9.57],
@@ -8628,14 +8626,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Panama' },
-      id: 'PA'
+      "properties": { "name": "Panama" },
+      "id": "PA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [152.24, -4.21],
@@ -8687,14 +8685,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Papua New Guinea' },
-      id: 'PG'
+      "properties": { "name": "Papua New Guinea" },
+      "id": "PG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-54.33, -24.68],
@@ -8718,14 +8716,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Paraguay' },
-      id: 'PY'
+      "properties": { "name": "Paraguay" },
+      "id": "PY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-78.71, -4.58],
@@ -8771,14 +8769,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Peru' },
-      id: 'PE'
+      "properties": { "name": "Peru" },
+      "id": "PE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [126.05, 9.23],
@@ -8916,14 +8914,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Philippines' },
-      id: 'PH'
+      "properties": { "name": "Philippines" },
+      "id": "PH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-128.29, -24.41],
@@ -8934,14 +8932,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Pitcairn Islands' },
-      id: 'PN'
+      "properties": { "name": "Pitcairn Islands" },
+      "id": "PN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [18.85, 49.52],
@@ -8965,14 +8963,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Poland' },
-      id: 'PL'
+      "properties": { "name": "Poland" },
+      "id": "PL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-8.2, 41.87],
@@ -8995,14 +8993,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Portugal' },
-      id: 'PT'
+      "properties": { "name": "Portugal" },
+      "id": "PT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-14.52, 12.68],
@@ -9024,14 +9022,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guinea-Bissau' },
-      id: 'GW'
+      "properties": { "name": "Guinea-Bissau" },
+      "id": "GW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [124.45, -9.18],
@@ -9051,14 +9049,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Timor-Leste' },
-      id: 'TL'
+      "properties": { "name": "Timor-Leste" },
+      "id": "TL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-67, 18.5],
@@ -9069,14 +9067,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Puerto Rico' },
-      id: 'PR'
+      "properties": { "name": "Puerto Rico" },
+      "id": "PR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [51.52, 25.38],
@@ -9089,14 +9087,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Qatar' },
-      id: 'QA'
+      "properties": { "name": "Qatar" },
+      "id": "QA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [55.71, -21],
@@ -9107,14 +9105,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Reunion' },
-      id: 'RE'
+      "properties": { "name": "Reunion" },
+      "id": "RE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [20.73, 46.18],
@@ -9139,14 +9137,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Romania' },
-      id: 'RO'
+      "properties": { "name": "Romania" },
+      "id": "RO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [143.66, 49.31],
@@ -9764,14 +9762,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Russia' },
-      id: 'RU'
+      "properties": { "name": "Russia" },
+      "id": "RU"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [29.95, -2.31],
@@ -9786,14 +9784,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Rwanda' },
-      id: 'RW'
+      "properties": { "name": "Rwanda" },
+      "id": "RW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-63.03, 18.02],
@@ -9804,14 +9802,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Barthelemy' },
-      id: 'BL'
+      "properties": { "name": "Saint Barthelemy" },
+      "id": "BL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-5.66, -15.99],
@@ -9822,14 +9820,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Helena' },
-      id: 'SH'
+      "properties": { "name": "Saint Helena" },
+      "id": "SH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-62.55, 17.09],
@@ -9848,14 +9846,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Kitts and Nevis' },
-      id: 'KN'
+      "properties": { "name": "Saint Kitts and Nevis" },
+      "id": "KN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-63.17, 18.16],
@@ -9866,14 +9864,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Anguilla' },
-      id: 'AI'
+      "properties": { "name": "Anguilla" },
+      "id": "AI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-60.95, 13.71],
@@ -9884,14 +9882,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Lucia' },
-      id: 'LC'
+      "properties": { "name": "Saint Lucia" },
+      "id": "LC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-63.01, 18.08],
@@ -9902,14 +9900,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Martin' },
-      id: 'MF'
+      "properties": { "name": "Saint Martin" },
+      "id": "MF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-56.15, 46.76],
@@ -9928,14 +9926,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Pierre and Miquelon' },
-      id: 'PM'
+      "properties": { "name": "Saint Pierre and Miquelon" },
+      "id": "PM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-61.17, 13.13],
@@ -9946,14 +9944,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saint Vincent and the Grenadines' },
-      id: 'VC'
+      "properties": { "name": "Saint Vincent and the Grenadines" },
+      "id": "VC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [12.42, 43.96],
@@ -9964,14 +9962,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'San Marino' },
-      id: 'SM'
+      "properties": { "name": "San Marino" },
+      "id": "SM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [6.52, 0.02],
@@ -9990,14 +9988,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Sao Tome and Principe' },
-      id: 'ST'
+      "properties": { "name": "Sao Tome and Principe" },
+      "id": "ST"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [44.72, 29.2],
@@ -10038,14 +10036,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Saudi Arabia' },
-      id: 'SA'
+      "properties": { "name": "Saudi Arabia" },
+      "id": "SA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-17.15, 14.61],
@@ -10075,14 +10073,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Senegal' },
-      id: 'SN'
+      "properties": { "name": "Senegal" },
+      "id": "SN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [20.07, 42.56],
@@ -10106,14 +10104,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Serbia' },
-      id: 'RS'
+      "properties": { "name": "Serbia" },
+      "id": "RS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [55.54, -4.76],
@@ -10124,14 +10122,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Seychelles' },
-      id: 'SC'
+      "properties": { "name": "Seychelles" },
+      "id": "SC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-11.21, 10],
@@ -10147,14 +10145,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Sierra Leone' },
-      id: 'SL'
+      "properties": { "name": "Sierra Leone" },
+      "id": "SL"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [103.99, 1.38],
@@ -10165,14 +10163,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Singapore' },
-      id: 'SG'
+      "properties": { "name": "Singapore" },
+      "id": "SG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [17.25, 48.02],
@@ -10188,14 +10186,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Slovakia' },
-      id: 'SK'
+      "properties": { "name": "Slovakia" },
+      "id": "SK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [105.58, 23.06],
@@ -10247,14 +10245,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Vietnam' },
-      id: 'VN'
+      "properties": { "name": "Vietnam" },
+      "id": "VN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [13.72, 46.53],
@@ -10271,14 +10269,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Slovenia' },
-      id: 'SI'
+      "properties": { "name": "Slovenia" },
+      "id": "SI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [42.94, 11],
@@ -10307,14 +10305,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Somalia' },
-      id: 'SO'
+      "properties": { "name": "Somalia" },
+      "id": "SO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [29.89, -22.19],
@@ -10364,14 +10362,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'South Africa' },
-      id: 'ZA'
+      "properties": { "name": "South Africa" },
+      "id": "ZA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [32.99, -17.27],
@@ -10395,14 +10393,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Zimbabwe' },
-      id: 'ZW'
+      "properties": { "name": "Zimbabwe" },
+      "id": "ZW"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-16.34, 28.37],
@@ -10453,14 +10451,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Spain' },
-      id: 'ES'
+      "properties": { "name": "Spain" },
+      "id": "ES"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-15.74, 21.34],
@@ -10496,14 +10494,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Western Sahara' },
-      id: 'EH'
+      "properties": { "name": "Western Sahara" },
+      "id": "EH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [31.45, 22],
@@ -10545,14 +10543,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Sudan' },
-      id: 'SD'
+      "properties": { "name": "Sudan" },
+      "id": "SD"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-55.13, 5.82],
@@ -10572,14 +10570,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Suriname' },
-      id: 'SR'
+      "properties": { "name": "Suriname" },
+      "id": "SR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [23.34, 78.2],
@@ -10663,14 +10661,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Svalbard' },
-      id: 'SJ'
+      "properties": { "name": "Svalbard" },
+      "id": "SJ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [30.9, -26.31],
@@ -10684,14 +10682,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Swaziland' },
-      id: 'SZ'
+      "properties": { "name": "Swaziland" },
+      "id": "SZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [21.81, 68.57],
@@ -10761,14 +10759,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Sweden' },
-      id: 'SE'
+      "properties": { "name": "Sweden" },
+      "id": "SE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [7.7, 47.54],
@@ -10800,14 +10798,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Switzerland' },
-      id: 'CH'
+      "properties": { "name": "Switzerland" },
+      "id": "CH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [42.36, 37.11],
@@ -10827,14 +10825,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Syria' },
-      id: 'SY'
+      "properties": { "name": "Syria" },
+      "id": "SY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [74.92, 37.24],
@@ -10863,14 +10861,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tajikistan' },
-      id: 'TJ'
+      "properties": { "name": "Tajikistan" },
+      "id": "TJ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [100.08, 20.35],
@@ -10917,14 +10915,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Thailand' },
-      id: 'TH'
+      "properties": { "name": "Thailand" },
+      "id": "TH"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [1.4, 9.43],
@@ -10940,14 +10938,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Togo' },
-      id: 'TG'
+      "properties": { "name": "Togo" },
+      "id": "TG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-171.84, -9.21],
@@ -10958,14 +10956,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tokelau' },
-      id: 'TK'
+      "properties": { "name": "Tokelau" },
+      "id": "TK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-175.15, -21.18],
@@ -10976,14 +10974,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tonga' },
-      id: 'TO'
+      "properties": { "name": "Tonga" },
+      "id": "TO"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-60.92, 10.8],
@@ -11004,14 +11002,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Trinidad and Tobago' },
-      id: 'TT'
+      "properties": { "name": "Trinidad and Tobago" },
+      "id": "TT"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [56.18, 25.65],
@@ -11028,14 +11026,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'United Arab Emirates' },
-      id: 'AE'
+      "properties": { "name": "United Arab Emirates" },
+      "id": "AE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [9.85, 37.14],
@@ -11059,14 +11057,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tunisia' },
-      id: 'TN'
+      "properties": { "name": "Tunisia" },
+      "id": "TN"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [35.1, 41.96],
@@ -11125,14 +11123,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Turkey' },
-      id: 'TR'
+      "properties": { "name": "Turkey" },
+      "id": "TR"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [58.78, 42.66],
@@ -11177,14 +11175,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Turkmenistan' },
-      id: 'TM'
+      "properties": { "name": "Turkmenistan" },
+      "id": "TM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-71.66, 21.82],
@@ -11203,14 +11201,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Turks and Caicos Islands' },
-      id: 'TC'
+      "properties": { "name": "Turks and Caicos Islands" },
+      "id": "TC"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [179.22, -8.55],
@@ -11221,14 +11219,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tuvalu' },
-      id: 'TV'
+      "properties": { "name": "Tuvalu" },
+      "id": "TV"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [34, 4.22],
@@ -11248,14 +11246,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Uganda' },
-      id: 'UG'
+      "properties": { "name": "Uganda" },
+      "id": "UG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [33.42, 52.36],
@@ -11335,14 +11333,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Ukraine' },
-      id: 'UA'
+      "properties": { "name": "Ukraine" },
+      "id": "UA"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [20.82, 40.91],
@@ -11355,14 +11353,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Macedonia' },
-      id: 'MK'
+      "properties": { "name": "Macedonia" },
+      "id": "MK"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [25.32, 31.5],
@@ -11390,14 +11388,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Egypt' },
-      id: 'EG'
+      "properties": { "name": "Egypt" },
+      "id": "EG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-6.35, 55.24],
@@ -11505,14 +11503,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'United Kingdom' },
-      id: 'GB'
+      "properties": { "name": "United Kingdom" },
+      "id": "GB"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-2.59, 49.42],
@@ -11523,14 +11521,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Guernsey' },
-      id: 'GG'
+      "properties": { "name": "Guernsey" },
+      "id": "GG"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-2.01, 49.21],
@@ -11541,14 +11539,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Jersey' },
-      id: 'JE'
+      "properties": { "name": "Jersey" },
+      "id": "JE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-4.78, 54.06],
@@ -11559,14 +11557,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Isle of Man' },
-      id: 'IM'
+      "properties": { "name": "Isle of Man" },
+      "id": "IM"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [31.68, -1],
@@ -11595,14 +11593,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Tanzania' },
-      id: 'TZ'
+      "properties": { "name": "Tanzania" },
+      "id": "TZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-155.01, 19.33],
@@ -11973,14 +11971,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'United States' },
-      id: 'US'
+      "properties": { "name": "United States" },
+      "id": "US"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-64.76, 17.77],
@@ -11991,14 +11989,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Virgin Islands' },
-      id: 'VI'
+      "properties": { "name": "Virgin Islands" },
+      "id": "VI"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-2.83, 11],
@@ -12025,14 +12023,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Burkina Faso' },
-      id: 'BF'
+      "properties": { "name": "Burkina Faso" },
+      "id": "BF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-57.81, -30.75],
@@ -12058,14 +12056,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Uruguay' },
-      id: 'UY'
+      "properties": { "name": "Uruguay" },
+      "id": "UY"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [64.38, 38.95],
@@ -12111,14 +12109,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Uzbekistan' },
-      id: 'UZ'
+      "properties": { "name": "Uzbekistan" },
+      "id": "UZ"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-69.77, 11.7],
@@ -12176,14 +12174,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Venezuela' },
-      id: 'VE'
+      "properties": { "name": "Venezuela" },
+      "id": "VE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-178.04, -14.32],
@@ -12202,14 +12200,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Wallis and Futuna' },
-      id: 'WF'
+      "properties": { "name": "Wallis and Futuna" },
+      "id": "WF"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [-171.43, -14.02],
@@ -12228,14 +12226,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Samoa' },
-      id: 'WS'
+      "properties": { "name": "Samoa" },
+      "id": "WS"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [52.23, 15.67],
@@ -12255,14 +12253,14 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Yemen' },
-      id: 'YE'
+      "properties": { "name": "Yemen" },
+      "id": "YE"
     },
     {
-      type: 'Feature',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
+      "type": "Feature",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
           [
             [
               [24.97, -17.56],
@@ -12301,8 +12299,8 @@ export const countries_data: FeatureCollection = {
           ]
         ]
       },
-      properties: { name: 'Zambia' },
-      id: 'ZM'
+      "properties": { "name": "Zambia" },
+      "id": "ZM"
     }
   ]
-};
+}
