@@ -69,7 +69,7 @@
 
   let properties: GeoJsonProperties | undefined = undefined;
   const [selectedCountry, previousSelectedCountry] =
-    withPrevious<CountryLineSegments | null>(countries.get('VN')!, {
+    withPrevious<CountryLineSegments | null>(countries.get(data.country)!, {
       requireChange: true
     });
   $: {
