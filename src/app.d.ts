@@ -1,6 +1,7 @@
 /// <reference types="@sveltejs/adapter-cloudflare"/>
 /// <reference types="@cloudflare/workers-types"/>
 
+import type { FeatureCollection } from 'geojson';
 import type { JWTPayload } from 'jose';
 
 declare global {
@@ -35,6 +36,7 @@ declare global {
   }
 
   interface Country {
+    id: string;
     group: Group;
     properties: CountryProperties;
   }
@@ -53,8 +55,13 @@ declare global {
     export default value;
   }
 
-  declare module 'vite-geojson:*' {
+  declare module 'vite-geograticule:*' {
     const value: string;
+    export default value;
+  }
+
+  declare module 'vite-geoprop:*' {
+    const value: FeatureCollection;
     export default value;
   }
 }

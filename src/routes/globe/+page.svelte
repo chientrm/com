@@ -4,6 +4,7 @@
   import { GeoJsonGeometry } from '$lib/helpers/geo';
   import type { GeoJsonProperties } from 'geojson';
   import { onMount } from 'svelte';
+  import { withPrevious } from 'svelte-previous';
   import {
     Color,
     LineBasicMaterial,
@@ -23,36 +24,36 @@
 
   let canvas: HTMLCanvasElement;
 
-  const backgroundColor =
-      data.colorMode === 'white' ? new Color(0xffffff) : new Color(0),
-    graticuleColor =
-      data.colorMode === 'white' ? new Color(0) : new Color(0xffffff),
+  type CountryLineSegments = LineSegments<GeoJsonGeometry, LineBasicMaterial>;
+
+  const [backgroundColor, graticuleColor] =
+      data.colorMode === 'white'
+        ? [new Color(0xffffff), new Color(0)]
+        : [new Color(0), new Color(0xffffff)],
     graticuleMaterial = new LineBasicMaterial({
       color: graticuleColor,
       opacity: 0.1,
       transparent: true
     }),
     borderMaterial = new LineBasicMaterial({ color: '#1da1f2' }),
-    lineObjs = [
+    selectedBorderMaterial = new LineBasicMaterial({ color: 'darkgreen' });
+  const countries = new Map<string, CountryLineSegments>();
+  data.countries.forEach(({ id, group }) => {
+    countries.set(
+      id,
+      new LineSegments(new GeoJsonGeometry(group), borderMaterial)
+    );
+  });
+  const lineObjs = [
       new LineSegments(
-        new GeoJsonGeometry({ name: '' }, data.graticule[0]),
+        new GeoJsonGeometry(data.graticule[0]),
         graticuleMaterial
       ),
-      ...data.countries.map(
-        ({ properties, group }) =>
-          new LineSegments(
-            new GeoJsonGeometry(properties, group),
-            borderMaterial
-          )
-      )
+      ...Array.from(countries.values())
     ],
     sphere = new Mesh(
       new SphereGeometry(data.radius, data.radius, data.radius),
       new MeshBasicMaterial({ color: backgroundColor })
-    ),
-    mouseSphere = new Mesh(
-      new SphereGeometry(3, 20, 20),
-      new MeshBasicMaterial({ color: 'white' })
     ),
     scene = new Scene(),
     camera = new PerspectiveCamera(45, 1, 1, 10000),
@@ -62,12 +63,25 @@
   camera.position.z = 500;
 
   scene.add(sphere);
-  scene.add(mouseSphere);
 
   lineObjs.forEach((obj) => scene.add(obj));
   scene.background = backgroundColor;
 
   let properties: GeoJsonProperties | undefined = undefined;
+  const [selectedCountry, previousSelectedCountry] =
+    withPrevious<CountryLineSegments | null>(countries.get('VN')!, {
+      requireChange: true
+    });
+  $: {
+    if ($previousSelectedCountry) {
+      const country = $previousSelectedCountry;
+      country.material = borderMaterial;
+    }
+    if ($selectedCountry) {
+      const country = $selectedCountry;
+      country.material = selectedBorderMaterial;
+    }
+  }
 
   onMount(() => {
     const renderer = new WebGLRenderer({ canvas });
@@ -100,12 +114,16 @@
           fetch('/globe/get_id', { method: 'POST', body: formData })
             .then((res) =>
               res.json<{
-                id: number | undefined;
+                id: string | undefined;
                 properties: GeoJsonProperties | undefined;
               }>()
             )
-            .then((data) => (properties = data.properties));
-          mouseSphere.position.set(x, y, z);
+            .then((d) => {
+              if (d.properties) {
+                properties = d.properties;
+                $selectedCountry = countries.get(d.properties.ISO_A2)!;
+              }
+            });
         }
       },
       false
@@ -133,5 +151,5 @@
 <canvas bind:this={canvas} />
 
 <div>
-  {properties?.name ?? ''}
+  {properties?.NAME_EN ?? ''}
 </div>
