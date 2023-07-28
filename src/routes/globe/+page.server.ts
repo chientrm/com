@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 
 export const load = (({ platform }) => {
-  const country = platform?.cf?.country ?? 'US';
-  return { country };
+  const countryCode = platform?.cf?.country ?? 'US';
+  return { countryCode };
 }) satisfies PageServerLoad;

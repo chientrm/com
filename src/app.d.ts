@@ -1,7 +1,7 @@
 /// <reference types="@sveltejs/adapter-cloudflare"/>
 /// <reference types="@cloudflare/workers-types"/>
 
-import type { FeatureCollection } from 'geojson';
+import type { Feature, FeatureCollection, Point } from 'geojson';
 import type { JWTPayload } from 'jose';
 
 declare global {
@@ -39,6 +39,7 @@ declare global {
     id: string;
     group: Group;
     properties: CountryProperties;
+    centerOfMass: Feature<Point, Properties>;
   }
 
   interface CountryProperties {

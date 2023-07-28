@@ -1,4 +1,4 @@
-const RAD2DEG = 180 / Math.PI,
+export const RAD2DEG = 180 / Math.PI,
   DEG2RAD = Math.PI / 180;
 
 export function polarToCartesian(lng: number, lat: number, radius: number) {

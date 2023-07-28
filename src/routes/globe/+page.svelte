@@ -68,17 +68,17 @@
   scene.background = backgroundColor;
 
   let properties: GeoJsonProperties | undefined = undefined;
-  const [selectedCountry, previousSelectedCountry] =
-    withPrevious<CountryLineSegments | null>(countries.get(data.country)!, {
+  const [selectedSegments, previousSegments] =
+    withPrevious<CountryLineSegments | null>(countries.get(data.countryCode)!, {
       requireChange: true
     });
   $: {
-    if ($previousSelectedCountry) {
-      const country = $previousSelectedCountry;
+    if ($previousSegments) {
+      const country = $previousSegments;
       country.material = borderMaterial;
     }
-    if ($selectedCountry) {
-      const country = $selectedCountry;
+    if ($selectedSegments) {
+      const country = $selectedSegments;
       country.material = selectedBorderMaterial;
     }
   }
@@ -121,7 +121,7 @@
             .then((d) => {
               if (d.properties) {
                 properties = d.properties;
-                $selectedCountry = countries.get(d.properties.ISO_A2)!;
+                $selectedSegments = countries.get(d.properties.ISO_A2)!;
               }
             });
         }

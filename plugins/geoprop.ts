@@ -15,7 +15,7 @@ export const geoprop = (): Plugin => {
   });
   (smallMap as FeatureCollection).features.forEach((feature) => {
     const id = feature.id! as string;
-    feature.properties = propertiesMap.get(id)!;
+    feature.properties = propertiesMap.get(id) ?? {};
   });
   generatedGeoprop.set('smallmapwithproperties', JSON.stringify(smallMap));
 

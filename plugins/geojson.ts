@@ -8,6 +8,7 @@ import { basename, extname } from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import type { Group } from '../src/app';
 import { polarToCartesian } from '../src/lib/helpers/coords';
+import centerOfMass from '@turf/center-of-mass';
 
 function interpolateLine(positions: Position[] = [], maxDegDistance = 1) {
   const result: Position[] = [];
@@ -171,13 +172,15 @@ export const geojson = (
       const srcURL = parseURL(id),
         raw = fs.readFileSync(srcURL).toString('utf-8'),
         collection = JSON.parse(raw) as FeatureCollection,
-        countries: Country[] = collection.features.map(
-          ({ geometry, properties }) => ({
+        countries: Country[] = collection.features.map((feature) => {
+          const { geometry, properties } = feature;
+          return {
             id: properties!['ISO_A2'],
             group: parse(geometry, radius, resolution),
-            properties: { name: properties!['NAME_EN'] }
-          })
-        ),
+            properties: { name: properties!['NAME_EN'] },
+            centerOfMass: centerOfMass(feature)
+          };
+        }),
         countriesString = JSON.stringify(countries);
       if (this.meta.watchMode) {
         const id = generateId(srcURL);
