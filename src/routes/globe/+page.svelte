@@ -1,5 +1,6 @@
 <script lang="ts">
   import { OrbitControls } from '$lib/helpers/OrbitControls';
+  import { DEG2RAD } from '$lib/helpers/coords';
   import { frameLoop } from '$lib/helpers/frame_loop';
   import { GeoJsonGeometry } from '$lib/helpers/geo';
   import type { GeoJsonProperties } from 'geojson';
@@ -56,11 +57,15 @@
       new MeshBasicMaterial({ color: backgroundColor })
     ),
     scene = new Scene(),
-    camera = new PerspectiveCamera(45, 1, 1, 10000),
+    [lng, lat] = data.centerOfMass,
+    camera = new PerspectiveCamera(45, 1, 1, 10000)
+      .translateX(-500 * Math.sin(lng * DEG2RAD))
+      .translateZ(-500 * Math.cos(lng * DEG2RAD))
+      .translateY(500 * Math.sin(lat * DEG2RAD)),
     raycaster = new Raycaster(),
     mouse = new Vector2(0, 0);
   raycaster.params.Points = { threshold: 3 };
-  camera.position.z = 500;
+  camera.lookAt(sphere.position);
 
   scene.add(sphere);
 
