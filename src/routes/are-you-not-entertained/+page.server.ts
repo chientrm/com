@@ -8,7 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals, url }) => {
   const result = await locals.D1.prepare(
-      'select url from Com_Ent where approvedAt is not null order by approvedAt desc'
+      'select url from Com_Ent where approvedAt is not null order by approvedAt desc limit 6'
     ).all<{ url: string }>(),
     urls = (result.results ?? []).map((i) => i.url),
     tweets = await Promise.all(urls.map(getTweet(locals.colorMode))),
@@ -24,7 +24,7 @@ export const load = (async ({ locals, url }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-  submit: async ({ request, locals, platform }) => {
+  submit: async ({ request, locals }) => {
     const { form, message } = await validate2(request, {
       url: string().required()
     });
