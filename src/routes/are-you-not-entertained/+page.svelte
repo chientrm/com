@@ -7,6 +7,7 @@
   export let data: PageData;
   export let form: ActionData;
   const text = 'Are you not entertained? Visit chientrm.com';
+  let tweetsDiv: HTMLDivElement;
   let approvedAt = new Date();
   interface Tweet {
     html: string;
@@ -14,7 +15,9 @@
   }
   let tweets: Tweet[] = [];
   let newTweets: Tweet[] = [];
-  $: tweets = [...tweets, ...newTweets];
+  $: {
+    tweets = [...tweets, ...newTweets];
+  }
   $: approvedAt = tweets[tweets.length - 1]?.approvedAt ?? new Date();
 
   const loadMore = async () => {
@@ -25,7 +28,10 @@
   };
 
   onMount(() => {
-    loadMore();
+    loadMore().then(() =>
+      // @ts-ignore
+      twttr.widgets.load(tweetsDiv)
+    );
   });
 </script>
 
@@ -58,7 +64,7 @@
   <button>submit</button>
 </form>
 
-<div>
+<div bind:this={tweetsDiv}>
   {#each tweets as { html }}
     {@html html}
   {/each}
