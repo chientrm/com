@@ -17,6 +17,6 @@
 
 <div>
   {#each data.asks as { id, username, content, fromNow }, index}
-    <Ask {index} {id} {username} {content} {fromNow} />
+    <Ask {index} {id} {username} {content} {fromNow} elipsis={true} />
   {/each}
 </div>

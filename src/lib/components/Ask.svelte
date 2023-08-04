@@ -4,6 +4,13 @@
   export let content: string;
   export let username: string;
   export let fromNow: string;
+  export let elipsis = false;
+
+  function truncate(str: string, n: number) {
+    return str.length > n ? str.slice(0, n - 1) + '... more' : str;
+  }
+
+  $: thread = elipsis ? truncate(content, 100) : content;
 </script>
 
 <div class="row">
@@ -14,7 +21,7 @@
   </span>
   <div class="col">
     <a href={`/ask/${id}`}>
-      {#each content.split(/\r?\n/) as line}
+      {#each thread.split(/\r?\n/) as line}
         {line} <br />
       {/each}
     </a>
@@ -42,5 +49,8 @@
   }
   span.ref {
     font-style: italic;
+  }
+  a {
+    overflow-wrap: anywhere;
   }
 </style>
