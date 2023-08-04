@@ -1,8 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import Error from '$lib/components/Error.svelte';
-  import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
-  import { onMount } from 'svelte';
+  import InfiniteLoading from 'svelte-infinite-loading';
   import type { ActionData, PageData } from './$types';
   export let data: PageData;
   export let form: ActionData;
@@ -14,25 +13,26 @@
     approvedAt: Date;
   }
   let tweets: Tweet[] = [];
-  let newTweets: Tweet[] = [];
-  $: {
-    tweets = [...tweets, ...newTweets];
+
+  function infiniteHandler({
+    detail: { loaded, complete }
+  }: {
+    detail: { loaded: VoidFunction; complete: VoidFunction };
+  }) {
+    fetch(`/are-you-not-entertained?approvedAt=${approvedAt.toISOString()}`)
+      .then((response) => response.json<Tweet[]>())
+      .then((newTweets) => {
+        if (newTweets.length > 0) {
+          approvedAt = newTweets[newTweets.length - 1].approvedAt;
+          tweets = [...tweets, ...newTweets];
+          // @ts-ignore
+          twttr.widgets.load(tweetsDiv);
+          loaded();
+        } else {
+          complete();
+        }
+      });
   }
-  $: approvedAt = tweets[tweets.length - 1]?.approvedAt ?? new Date();
-
-  const loadMore = async () => {
-    const response = await fetch(
-      `/are-you-not-entertained?approvedAt=${approvedAt.toISOString()}`
-    );
-    newTweets = await response.json();
-  };
-
-  onMount(() => {
-    loadMore().then(() =>
-      // @ts-ignore
-      twttr.widgets.load(tweetsDiv)
-    );
-  });
 </script>
 
 <svelte:head>
@@ -68,9 +68,5 @@
   {#each tweets as { html }}
     {@html html}
   {/each}
-  <InfiniteScroll
-    hasMore={newTweets.length > 0}
-    threshold={100}
-    on:loadMore={loadMore}
-  />
+  <InfiniteLoading on:infinite={infiniteHandler} />
 </div>
