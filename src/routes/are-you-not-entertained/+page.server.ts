@@ -1,5 +1,4 @@
 import { adminUsername } from '$lib/constants/string';
-import { getTweet } from '$lib/helpers/get_tweet';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
@@ -7,12 +6,7 @@ import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals, url }) => {
-  const result = await locals.D1.prepare(
-      'select url from Com_Ent where approvedAt is not null order by approvedAt desc limit 6'
-    ).all<{ url: string }>(),
-    urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet(locals.colorMode))),
-    _url = url.searchParams.get('url') ?? '';
+  const _url = url.searchParams.get('url') ?? '';
   let reviewCount: number | null = null;
   if (locals.user?.username === adminUsername) {
     const result = await locals.D1.prepare(
@@ -20,7 +14,7 @@ export const load = (async ({ locals, url }) => {
     ).first<{ reviewCount: number }>();
     reviewCount = result!.reviewCount;
   }
-  return { tweets, reviewCount, url: _url };
+  return { reviewCount, url: _url };
 }) satisfies PageServerLoad;
 
 export const actions = {

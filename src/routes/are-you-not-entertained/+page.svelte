@@ -1,10 +1,32 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import Error from '$lib/components/Error.svelte';
+  import InfiniteScroll from '$lib/components/InfiniteScroll.svelte';
+  import { onMount } from 'svelte';
   import type { ActionData, PageData } from './$types';
   export let data: PageData;
   export let form: ActionData;
   const text = 'Are you not entertained? Visit chientrm.com';
+  let approvedAt = new Date();
+  interface Tweet {
+    html: string;
+    approvedAt: Date;
+  }
+  let tweets: Tweet[] = [];
+  let newTweets: Tweet[] = [];
+  $: tweets = [...tweets, ...newTweets];
+  $: approvedAt = tweets[tweets.length - 1]?.approvedAt ?? new Date();
+
+  const loadMore = async () => {
+    const response = await fetch(
+      `/are-you-not-entertained?approvedAt=${approvedAt.toISOString()}`
+    );
+    newTweets = await response.json();
+  };
+
+  onMount(() => {
+    loadMore();
+  });
 </script>
 
 <svelte:head>
@@ -37,7 +59,12 @@
 </form>
 
 <div>
-  {#each data.tweets as { html }}
+  {#each tweets as { html }}
     {@html html}
   {/each}
+  <InfiniteScroll
+    hasMore={newTweets.length > 0}
+    threshold={100}
+    on:loadMore={loadMore}
+  />
 </div>
