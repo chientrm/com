@@ -27,6 +27,9 @@
   <li>
     <a href="https://rocketmouse.chientrm.com">rocketmouse</a>
   </li>
+  <li>
+    <a href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026">singularity</a>
+  </li>
 </ol>
 
 <h2>change logs</h2>
