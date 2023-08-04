@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import Error from '$lib/components/Error.svelte';
+  import dayjs from 'dayjs';
   import InfiniteLoading from 'svelte-infinite-loading';
   import type { ActionData, PageData } from './$types';
   export let data: PageData;
@@ -10,7 +11,7 @@
   let approvedAt = new Date();
   interface Tweet {
     html: string;
-    approvedAt: Date;
+    approvedAt: string;
   }
   let tweets: Tweet[] = [];
 
@@ -19,11 +20,12 @@
   }: {
     detail: { loaded: VoidFunction; complete: VoidFunction };
   }) {
-    fetch(`/are-you-not-entertained?approvedAt=${approvedAt.toISOString()}`)
+    const date = dayjs(approvedAt).format('YYYY-MM-DD HH:MM:SS');
+    fetch(`/are-you-not-entertained?approvedAt=${date}`)
       .then((response) => response.json<Tweet[]>())
       .then((newTweets) => {
         if (newTweets.length > 0) {
-          approvedAt = newTweets[newTweets.length - 1].approvedAt;
+          approvedAt = new Date(newTweets[newTweets.length - 1].approvedAt);
           tweets = [...tweets, ...newTweets];
           // @ts-ignore
           twttr.widgets.load(tweetsDiv);

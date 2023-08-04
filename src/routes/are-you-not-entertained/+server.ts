@@ -5,7 +5,7 @@ import type { RequestHandler } from './$types';
 export const GET = (async ({ locals, url }) => {
   const approvedAt = url.searchParams.get('approvedAt')!,
     result = await locals.D1.prepare(
-      'select url, approvedAt from Com_Ent where approvedAt < ?1 order by approvedAt desc limit 6'
+      'select url, approvedAt from Com_Ent where approvedAt < ?1 order by approvedAt desc limit 2'
     )
       .bind(approvedAt)
       .all<{ url: string; approvedAt: Date }>(),
