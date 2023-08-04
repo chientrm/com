@@ -5,6 +5,10 @@ interface ChangeLog {
 
 export const changeLogs: ChangeLog[] = [
   {
+    createdAt: new Date('Fri Aug  4 02:00:55 PM UTC 2023'),
+    changes: ['rocketmouse']
+  },
+  {
     createdAt: new Date('Sat Jul 22 06:06:35 PM UTC 2023'),
     changes: ['add countries globe']
   },
