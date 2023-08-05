@@ -28,7 +28,14 @@
     <a href="https://rocketmouse.chientrm.com">rocketmouse</a>
   </li>
   <li>
-    <a href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026">singularity</a>
+    <a
+      href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026"
+    >
+      singularity
+    </a>
+  </li>
+  <li>
+    <a href="/llama-v2">llama v2</a>
   </li>
 </ol>
 

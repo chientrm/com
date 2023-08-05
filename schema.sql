@@ -1,7 +1,9 @@
 CREATE TABLE Com_User(
     username text PRIMARY KEY NOT NULL,
     passwordHash text NOT NULL,
-    createdAt datetime DEFAULT CURRENT_TIMESTAMP
+    createdAt datetime DEFAULT CURRENT_TIMESTAMP,
+    beamQuota integer DEFAULT 0,
+    beamUsed integer DEFAULT 0
 );
 
 CREATE TABLE Com_Ask(
