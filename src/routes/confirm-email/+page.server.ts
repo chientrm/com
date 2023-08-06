@@ -1,6 +1,5 @@
 import { auth } from '$lib/helpers/auth';
 import { verify } from '$lib/helpers/crypt';
-import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 interface Payload {
@@ -21,9 +20,11 @@ export const load = (async ({ url, locals, cookies }) => {
   if (code != emailCode) {
     return { email, error: 'invalid verification' };
   }
-  await locals.D1.prepare('update Com_User set email=?1 where username=?2')
+  await locals.D1.prepare(
+    'update Com_User set email=?1, emailCode=NULL where username=?2'
+  )
     .bind(email, username)
     .run();
   await auth(cookies, { username, createdAt, email });
-  throw redirect(303, '/');
+  return { result: `succesfully changed your email to ${email}` };
 }) satisfies PageServerLoad;

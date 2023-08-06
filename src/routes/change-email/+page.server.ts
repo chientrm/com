@@ -1,11 +1,9 @@
+import { dev } from '$app/environment';
+import { sign } from '$lib/helpers/crypt';
+import { sendEmail } from '$lib/helpers/email';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';
-import type { Actions, PageServerLoad } from './$types';
-import { sign, verify } from '$lib/helpers/crypt';
-import { ServerClient, TemplatedMessage } from 'postmark';
-import { dev } from '$app/environment';
-
-const client = new ServerClient('72cf24a7-2fff-44ef-9160-516f78ac1020');
+import type { Actions } from './$types';
 
 export const actions = {
   default: async ({ request, locals }) => {
@@ -27,19 +25,16 @@ export const actions = {
       }),
       host = dev ? 'http://localhost:5173' : 'https://chientrm.com',
       action_url = `${host}/confirm-email?jwt=${jwt}`;
-    await client.sendEmailWithTemplate(
-      new TemplatedMessage(
-        'admin@chientrm.com',
-        'confirm',
-        {
-          username,
-          product_name: 'chientrm.com',
-          support_email: 'admin@chientrm.com',
-          action_url
-        },
-        email
-      )
-    );
+    await sendEmail({
+      To: 'admin@chientrm.com',
+      TemplateAlias: 'confirm',
+      TemplateModel: {
+        username,
+        product_name: 'chientrm.com',
+        support_email: 'admin@chientrm.com',
+        action_url
+      }
+    });
     return { result: 'please check your inbox for confirmation email' };
   }
 } satisfies Actions;

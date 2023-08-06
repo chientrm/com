@@ -22,7 +22,12 @@
     </tr>
     <tr>
       <td>email:</td>
-      <td>{data.email ?? ''} <a href="/change-email">change email</a></td>
+      <td>
+        {data.email ?? ''}
+        <a href="/change-email">
+          {data.email ? 'change email' : `add email`}
+        </a>
+      </td>
     </tr>
     <tr>
       <td>created at:</td>
