@@ -24,15 +24,15 @@ export const actions = {
     }
     const { username, password } = form!,
       dbUser = await locals.D1.prepare(
-        'select createdAt, passwordHash from Com_User where username=?1'
+        'select createdAt, passwordHash, email from Com_User where username=?1'
       )
         .bind(username)
-        .first<{ createdAt: Date; passwordHash: string }>();
+        .first<{ createdAt: Date; passwordHash: string; email: string }>();
     if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
       return { loginMessage: 'invalid username or password' };
     }
-    const { createdAt } = dbUser;
-    await auth(cookies, { username, createdAt });
+    const { createdAt, email } = dbUser;
+    await auth(cookies, { username, createdAt, email });
     throw redirect(303, url.searchParams.get('redirectTo')!);
   },
   register: async ({ request, locals, cookies, url }) => {
