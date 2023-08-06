@@ -7,9 +7,9 @@ interface Payload {
   email: string;
 }
 
-export const load = (async ({ url, locals, cookies }) => {
+export const load = (async ({ params, locals, cookies }) => {
   const { username, createdAt } = locals.user!,
-    jwt = url.searchParams.get('jwt')!,
+    { jwt } = params,
     { code, email } = await verify<Payload>(jwt),
     result = await locals.D1.prepare(
       'select emailCode from Com_User where username=?1'

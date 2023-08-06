@@ -29,7 +29,7 @@ export const actions = {
         .bind(username)
         .first<{ createdAt: Date; passwordHash: string }>();
     if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
-      return fail(400, { loginMessage: 'invalid username or password' });
+      return { loginMessage: 'invalid username or password' };
     }
     const { createdAt } = dbUser;
     await auth(cookies, { username, createdAt });
@@ -48,7 +48,6 @@ export const actions = {
       password: string().required().min(8).max(72)
     });
     if (registerMessage) {
-      console.log('gg');
       return fail(400, { registerMessage });
     }
     const { username, password } = form!,

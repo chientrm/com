@@ -36,7 +36,7 @@
   </div>
 
   <form method="POST" action="?/reply" use:enhance bind:this={f}>
-    <Error message={form?.message} />
+    <Error error={form?.message} />
     <table>
       <tr>
         <td>reply:</td>

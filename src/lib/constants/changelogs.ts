@@ -5,6 +5,10 @@ interface ChangeLog {
 
 export const changeLogs: ChangeLog[] = [
   {
+    createdAt: new Date('Sun Aug  6 08:27:31 AM UTC 2023'),
+    changes: ['you can add email to reset password later']
+  },
+  {
     createdAt: new Date('Fri Aug  4 09:43:14 PM UTC 2023'),
     changes: ['add singularity discord']
   },

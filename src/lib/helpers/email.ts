@@ -1,4 +1,5 @@
 import { POSTMARK_SERVER_TOKEN } from '$env/static/private';
+import { support_email } from '$lib/constants/string';
 
 const host = 'https://api.postmarkapp.com';
 export const sendEmail = ({
@@ -17,7 +18,7 @@ export const sendEmail = ({
       'X-Postmark-Server-Token': POSTMARK_SERVER_TOKEN
     },
     body: JSON.stringify({
-      From: 'admin@chientrm.com',
+      From: support_email,
       To,
       TemplateAlias,
       TemplateModel

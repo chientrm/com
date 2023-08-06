@@ -17,7 +17,7 @@
 
 <form method="POST" action={`?/login&redirectTo=${redirectTo}`} use:enhance>
   <h3>login</h3>
-  <Error message={form?.loginMessage} />
+  <Error error={form?.loginMessage} />
   <table>
     <tr>
       <td>username:</td>
@@ -42,11 +42,11 @@
   <button>login</button>
 </form>
 
-<a href="/reset_password">forgot your password?</a>
+<a href="/forgot-password">forgot your password?</a>
 
 <form method="POST" action={`?/register&redirectTo=${redirectTo}`} use:enhance>
   <h3>create account</h3>
-  <Error message={form?.registerMessage} />
+  <Error error={form?.registerMessage} />
   <table>
     <tr>
       <td>username:</td>

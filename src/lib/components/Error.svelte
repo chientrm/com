@@ -1,9 +1,9 @@
 <script lang="ts">
-  export let message: string | null | undefined;
+  export let error: string | null | undefined;
 </script>
 
 <span>
-  {message ?? '‎'}
+  {error ?? '‎'}
 </span>
 
 <style>

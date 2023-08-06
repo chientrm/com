@@ -4,6 +4,8 @@ import { sendEmail } from '$lib/helpers/email';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';
 import type { Actions } from './$types';
+import { PUBLIC_HOST } from '$env/static/public';
+import { support_email } from '$lib/constants/string';
 
 export const actions = {
   default: async ({ request, locals }) => {
@@ -23,15 +25,14 @@ export const actions = {
         email,
         code
       }),
-      host = dev ? 'http://localhost:5173' : 'https://chientrm.com',
-      action_url = `${host}/confirm-email?jwt=${jwt}`;
+      action_url = `${PUBLIC_HOST}/confirm-email/${jwt}`;
     await sendEmail({
-      To: 'admin@chientrm.com',
+      To: email,
       TemplateAlias: 'confirm',
       TemplateModel: {
         username,
         product_name: 'chientrm.com',
-        support_email: 'admin@chientrm.com',
+        support_email,
         action_url
       }
     });

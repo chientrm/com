@@ -11,6 +11,10 @@
 
 <p>you may find something useful here</p>
 
+{#if data.user && !data.user.email}
+  <a href="/change-email">add email to reset password later</a>
+{/if}
+
 <ol>
   <li>
     <a href="/ask">wanna ask?</a>
@@ -28,7 +32,10 @@
     <a href="https://rocketmouse.chientrm.com">rocketmouse</a>
   </li>
   <li>
-    <a href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026">singularity</a>
+    <a
+      href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026"
+      >singularity</a
+    >
   </li>
 </ol>
 

@@ -17,7 +17,7 @@
 </svelte:head>
 
 <form method="POST" use:enhance bind:this={f}>
-  <Error message={form?.message} />
+  <Error error={form?.message} />
   <table>
     <tr>
       <td>question:</td>

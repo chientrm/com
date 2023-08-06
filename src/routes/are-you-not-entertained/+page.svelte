@@ -59,7 +59,7 @@
     <tr>
       <td />
       <td>
-        <Error message={form?.message} />
+        <Error error={form?.message} />
       </td>
     </tr>
   </table>

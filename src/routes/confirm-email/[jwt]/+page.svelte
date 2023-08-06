@@ -7,5 +7,5 @@
 </script>
 
 <h3>confirm email</h3>
-<Error message={data.error} />
+<Error error={data.error} />
 <Result result={data.result} />
