@@ -24,7 +24,7 @@
       <td>email:</td>
       <td>
         {data.email ?? ''}
-        <a href="/change-email">
+        <a href="/auth/change-email">
           {data.email ? 'change email' : `add email`}
         </a>
       </td>
