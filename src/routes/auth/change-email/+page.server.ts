@@ -25,7 +25,7 @@ export const actions = {
         email,
         code
       }),
-      action_url = `${PUBLIC_HOST}/confirm-email/${jwt}`;
+      action_url = `${PUBLIC_HOST}/auth/confirm-email/${jwt}`;
     await sendEmail({
       To: email,
       TemplateAlias: 'confirm',

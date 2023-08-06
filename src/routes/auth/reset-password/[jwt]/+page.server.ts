@@ -22,6 +22,6 @@ export const actions = {
     )
       .bind(passwordHash, email)
       .run();
-    throw redirect(303, '/reset-password/success');
+    throw redirect(303, '/auth/reset-password/success');
   }
 } satisfies Actions;

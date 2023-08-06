@@ -21,7 +21,7 @@ export const actions = {
       To: email,
       TemplateModel: {
         product_name: 'chientrm.com',
-        action_url: `${PUBLIC_HOST}/reset-password/${jwt}`,
+        action_url: `${PUBLIC_HOST}/auth/reset-password/${jwt}`,
         support_email
       }
     });

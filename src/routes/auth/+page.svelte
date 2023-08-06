@@ -42,7 +42,7 @@
   <button>login</button>
 </form>
 
-<a href="/forgot-password">forgot your password?</a>
+<a href="/auth/forgot-password">forgot your password?</a>
 
 <form method="POST" action={`?/register&redirectTo=${redirectTo}`} use:enhance>
   <h3>create account</h3>
