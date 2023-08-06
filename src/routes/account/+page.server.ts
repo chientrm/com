@@ -6,7 +6,7 @@ import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
-  const { username } = locals.user!,
+  const { username, email } = locals.user!,
     [asks, result] = await Promise.all([
       locals.D1.prepare(
         'select id, username, content, createdAt from Com_Ask where username != ?1 and parentId in (select id from Com_Ask where username=?1)'
@@ -26,7 +26,7 @@ export const load = (async ({ locals }) => {
     ]),
     { createdAt } = result!,
     colorMode = locals.colorMode;
-  return { asks, username, createdAt, colorMode };
+  return { asks, username, email, createdAt, colorMode };
 }) satisfies PageServerLoad;
 
 export const actions = {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { enhance } from '$app/forms';
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
@@ -18,6 +19,10 @@
     <tr>
       <td>username:</td>
       <td>{data.username}</td>
+    </tr>
+    <tr>
+      <td>email:</td>
+      <td>{data.email ?? ''} <a href="/change-email">change email</a></td>
     </tr>
     <tr>
       <td>created at:</td>

@@ -22,6 +22,7 @@ declare global {
     interface User extends JWTPayload {
       username: string;
       createdAt: Date;
+      email?: string;
     }
   }
 

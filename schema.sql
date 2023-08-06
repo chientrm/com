@@ -1,5 +1,7 @@
 CREATE TABLE Com_User(
     username text PRIMARY KEY NOT NULL,
+    email text UNIQUE,
+    emailCode integer,
     passwordHash text NOT NULL,
     createdAt datetime DEFAULT CURRENT_TIMESTAMP
 );
