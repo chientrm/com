@@ -12,7 +12,7 @@
 <p>you may find something useful here</p>
 
 {#if data.user && !data.user.email}
-  <a href="/change-email">add email to reset password later</a>
+  <a href="/auth/change-email">add email to reset password later</a>
 {/if}
 
 <ol>
