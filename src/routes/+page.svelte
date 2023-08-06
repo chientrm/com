@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MdOpenInNew from 'svelte-icons/md/MdOpenInNew.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
 </script>
@@ -29,13 +30,23 @@
     <a href="/globe">globe</a>
   </li>
   <li>
-    <a href="https://rocketmouse.chientrm.com">rocketmouse</a>
+    <a href="https://rocketmouse.chientrm.com" target="_blank">
+      rocketmouse
+      <div class="icon">
+        <MdOpenInNew />
+      </div>
+    </a>
   </li>
   <li>
     <a
       href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026"
-      >singularity</a
+      target="_blank"
     >
+      singularity
+      <div class="icon">
+        <MdOpenInNew />
+      </div>
+    </a>
   </li>
 </ol>
 

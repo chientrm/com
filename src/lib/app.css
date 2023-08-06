@@ -8,3 +8,8 @@ a {
   text-decoration: none;
   color: #1da1f2;
 }
+
+.icon {
+  width: 12pt;
+  height: 12pt;
+}
