@@ -10,13 +10,11 @@
   <meta property="og:description" content="just a bunch of random stuffs" />
 </svelte:head>
 
-<p>you may find something useful here</p>
+<blockquote class="mt-6 border-l-2 pl-6 italic">
+  "you may find something useful here."
+</blockquote>
 
-{#if data.user && !data.user.email}
-  <a href="/auth/change-email">add email to reset password later</a>
-{/if}
-
-<ol>
+<ul class="my-6 ml-6 list-disc [&>li]:mt-2">
   <li>
     <a href="/ask">wanna ask?</a>
   </li>
@@ -48,13 +46,17 @@
       </div>
     </a>
   </li>
-</ol>
+</ul>
 
-<h2>change logs</h2>
+<h2
+  class="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+>
+  change logs
+</h2>
 
 {#each data.logs as { fromNow, changes }}
-  <h3>{fromNow}</h3>
-  <ul>
+  <h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">{fromNow}</h3>
+  <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
     {#each changes as change}
       <li>{change}</li>
     {/each}

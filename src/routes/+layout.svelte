@@ -1,10 +1,11 @@
 <script lang="ts">
-  import 'modern-normalize/modern-normalize.css';
+  import { navigating } from '$app/stores';
+  import { PUBLIC_HOST, PUBLIC_OG_URL } from '$env/static/public';
   import '$lib/app.css';
   import logo from '$lib/assets/chientrm.png';
+  import Navigating from '$components/Navigating.svelte';
+  import '../app.postcss';
   import type { LayoutData } from './$types';
-  import { navigating } from '$app/stores';
-  import Navigating from '$lib/components/Navigating.svelte';
   export let data: LayoutData;
 </script>
 
@@ -14,8 +15,8 @@
   <meta name="keywords" content="chientrm, blogs, tools" />
   <meta name="author" content="chientrm" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://chientrm.com/" />
-  <meta property="og:image" content={`https://chientrm.com${logo}`} />
+  <meta property="og:url" content={PUBLIC_HOST} />
+  <meta property="og:image" content={`${PUBLIC_OG_URL}${logo}`} />
 </svelte:head>
 
 {#if $navigating}
@@ -43,7 +44,9 @@
     {/if}
   </header>
   <hr />
-  <slot />
+  <section>
+    <slot />
+  </section>
 </content>
 
 {#if data.colorMode === 'os'}
@@ -89,5 +92,8 @@
   img {
     padding: 2pt;
     width: 24pt;
+  }
+  section {
+    padding: 8pt;
   }
 </style>
