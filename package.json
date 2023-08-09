@@ -13,7 +13,7 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230801.0",
+    "@cloudflare/workers-types": "^4.20230807.0",
     "@sveltejs/adapter-cloudflare": "^2.3.2",
     "@sveltejs/kit": "^1.22.4",
     "@turf/center-of-mass": "^6.5.0",
@@ -34,8 +34,8 @@
     "mimetext": "^3.0.16",
     "modern-normalize": "^2.0.0",
     "polygon-lookup": "^2.6.0",
-    "prettier": "2.8.8",
-    "prettier-plugin-svelte": "^2.10.1",
+    "prettier": "3.0.1",
+    "prettier-plugin-svelte": "^3.0.3",
     "svelte": "^4.1.2",
     "svelte-check": "^3.4.6",
     "svelte-icons": "^2.1.0",
@@ -44,7 +44,7 @@
     "three": "^0.155.0",
     "tslib": "^2.6.1",
     "typescript": "^5.1.6",
-    "vite": "^4.4.8",
+    "vite": "^4.4.9",
     "vite-imagetools": "^5.0.7",
     "vitest": "^0.34.1",
     "yup": "^1.2.0"
