@@ -1,23 +1,27 @@
 <script lang="ts">
   import H1 from '$components/typo/H1.svelte';
   import H2 from '$components/typo/H2.svelte';
+  import H3 from '$components/typo/H3.svelte';
   import Lead from '$components/typo/Lead.svelte';
   import { Button } from '$components/ui/button';
   import { ExternalLink } from 'lucide-svelte';
   import type { PageData } from './$types';
-  import H3 from '$components/typo/H3.svelte';
   export let data: PageData;
+  const title = 'chientrm.com | You may find something useful here',
+    description =
+      'Build products nobody use to spread the boredomness over the world.';
 </script>
 
 <svelte:head>
-  <meta name="description" content="just a bunch of random stuffs" />
-  <meta property="og:title" content="chientrm.com" />
-  <meta property="og:description" content="just a bunch of random stuffs" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
 </svelte:head>
 
 <H1>chientrm.com</H1>
 
-<Lead>Build products nobody use to spread the boredomness over the world.</Lead>
+<Lead>{description}</Lead>
 
 {#if data.user && !data.user.email}
   <Button href="/auth/change-email">Add email to reset password later</Button>
@@ -27,7 +31,7 @@
 
 <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
   <li>
-    <Button href="/ask" variant="link">Wanna ask?</Button>
+    <Button href="/thread" variant="link">Thread</Button>
   </li>
   <li>
     <Button href="/counter" variant="link">Counter</Button>

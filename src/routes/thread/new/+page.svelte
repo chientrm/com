@@ -11,32 +11,29 @@
   } from '$components/ui/card';
   import { Label } from '$components/ui/label';
   import { Textarea } from '$components/ui/textarea';
-  import Error from '$lib/components/Error.svelte';
   import { autoSubmit } from '$lib/helpers/form';
-  import type { ActionData, PageData } from './$types';
-  export let form: ActionData;
+  import type { PageData } from './$types';
   export let data: PageData;
   let f: HTMLFormElement;
-  const text = 'Ask something at chientrm.com';
+  const meta = 'Create new thread on chientrm.com';
 </script>
 
 <svelte:head>
-  <title>{text}</title>
-  <meta name="description" content={text} />
-  <meta property="og:title" content={text} />
-  <meta property="og:description" content={text} />
+  <title>{meta}</title>
+  <meta name="description" content={meta} />
+  <meta property="og:title" content={meta} />
+  <meta property="og:description" content={meta} />
 </svelte:head>
 
 <form method="POST" use:enhance bind:this={f}>
   <Card>
     <CardHeader>
-      <CardTitle>New question</CardTitle>
-      <CardDescription>Ask anything.</CardDescription>
-      <Error error={form?.message} />
+      <CardTitle>New thread</CardTitle>
+      <CardDescription>Could be anything.</CardDescription>
     </CardHeader>
     <CardContent class="space-y-2">
       <div class="space-y-1">
-        <Label for="content">Question</Label>
+        <Label for="content">Content</Label>
         <Textarea
           name="content"
           value={data.content}

@@ -3,7 +3,7 @@
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
-  const text = 'Ask something at chientrm.com';
+  const text = 'Thread on chientrm.com';
 </script>
 
 <svelte:head>
@@ -13,10 +13,10 @@
   <meta property="og:description" content={text} />
 </svelte:head>
 
-<Button href="/ask/new" variant="link">Ask something</Button>
+<Button href="/thread/new">New thread</Button>
 
-<ul class="flex flex-col gap-4">
-  {#each data.asks as { id, username, content, fromNow }, index}
+<ul class="flex flex-col gap-4 mt-4">
+  {#each data.threads as { id, username, content, fromNow }, index}
     <Ask {index} {id} {username} {content} {fromNow} elipsis={true} />
   {/each}
 </ul>

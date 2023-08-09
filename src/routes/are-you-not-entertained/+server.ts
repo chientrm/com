@@ -11,7 +11,7 @@ export const GET = (async ({ locals, url }) => {
       .all<{ url: string; approvedAt: Date }>(),
     tweets = await Promise.all(
       result.results.map(async ({ url, approvedAt }) => ({
-        ...(await getTweet(locals.colorMode)(url)),
+        ...(await getTweet(url)),
         approvedAt
       }))
     );

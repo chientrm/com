@@ -5,9 +5,9 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
   const { username, email } = locals.user!,
-    [asks, result] = await Promise.all([
+    [threads, result] = await Promise.all([
       locals.D1.prepare(
-        'select id, username, content, createdAt from Com_Ask where username != ?1 and parentId in (select id from Com_Ask where username=?1)'
+        'select id, username, content, createdAt from Com_Thread where username != ?1 and parentId in (select id from Com_Thread where username=?1)'
       )
         .bind(username)
         .all<{
@@ -17,14 +17,13 @@ export const load = (async ({ locals }) => {
           createdAt: Date;
         }>()
         .then((result) => result.results ?? [])
-        .then((asks) => asks.map(addFromNow)),
+        .then((threadss) => threadss.map(addFromNow)),
       locals.D1.prepare('select createdAt from Com_User where username=?1')
         .bind(username)
         .first<{ createdAt: Date }>()
     ]),
-    { createdAt } = result!,
-    colorMode = locals.colorMode;
-  return { asks, username, email, createdAt, colorMode };
+    { createdAt } = result!;
+  return { threads, username, email, createdAt };
 }) satisfies PageServerLoad;
 
 export const actions = {

@@ -25,7 +25,7 @@
       <Badge variant="outline">{fromNow}</Badge>
     </span>
     {#if elipsis}
-      <Button href={`/ask/${id}`} variant="link">{thread}</Button>
+      <Button href={`/thread/${id}`} variant="link">{thread}</Button>
     {:else}
       <p
         class="leading-7 [&:not(:first-child)]:mt-6"

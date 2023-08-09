@@ -11,7 +11,6 @@ declare global {
       WORKER: Fetcher;
       tz: string;
       user?: User;
-      colorMode: 'os' | 'dark' | 'white';
     }
     interface Platform {
       env: {

@@ -27,10 +27,7 @@
 
   type CountryLineSegments = LineSegments<GeoJsonGeometry, LineBasicMaterial>;
 
-  const [backgroundColor, graticuleColor] =
-      data.colorMode === 'white'
-        ? [new Color(0xffffff), new Color(0)]
-        : [new Color(0), new Color(0xffffff)],
+  const [backgroundColor, graticuleColor] = [new Color(0), new Color(0xffffff)],
     graticuleMaterial = new LineBasicMaterial({
       color: graticuleColor,
       opacity: 0.1,

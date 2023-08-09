@@ -11,7 +11,6 @@ export const load = (async ({ locals, params }) => {
     )
       .bind(username)
       .first<{ createdAt: Date }>(),
-    { createdAt } = result!,
-    colorMode = locals.colorMode;
-  return { username, createdAt, colorMode };
+    { createdAt } = result!;
+  return { username, createdAt };
 }) satisfies PageServerLoad;

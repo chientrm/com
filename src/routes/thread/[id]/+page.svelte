@@ -12,20 +12,20 @@
   export let data: PageData;
   export let form: ActionData;
   let f: HTMLFormElement;
-  $: text = data.content;
+  $: meta = data.content;
 </script>
 
 <svelte:head>
-  <title>{text}</title>
-  <meta name="description" content={text} />
-  <meta property="og:title" content={text} />
-  <meta property="og:description" content={text} />
+  <title>{meta}</title>
+  <meta name="description" content={data.content} />
+  <meta property="og:title" content={meta} />
+  <meta property="og:description" content={meta} />
 </svelte:head>
 
-<H3>Ask</H3>
+<H3>Thread</H3>
 <div class="flex flex-col">
   {#if data.parentId}
-    <a href={`/ask/${data.parentId}`}>← parent</a>
+    <Button href={`/thread/${data.parentId}`}>← Parent</Button>
   {/if}
 
   <Ask

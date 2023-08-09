@@ -7,7 +7,7 @@ import type { Actions, PageServerLoad } from './$types';
 export const load = (async ({ params, locals, url }) => {
   const { id } = params,
     result = await locals.D1.prepare(
-      'select username, parentId, content, createdAt from Com_Ask where id=?1'
+      'select username, parentId, content, createdAt from Com_Thread where id=?1'
     )
       .bind(id)
       .first<{
@@ -18,7 +18,7 @@ export const load = (async ({ params, locals, url }) => {
       }>(),
     { username, parentId, content, createdAt } = result!,
     repliesResult = await locals.D1.prepare(
-      'select id, username, content, createdAt from Com_Ask where parentId=?1 order by createdAt'
+      'select id, username, content, createdAt from Com_Thread where parentId=?1 order by createdAt'
     )
       .bind(id)
       .all<{
@@ -55,11 +55,11 @@ export const actions = {
     const { id } = params,
       { reply } = form!;
     if (!locals.user) {
-      throw redirect(303, `/auth?redirectTo=/ask/${id}?reply=${reply}`);
+      throw redirect(303, `/auth?redirectTo=/thread/${id}?reply=${reply}`);
     }
     const { username } = locals.user!;
     await locals.D1.prepare(
-      'insert into Com_Ask(username, content, parentId) values(?1, ?2, ?3) returning id'
+      'insert into Com_Thread(username, content, parentId) values(?1, ?2, ?3) returning id'
     )
       .bind(username, reply, id)
       .first<{ id: number }>();

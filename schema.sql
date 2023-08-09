@@ -6,7 +6,7 @@ CREATE TABLE Com_User(
     createdAt datetime DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE Com_Ask(
+CREATE TABLE Com_Thread(
     id integer PRIMARY KEY AUTOINCREMENT,
     parentId integer,
     username text NOT NULL,

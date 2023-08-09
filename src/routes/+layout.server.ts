@@ -1,22 +1,18 @@
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, request }) => {
-  const { user, colorMode } = locals,
+  const { user } = locals,
     url = new URL(request.url),
-    pathname = url.pathname,
-    result = await locals.D1.prepare(
-      'select count(*) as count from Com_Ask where parentId is null'
-    ).first<{ count: number }>(),
-    totalCount = result!.count;
+    pathname = url.pathname;
   if (user) {
     const { username } = user,
       result = await locals.D1.prepare(
-        'select count(id) as count from Com_Ask where username != ?1 and parentId in (select id from Com_Ask where username=?1)'
+        'select count(id) as count from Com_Thread where username != ?1 and parentId in (select id from Com_Thread where username=?1)'
       )
         .bind(username)
         .first<{ count: number }>(),
       { count } = result!;
-    return { user, colorMode, pathname, count, totalCount };
+    return { user, pathname, count };
   }
-  return { user, colorMode, pathname, totalCount };
+  return { user, pathname };
 }) satisfies LayoutServerLoad;

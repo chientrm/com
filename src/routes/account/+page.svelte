@@ -61,7 +61,7 @@
 
 <H2>Inbox</H2>
 <ul class="flex flex-col gap-4">
-  {#each data.asks as { id, content, username, fromNow }, index}
+  {#each data.threads as { id, content, username, fromNow }, index}
     <Ask {index} {id} {content} {username} {fromNow} />
   {/each}
 </ul>

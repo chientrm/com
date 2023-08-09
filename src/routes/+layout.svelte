@@ -16,7 +16,6 @@
 
 <svelte:head>
   <link rel="icon" href={logo} />
-  <title>chientrm.com | You may find something useful here</title>
   <meta name="keywords" content="chientrm, blogs, tools" />
   <meta name="author" content="chientrm" />
   <meta property="og:type" content="website" />
@@ -37,7 +36,7 @@
     </Avatar>
     chientrm
   </Button>
-  <Button href="/ask" variant="link">ask ({data.totalCount})</Button>
+  <Button href="/thread" variant="link">Thread</Button>
   <div class="grow" />
   {#if data.user}
     <Button href="/account">
