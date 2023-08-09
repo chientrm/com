@@ -1,5 +1,6 @@
 <script lang="ts">
   import { navigating } from '$app/stores';
+  import Referral from '$components/Referral.svelte';
   import { LightSwitch } from '$components/light-switch';
   import { Avatar, AvatarFallback, AvatarImage } from '$components/ui/avatar';
   import Button from '$components/ui/button/Button.svelte';
@@ -7,6 +8,7 @@
   import logo from '$lib/assets/chientrm.png';
   import Navigating from '$lib/components/Navigating.svelte';
   import { setInitialClassState } from '$lib/components/light-switch/light-switch';
+  import { Github, Twitter } from 'lucide-svelte';
   import '../app.postcss';
   import type { LayoutData } from './$types';
   export let data: LayoutData;
@@ -44,6 +46,12 @@
   {:else}
     <Button href="/auth">Login</Button>
   {/if}
+  <Referral href="https://twitter.com/chientrm" alt="Twitter">
+    <Twitter class="h-5 w-5" />
+  </Referral>
+  <Referral href="https://github.com/chientrm" alt="Github">
+    <Github class="h-5 w-5" />
+  </Referral>
   <LightSwitch />
 </header>
 <div class="p-8">
