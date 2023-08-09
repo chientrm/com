@@ -3,13 +3,14 @@ import { hashPassword, validatePassword } from '$lib/helpers/password';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { fail, redirect } from '@sveltejs/kit';
-import { string } from 'yup';
+import { ref, string } from 'yup';
 import type { Actions } from './$types';
 
 export const actions = {
   login: async ({ request, locals, cookies, url }) => {
     const { form, message: loginMessage } = await validate2(request, {
       username: string()
+        .label('Username')
         .matches(
           /^[a-zA-Z0-9\-_]+$/,
           'username can only contain letters, digits, dashes and underscores'
@@ -17,10 +18,10 @@ export const actions = {
         .required()
         .min(2)
         .max(15),
-      password: string().required().min(8).max(72)
+      password: string().label('Password').required().min(8).max(72)
     });
     if (loginMessage) {
-      return fail(400, { loginMessage });
+      return { loginMessage };
     }
     const { username, password } = form!,
       dbUser = await locals.D1.prepare(
@@ -29,7 +30,7 @@ export const actions = {
         .bind(username)
         .first<{ createdAt: Date; passwordHash: string; email: string }>();
     if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
-      return { loginMessage: 'invalid username or password' };
+      return { loginMessage: 'Invalid username or password' };
     }
     const { createdAt, email } = dbUser;
     await auth(cookies, { username, createdAt, email });
@@ -38,6 +39,7 @@ export const actions = {
   register: async ({ request, locals, cookies, url }) => {
     const { form, message: registerMessage } = await validate2(request, {
       username: string()
+        .label('Username')
         .matches(
           /^[a-zA-Z0-9\-_]+$/,
           'username can only contain letters, digits, dashes and underscores'
@@ -45,10 +47,14 @@ export const actions = {
         .required()
         .min(2)
         .max(15),
-      password: string().required().min(8).max(72)
+      password: string().label('Password').required().min(8).max(72),
+      confirmPassword: string()
+        .label('Confirm password')
+        .required()
+        .oneOf([ref('password')], 'Password mismatch')
     });
     if (registerMessage) {
-      return fail(400, { registerMessage });
+      return { registerMessage };
     }
     const { username, password } = form!,
       passwordHash = await hashPassword(password);

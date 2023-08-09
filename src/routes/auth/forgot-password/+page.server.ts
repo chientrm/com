@@ -9,7 +9,7 @@ import type { Actions } from './$types';
 export const actions = {
   default: async ({ request }) => {
     const { form, message } = await validate2(request, {
-      email: string().required().email()
+      email: string().label('Email').required().email()
     });
     if (message) {
       return { message };
@@ -25,6 +25,6 @@ export const actions = {
         support_email
       }
     });
-    return { result: `an email is sent to ${email}, please check inbox` };
+    return { result: `An email is sent to ${email}, please check inbox.` };
   }
 } satisfies Actions;

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from '$components/ui/button/Button.svelte';
   import Ask from '$lib/components/Ask.svelte';
   import type { PageData } from './$types';
   export let data: PageData;
@@ -12,11 +13,10 @@
   <meta property="og:description" content={text} />
 </svelte:head>
 
-<a href="/ask/new">ask something</a>
-<hr />
+<Button href="/ask/new" variant="link">Ask something</Button>
 
-<div>
+<ul class="flex flex-col gap-4">
   {#each data.asks as { id, username, content, fromNow }, index}
     <Ask {index} {id} {username} {content} {fromNow} elipsis={true} />
   {/each}
-</div>
+</ul>

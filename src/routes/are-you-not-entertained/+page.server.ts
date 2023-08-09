@@ -20,7 +20,7 @@ export const load = (async ({ locals, url }) => {
 export const actions = {
   submit: async ({ request, locals }) => {
     const { form, message } = await validate2(request, {
-      url: string().required()
+      url: string().label('Url').required()
     });
     if (message) {
       return { message };
@@ -49,6 +49,7 @@ export const actions = {
           data: `${username}'ve just submited a tweet. Url : ${url}\nReview now: https://chientrm.com/are-you-not-entertained/review`
         })
       });
+      return { result: 'Submit successfully.' };
     } catch (e) {
       if (unique(e)) {
         const message = 'Someone already submited this url';

@@ -2,7 +2,7 @@ import { verify } from '$lib/helpers/crypt';
 import { hashPassword } from '$lib/helpers/password';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
-import { string } from 'yup';
+import { ref, string } from 'yup';
 import type { Actions } from './$types';
 
 export const actions = {
@@ -10,7 +10,11 @@ export const actions = {
     const { jwt } = params,
       { email } = await verify<{ email: string }>(jwt),
       { form, message } = await validate2(request, {
-        password: string().required().min(8).max(72)
+        password: string().required().min(8).max(72),
+        confirmPassword: string()
+          .label('Confirm password')
+          .required()
+          .oneOf([ref('password')], 'Password mistmatch')
       });
     if (message) {
       return { message };

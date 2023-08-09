@@ -2,12 +2,6 @@
   export let error: string | null | undefined;
 </script>
 
-<span>
+<span class="text-red-400">
   {error ?? '‎'}
 </span>
-
-<style>
-  span {
-    color: red;
-  }
-</style>

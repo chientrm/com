@@ -1,3 +1,7 @@
+<script>
+  import H3 from '$components/typo/H3.svelte';
+</script>
+
 <svelte:head>
   <script
     async
@@ -6,6 +10,6 @@
   ></script>
 </svelte:head>
 
-<h3>Are you not entertained?</h3>
+<H3>Are you not entertained?</H3>
 
 <slot />

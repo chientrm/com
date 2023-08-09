@@ -11,7 +11,7 @@ export const actions = {
   default: async ({ request, locals }) => {
     const { username } = locals.user!,
       { form, message } = await validate2(request, {
-        email: string().required().email()
+        email: string().label('Email').required().email()
       });
     if (message) {
       return { message };
@@ -36,6 +36,6 @@ export const actions = {
         action_url
       }
     });
-    return { result: 'please check your inbox for confirmation email' };
+    return { result: 'Please check your inbox for confirmation email' };
   }
 } satisfies Actions;

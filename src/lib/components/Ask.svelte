@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { Badge } from '$components/ui/badge';
+  import Button from './ui/button/Button.svelte';
+
   export let index: number | null = null;
   export let id: number | string;
   export let content: string;
@@ -13,44 +16,29 @@
   $: thread = elipsis ? truncate(content, 100) : content;
 </script>
 
-<div class="row">
-  <span class="id">
+<div class="flex flex-row items-start border rounded-md p-4">
+  <div class="flex flex-col items-start">
+    <span>
+      <Button href={`/user/${username}`} variant="link" class="italic">
+        {username}
+      </Button>
+      <Badge variant="outline">{fromNow}</Badge>
+    </span>
+    {#if elipsis}
+      <Button href={`/ask/${id}`} variant="link">{thread}</Button>
+    {:else}
+      <p
+        class="leading-7 [&:not(:first-child)]:mt-6"
+        style="overflow-wrap: anywhere"
+      >
+        {thread}
+      </p>
+    {/if}
+  </div>
+  <div class="grow" />
+  <span>
     {#if index !== null}
-      {index + 1}.
+      #{index + 1}
     {/if}
   </span>
-  <div class="col">
-    <a href={`/ask/${id}`}>
-      {#each thread.split(/\r?\n/) as line}
-        {line} <br />
-      {/each}
-    </a>
-    <span class="ref">
-      by <a href={`/user/${username}`}>{username}</a>
-      {fromNow}
-    </span>
-  </div>
 </div>
-
-<style>
-  div.row {
-    display: flex;
-    flex-direction: row;
-    gap: 8pt;
-    padding: 8pt;
-  }
-  div.col {
-    display: flex;
-    flex-direction: column;
-    gap: 8pt;
-  }
-  span.id {
-    width: 16pt;
-  }
-  span.ref {
-    font-style: italic;
-  }
-  a {
-    overflow-wrap: anywhere;
-  }
-</style>

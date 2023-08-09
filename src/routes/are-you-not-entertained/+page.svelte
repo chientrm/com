@@ -1,9 +1,21 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import { Button } from '$components/ui/button';
+  import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle
+  } from '$components/ui/card';
+  import { Input } from '$components/ui/input';
+  import { Label } from '$components/ui/label';
   import Error from '$lib/components/Error.svelte';
   import dayjs from 'dayjs';
   import InfiniteLoading from 'svelte-infinite-loading';
   import type { ActionData, PageData } from './$types';
+  import Result from '$components/Result.svelte';
   export let data: PageData;
   export let form: ActionData;
   const text = 'Are you not entertained? Visit chientrm.com';
@@ -49,21 +61,28 @@
 {/if}
 
 <form method="POST" action="?/submit" use:enhance>
-  <table>
-    <tr>
-      <td>Tweet url:</td>
-      <td>
-        <input type="text" name="url" value={data.url} />
-      </td>
-    </tr>
-    <tr>
-      <td />
-      <td>
+  <Card class="w-[400px]">
+    <CardHeader>
+      <CardTitle>Submit tweet</CardTitle>
+      <CardDescription>
+        Submit your favorite tweet here to share with other.
+      </CardDescription>
+      {#if form?.result}
+        <Result result={form?.result} />
+      {:else}
         <Error error={form?.message} />
-      </td>
-    </tr>
-  </table>
-  <button>submit</button>
+      {/if}
+    </CardHeader>
+    <CardContent class="space-y-2">
+      <div class="space-y-1">
+        <Label for="url">Tweet url</Label>
+        <Input id="url" name="url" value={data.url} />
+      </div>
+    </CardContent>
+    <CardFooter>
+      <Button>Submit</Button>
+    </CardFooter>
+  </Card>
 </form>
 
 <div bind:this={tweetsDiv}>

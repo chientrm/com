@@ -1,8 +1,6 @@
-import { COOKIE_COLORMODE } from '$lib/constants/cookies';
+import { COOKIE_USER } from '$lib/constants/cookies';
 import { addFromNow } from '$lib/helpers/day';
-import { validate } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
-import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
@@ -30,14 +28,9 @@ export const load = (async ({ locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions = {
-  update: async ({ request, cookies }) => {
-    const { colorMode } = await validate(request, {
-      colorMode: string().required().oneOf(['os', 'dark', 'white'])
-    });
-    cookies.set(COOKIE_COLORMODE, colorMode, {
-      path: '/',
-      maxAge: 365 * 24 * 3600
-    });
+  logout: ({ cookies, locals }) => {
+    cookies.delete(COOKIE_USER);
+    locals.user = undefined;
     throw redirect(303, '/');
   }
 } satisfies Actions;

@@ -1,5 +1,10 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
+  import H3 from '$components/typo/H3.svelte';
+  import { Button } from '$components/ui/button';
+  import { Card, CardContent, CardFooter } from '$components/ui/card';
+  import { Label } from '$components/ui/label';
+  import { Textarea } from '$components/ui/textarea';
   import Ask from '$lib/components/Ask.svelte';
   import Error from '$lib/components/Error.svelte';
   import { autoSubmit } from '$lib/helpers/form';
@@ -17,7 +22,8 @@
   <meta property="og:description" content={text} />
 </svelte:head>
 
-<div class="col">
+<H3>Ask</H3>
+<div class="flex flex-col">
   {#if data.parentId}
     <a href={`/ask/${data.parentId}`}>← parent</a>
   {/if}
@@ -28,44 +34,29 @@
     username={data.username}
     fromNow={data.fromNow}
   />
-
-  <div class="replies">
+  <H3>Replies</H3>
+  <ul class="flex flex-col gap-4">
     {#each data.replies as { id, content, username, fromNow }, index}
       <Ask {index} {id} {content} {username} {fromNow} />
     {/each}
-  </div>
-
-  <form method="POST" action="?/reply" use:enhance bind:this={f}>
-    <Error error={form?.message} />
-    <table>
-      <tr>
-        <td>reply:</td>
-        <td>
-          <textarea
-            name="reply"
-            value={data.reply}
-            maxlength="5000"
-            on:keydown={(e) => autoSubmit(f, e)}
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button>submit</button>
-        </td>
-        <td />
-      </tr>
-    </table>
-  </form>
+    <form method="POST" action="?/reply" use:enhance bind:this={f}>
+      <Card>
+        <CardContent class="space-y-2">
+          <Error error={form?.message} />
+          <div class="space-y-1">
+            <Label for="reply">Reply</Label>
+            <Textarea
+              name="reply"
+              value={data.reply}
+              maxlength="5000"
+              on:keydown={(e) => autoSubmit(f, e)}
+            />
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>Submit</Button>
+        </CardFooter>
+      </Card>
+    </form>
+  </ul>
 </div>
-
-<style>
-  div.col {
-    display: flex;
-    flex-direction: column;
-  }
-  div.replies {
-    padding: 8pt;
-    padding-left: 16pt;
-  }
-</style>

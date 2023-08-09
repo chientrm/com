@@ -2,12 +2,6 @@
   export let result: string | null | undefined;
 </script>
 
-<span>
+<span class="text-green-400">
   {result ?? '‎'}
 </span>
-
-<style>
-  span {
-    color: green;
-  }
-</style>

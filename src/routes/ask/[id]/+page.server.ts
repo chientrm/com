@@ -47,7 +47,7 @@ export const load = (async ({ params, locals, url }) => {
 export const actions = {
   reply: async ({ params, request, locals }) => {
     const { form, message } = await validate2(request, {
-      reply: string().required().max(5000)
+      reply: string().label('Reply').required().max(5000)
     });
     if (message) {
       return fail(400, { message });
