@@ -45,7 +45,7 @@
   {:else}
     <Button href="/auth">Login</Button>
   {/if}
-  <Referral href="https://twitter.com/chientrm" alt="Twitter">
+  <Referral href="https://twitter.com/realchientrm" alt="Twitter">
     <Twitter class="h-5 w-5" />
   </Referral>
   <Referral href="https://github.com/chientrm" alt="Github">
