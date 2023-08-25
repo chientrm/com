@@ -34,6 +34,12 @@
     <Button href="/thread" variant="link">Thread</Button>
   </li>
   <li>
+    <Button href="https://shitpostai.com" target="_blank" variant="link">
+      ShitpostAI
+      <ExternalLink class="ml-2 h-4 w-4" />
+    </Button>
+  </li>
+  <li>
     <Button href="/counter" variant="link">Counter</Button>
   </li>
   <li>
@@ -51,16 +57,6 @@
       variant="link"
     >
       Rocketmouse
-      <ExternalLink class="ml-2 h-4 w-4" />
-    </Button>
-  </li>
-  <li>
-    <Button
-      href="https://discord.gg/official-r-singularity-discord-server-1057701239426646026"
-      target="_blank"
-      variant="link"
-    >
-      Singularity
       <ExternalLink class="ml-2 h-4 w-4" />
     </Button>
   </li>
