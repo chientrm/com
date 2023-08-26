@@ -31,6 +31,9 @@
 
 <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
   <li>
+    <Button href="/my-son" variant="link">My son</Button>
+  </li>
+  <li>
     <Button href="/thread" variant="link">Thread</Button>
   </li>
   <li>
