@@ -74,9 +74,9 @@ We use the `Snowflake` table to generate `time`, `sequence` and check for their 
 
 ```sql
 CREATE TABLE Snowflake(
-    time uint64 NOT NULL,
+    now uint64 NOT NULL,
     align uint16 NOT NULL,
-    PRIMARY KEY (time, align)
+    PRIMARY KEY (now, align)
 );
 ```
 
