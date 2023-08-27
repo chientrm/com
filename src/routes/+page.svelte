@@ -34,7 +34,7 @@
     <Button href="/my-son" variant="link">My son</Button>
   </li>
   <li>
-    <Button href="/snowflake-id-for-serverless-runtime" variant="link">
+    <Button href="/blogs/snowflake-id-for-serverless-runtime" variant="link">
       Snowflake Id
     </Button>
   </li>
