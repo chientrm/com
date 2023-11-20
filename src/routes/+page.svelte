@@ -45,6 +45,12 @@
     <Button href="/thread" variant="link">Thread</Button>
   </li>
   <li>
+    <Button href="https://parallax.chientrm.com" target="_blank" variant="link">
+      Parallax
+      <ExternalLink class="ml-2 h-4 w-4" />
+    </Button>
+  </li>
+  <li>
     <Button href="https://shitpostai.com" target="_blank" variant="link">
       ShitpostAI
       <ExternalLink class="ml-2 h-4 w-4" />
