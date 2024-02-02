@@ -37,7 +37,7 @@
   <Referral href="https://twitter.com/realchientrm" alt="Twitter">
     <MingcuteSocialXLine class="h-5 w-5" />
   </Referral>
-  <Referral href="https://github.com/chientrm" alt="Github">
+  <Referral href="https://github.com/chientrm/com" alt="Github">
     <MdiGithub class="h-5 w-5" />
   </Referral>
   <ModeToggle />
