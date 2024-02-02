@@ -16,6 +16,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240129.0",
     "@iconify/json": "^2.2.178",
+    "@rollup/pluginutils": "^5.1.0",
     "@sveltejs/adapter-cloudflare": "^4.1.0",
     "@sveltejs/kit": "^2.5.0",
     "@turf/center-of-mass": "^6.5.0",

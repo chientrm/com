@@ -1,4 +1,5 @@
 import { dataToEsm } from '@rollup/pluginutils';
+import centerOfMass from '@turf/center-of-mass';
 import { createHash } from 'crypto';
 import { geoDistance, geoInterpolate } from 'd3-geo';
 import earcut from 'earcut';
@@ -8,7 +9,6 @@ import { basename, extname } from 'node:path';
 import type { Plugin, ResolvedConfig } from 'vite';
 import type { Group } from '../src/app';
 import { polarToCartesian } from '../src/lib/helpers/coords';
-import centerOfMass from '@turf/center-of-mass';
 
 function interpolateLine(positions: Position[] = [], maxDegDistance = 1) {
   const result: Position[] = [];
@@ -119,8 +119,8 @@ const parse = (geometry: Geometry, radius: number, resolution: number) => {
     geometry.type === 'Polygon'
       ? genPolygon(geometry.coordinates, radius, resolution)
       : geometry.type === 'MultiPolygon'
-      ? genMultiPolygon(geometry.coordinates, radius, resolution)
-      : null;
+        ? genMultiPolygon(geometry.coordinates, radius, resolution)
+        : null;
   if (groups === null) {
     throw new Error();
   }

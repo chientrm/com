@@ -11,9 +11,7 @@ export default defineConfig({
     geograticule(),
     geojson(),
     geoprop(),
-    Icons({
-      compiler: 'svelte'
-    })
+    Icons({ compiler: 'svelte' })
   ],
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}']

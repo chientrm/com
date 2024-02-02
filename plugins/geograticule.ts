@@ -89,8 +89,8 @@ const parse = (geometry: Geometry, radius: number, resolution: number) => {
     geometry.type === 'LineString'
       ? genLineString(geometry.coordinates, radius, resolution)
       : geometry.type === 'MultiLineString'
-      ? genMultiLineString(geometry.coordinates, radius, resolution)
-      : null;
+        ? genMultiLineString(geometry.coordinates, radius, resolution)
+        : null;
   if (groups === null) {
     throw new Error();
   }
