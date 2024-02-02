@@ -140,7 +140,6 @@
         <span>Copyright &copy; 2024</span>
         <a href="/terms" class="text-muted-foreground">Terms of Service</a>
         <a href="/privacy" class="text-muted-foreground">Privacy Policy</a>
-        <a href="/refund" class="text-muted-foreground">Refund Policy</a>
         <a href="/cookies" class="text-muted-foreground">Cookies</a>
       </div>
     </div>
