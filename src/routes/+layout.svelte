@@ -42,7 +42,7 @@
         <a href="/thread">thread</a>
         <div class="grow"></div>
         {#if data.user.username === anonymousUsername}
-          <Button href="/auth">Login</Button>
+          <Button href="/auth">Sign Up</Button>
         {:else}
           <Button href="/account">
             {data.user.username} ({data.count})
