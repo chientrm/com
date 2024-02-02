@@ -9,7 +9,7 @@ declare global {
   namespace App {
     interface Locals {
       D1: D1Database;
-      user?: User;
+      user: User;
     }
     interface Platform {
       env: {
