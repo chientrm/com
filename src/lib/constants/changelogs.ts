@@ -6,7 +6,7 @@ interface ChangeLog {
 export const changeLogs: ChangeLog[] = [
   {
     createdAt: new Date('Fri Feb  2 02:23:45 PM UTC 2024'),
-    changes: ['revamp']
+    changes: ['revamp', 'remove email support']
   },
   {
     createdAt: new Date('Mon Nov 20 01:47:56 AM UTC 2023'),

@@ -12,7 +12,6 @@
     CardTitle
   } from '$lib/components/ui/card';
   import MaterialSymbolsCalendarClockOutline from '~icons/material-symbols/calendar-clock-outline';
-  import MaterialSymbolsMailOutline from '~icons/material-symbols/mail-outline';
 
   export let data;
   const text = 'You account at chientrm.com';
@@ -31,18 +30,6 @@
     <CardDescription>{data.username}</CardDescription>
   </CardHeader>
   <CardContent class="grid gap-4">
-    <div class="flex items-center space-x-4 rounded-md border p-4">
-      <MaterialSymbolsMailOutline />
-      <div class="flex-1 space-y-1">
-        <p class="text-sm font-medium leading-none">Email</p>
-        <p class="text-sm text-muted-foreground">
-          {data.user?.email ?? ''}
-        </p>
-      </div>
-      <Button href="/auth/change-email" variant="link">
-        {data.email ? 'Change' : 'Add'}
-      </Button>
-    </div>
     <div class="flex items-center space-x-4 rounded-md border p-4">
       <MaterialSymbolsCalendarClockOutline />
       <div class="flex-1 space-y-1">

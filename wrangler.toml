@@ -6,8 +6,3 @@ binding = "D1"
 database_name = "D1"
 database_id = "5366169d-d4d2-4473-a4e7-80638e7660f4"
 preview_database_id = "5366169d-d4d2-4473-a4e7-80638e7660f4"
-
-[[services]]
-binding = "MAIL"
-service = "mail"
-environment = "production"

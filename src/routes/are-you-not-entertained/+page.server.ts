@@ -1,4 +1,4 @@
-import { adminUsername, support_email } from '$lib/constants/string';
+import { adminUsername } from '$lib/constants/string';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
@@ -39,16 +39,6 @@ export const actions = {
       )
         .bind(url, username)
         .run();
-      locals.WORKER.fetch('http://whatever.fake/send_email', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: 'entertained',
-          addr: support_email,
-          recipent: 'chientrm@gmail.com',
-          subject: `${username} submited a tweet to chientrm.com`,
-          data: `${username}'ve just submited a tweet. Url : ${url}\nReview now: https://chientrm.com/are-you-not-entertained/review`
-        })
-      });
       return { result: 'Submit successfully.' };
     } catch (e) {
       if (unique(e)) {

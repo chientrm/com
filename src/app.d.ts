@@ -9,13 +9,11 @@ declare global {
   namespace App {
     interface Locals {
       D1: D1Database;
-      MAIL: Fetcher;
       user?: User;
     }
     interface Platform {
       env: {
         D1: D1Database;
-        MAIL: Fetcher;
       };
     }
     interface User extends JWTPayload {
