@@ -82,7 +82,7 @@ CREATE TABLE Snowflake(
 
 The snowflake generator:
 
-```ts
+```js
 import { unique } from './unique';
 
 const random_integer = (range: number) => Math.round(Math.random() * range);
@@ -146,3 +146,19 @@ In case of clashing, the function delay 1 millisecond and retry every 1 ms.
 Instead of using `autoincrement` sequence_id, we use a random `align`, which will eventually lead to a higher chance of clashing. However, we resolve the issue by retry generating after 1ms.
 
 Although this implementation enable to use snowflake id in serverless environment, `align` become meaningless and records inserted at the same milliseconds are not order by creation time.
+
+<style>
+  h1, h2 {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  table, th, td {
+    border: 1px solid;
+    padding: 1em;
+  }
+</style>

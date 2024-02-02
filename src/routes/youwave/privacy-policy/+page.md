@@ -6,6 +6,8 @@ authors: chientrm
 tag: [youwave, privacy, policy]
 ---
 
+# YouWave Privacy Policy
+
 ## Introduction
 
 Welcome to the YouWave app for Android!
@@ -62,3 +64,19 @@ This privacy policy may be updated along with the development and evolution of t
 
 If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter
 relating to individual rights and your Personal Information, you may send an email to [admin@chientrm.com](mailto:admin@chientrm.com).
+
+<style>
+  h1, h2 {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+  table, th, td {
+    border: 1px solid;
+    padding: 1em;
+  }
+</style>
