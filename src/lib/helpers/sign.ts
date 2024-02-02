@@ -10,5 +10,5 @@ export const sign = async <T extends JWTPayload>(data: T) =>
     .setIssuedAt()
     .setIssuer(issuer)
     .setAudience(audience)
-    .setExpirationTime('1w')
+    .setExpirationTime('30d')
     .sign(await forPrivateKey);

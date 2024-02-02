@@ -1,11 +1,10 @@
-import { dev } from '$app/environment';
-import { sign } from '$lib/helpers/getPrivateKey';
+import { PUBLIC_HOST } from '$env/static/public';
+import { support_email } from '$lib/constants/string';
 import { sendEmail } from '$lib/helpers/email';
+import { sign } from '$lib/helpers/sign';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';
 import type { Actions } from './$types';
-import { PUBLIC_HOST } from '$env/static/public';
-import { support_email } from '$lib/constants/string';
 
 export const actions = {
   default: async ({ request, locals }) => {

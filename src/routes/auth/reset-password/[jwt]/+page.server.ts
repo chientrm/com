@@ -1,6 +1,6 @@
-import { verify } from '$lib/helpers/getPrivateKey';
 import { hashPassword } from '$lib/helpers/password';
 import { validate2 } from '$lib/helpers/validate';
+import { verify } from '$lib/helpers/verify';
 import { redirect } from '@sveltejs/kit';
 import { ref, string } from 'yup';
 import type { Actions } from './$types';
