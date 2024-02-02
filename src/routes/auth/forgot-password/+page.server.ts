@@ -1,6 +1,6 @@
 import { PUBLIC_HOST } from '$env/static/public';
 import { support_email } from '$lib/constants/string';
-import { sign } from '$lib/helpers/crypt';
+import { sign } from '$lib/helpers/getPrivateKey';
 import { sendEmail } from '$lib/helpers/email';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';

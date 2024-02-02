@@ -1,6 +1,8 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button } from '$components/ui/button';
+  import Error from '$lib/components/Error.svelte';
+  import Result from '$lib/components/Result.svelte';
+  import { Button } from '$lib/components/ui/button';
   import {
     Card,
     CardContent,
@@ -8,16 +10,13 @@
     CardFooter,
     CardHeader,
     CardTitle
-  } from '$components/ui/card';
-  import { Input } from '$components/ui/input';
-  import { Label } from '$components/ui/label';
-  import Error from '$lib/components/Error.svelte';
+  } from '$lib/components/ui/card';
+  import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
   import dayjs from 'dayjs';
   import InfiniteLoading from 'svelte-infinite-loading';
-  import type { ActionData, PageData } from './$types';
-  import Result from '$components/Result.svelte';
-  export let data: PageData;
-  export let form: ActionData;
+  export let data;
+  export let form;
   const text = 'Are you not entertained? Visit chientrm.com';
   let tweetsDiv: HTMLDivElement;
   let approvedAt = new Date();

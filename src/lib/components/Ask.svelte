@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Badge } from '$components/ui/badge';
-  import Button from './ui/button/Button.svelte';
+  import { Badge } from '$lib/components/ui/badge';
+  import { Button } from '$lib/components/ui/button';
 
   export let index: number | null = null;
   export let id: number | string;
@@ -16,7 +16,7 @@
   $: thread = elipsis ? truncate(content, 100) : content;
 </script>
 
-<div class="flex flex-row items-start border rounded-md p-4">
+<div class="flex flex-row items-start rounded-md border p-4">
   <div class="flex flex-col items-start">
     <span>
       <Button href={`/user/${username}`} variant="link" class="italic">

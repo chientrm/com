@@ -1,5 +1,5 @@
 import { auth } from '$lib/helpers/auth';
-import { verify } from '$lib/helpers/crypt';
+import { verify } from '$lib/helpers/getPrivateKey';
 import type { PageServerLoad } from './$types';
 
 interface Payload {

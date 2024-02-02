@@ -1,8 +1,7 @@
 <script>
-  import Result from '$components/Result.svelte';
-  import H3 from '$components/typo/H3.svelte';
-  import P from '$components/typo/P.svelte';
-  import { Button } from '$components/ui/button';
+  import Result from '$lib/components/Result.svelte';
+  import H3 from '$lib/components/typo/H3.svelte';
+  import { Button } from '$lib/components/ui/button';
 </script>
 
 <H3>Reset password</H3>

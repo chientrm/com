@@ -1,7 +1,7 @@
 <script lang="ts">
-  import H3 from '$components/typo/H3.svelte';
   import Error from '$lib/components/Error.svelte';
   import Result from '$lib/components/Result.svelte';
+  import H3 from '$lib/components/typo/H3.svelte';
   import type { PageServerData } from './$types';
 
   export let data: PageServerData;

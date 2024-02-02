@@ -1,17 +1,15 @@
-<script lang="ts">
-  import { navigating } from '$app/stores';
-  import Referral from '$components/Referral.svelte';
-  import { LightSwitch } from '$components/light-switch';
-  import { Avatar, AvatarFallback, AvatarImage } from '$components/ui/avatar';
-  import Button from '$components/ui/button/Button.svelte';
+<script>
   import { PUBLIC_OG_URL } from '$env/static/public';
   import logo from '$lib/assets/chientrm.png';
-  import Navigating from '$lib/components/Navigating.svelte';
-  import { setInitialClassState } from '$lib/components/light-switch/light-switch';
-  import { Github, Twitter } from 'lucide-svelte';
-  import '../app.postcss';
-  import type { LayoutData } from './$types';
-  export let data: LayoutData;
+  import ModeToggle from '$lib/components/ModeToggle.svelte';
+  import Referral from '$lib/components/Referral.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import { ModeWatcher } from 'mode-watcher';
+  import MdiGithub from '~icons/mdi/github';
+  import MingcuteSocialXLine from '~icons/mingcute/social-x-line';
+  import '../app.pcss';
+
+  export let data;
 </script>
 
 <svelte:head>
@@ -21,23 +19,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content={PUBLIC_OG_URL} />
   <meta property="og:image" content={`${PUBLIC_OG_URL}${logo}`} />
-  {@html `<\u{73}cript nonce="%sveltekit.nonce%">(${setInitialClassState.toString()})();</script>`}
 </svelte:head>
 
-{#if $navigating}
-  <Navigating />
-{/if}
+<ModeWatcher />
 
-<header class="flex flex-row p-4 gap-2">
-  <Button href="/" variant="link" class="gap-1">
-    <Avatar>
-      <AvatarImage src={logo} alt="@chientrm" />
-      <AvatarFallback>Logo</AvatarFallback>
-    </Avatar>
-    chientrm
-  </Button>
+<header class="flex flex-row gap-2 p-4">
+  <Button href="/" variant="link" class="gap-1">chientrm</Button>
   <Button href="/thread" variant="link">Thread</Button>
-  <div class="grow" />
+  <div class="grow"></div>
   {#if data.user}
     <Button href="/account">
       {data.user.username} ({data.count})
@@ -46,12 +35,12 @@
     <Button href="/auth">Login</Button>
   {/if}
   <Referral href="https://twitter.com/realchientrm" alt="Twitter">
-    <Twitter class="h-5 w-5" />
+    <MingcuteSocialXLine class="h-5 w-5" />
   </Referral>
   <Referral href="https://github.com/chientrm" alt="Github">
-    <Github class="h-5 w-5" />
+    <MdiGithub class="h-5 w-5" />
   </Referral>
-  <LightSwitch />
+  <ModeToggle />
 </header>
 <div class="p-8">
   <slot />

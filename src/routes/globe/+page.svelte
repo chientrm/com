@@ -19,9 +19,8 @@
     Vector2,
     WebGLRenderer
   } from 'three';
-  import type { PageData } from './$types';
 
-  export let data: PageData;
+  export let data;
 
   let canvas: HTMLCanvasElement;
 

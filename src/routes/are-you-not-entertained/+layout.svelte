@@ -1,5 +1,5 @@
 <script>
-  import H3 from '$components/typo/H3.svelte';
+  import H3 from '$lib/components/typo/H3.svelte';
 </script>
 
 <svelte:head>

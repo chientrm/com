@@ -3,25 +3,23 @@
 
 import type { Feature, FeatureCollection, Point } from 'geojson';
 import type { JWTPayload } from 'jose';
+import 'unplugin-icons/types/svelte';
 
 declare global {
   namespace App {
     interface Locals {
       D1: D1Database;
-      WORKER: Fetcher;
-      tz: string;
+      MAIL: Fetcher;
       user?: User;
     }
     interface Platform {
       env: {
         D1: D1Database;
-        WORKER: Fetcher;
+        MAIL: Fetcher;
       };
     }
     interface User extends JWTPayload {
       username: string;
-      createdAt: Date;
-      email?: string;
     }
   }
 

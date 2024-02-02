@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import { Button } from '$components/ui/button';
+  import { Button } from '$lib/components/ui/button';
   import {
     Card,
     CardContent,
@@ -8,13 +8,13 @@
     CardFooter,
     CardHeader,
     CardTitle
-  } from '$components/ui/card';
-  import { Label } from '$components/ui/label';
-  import { Textarea } from '$components/ui/textarea';
+  } from '$lib/components/ui/card';
+  import { Label } from '$lib/components/ui/label';
+  import { Textarea } from '$lib/components/ui/textarea';
   import { autoSubmit } from '$lib/helpers/form';
-  import type { PageData } from './$types';
-  export let data: PageData;
-  let f: HTMLFormElement;
+
+  export let data;
+  let formEl: HTMLFormElement;
   const meta = 'Create new thread on chientrm.com';
 </script>
 
@@ -25,7 +25,7 @@
   <meta property="og:description" content={meta} />
 </svelte:head>
 
-<form method="POST" use:enhance bind:this={f}>
+<form method="POST" use:enhance bind:this={formEl}>
   <Card>
     <CardHeader>
       <CardTitle>New thread</CardTitle>
@@ -37,8 +37,8 @@
         <Textarea
           name="content"
           value={data.content}
-          maxlength="5000"
-          on:keydown={(e) => autoSubmit(f, e)}
+          maxlength={5000}
+          on:keydown={(e) => autoSubmit(formEl, e)}
         />
       </div>
     </CardContent>

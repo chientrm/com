@@ -1,7 +1,8 @@
-<script lang="ts">
+<script>
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
-  import { Button } from '$components/ui/button';
+  import Error from '$lib/components/Error.svelte';
+  import { Button } from '$lib/components/ui/button';
   import {
     Card,
     CardContent,
@@ -9,18 +10,17 @@
     CardFooter,
     CardHeader,
     CardTitle
-  } from '$components/ui/card';
-  import { Input } from '$components/ui/input';
-  import { Label } from '$components/ui/label';
+  } from '$lib/components/ui/card';
+  import { Input } from '$lib/components/ui/input';
+  import { Label } from '$lib/components/ui/label';
   import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger
-  } from '$components/ui/tabs';
-  import Error from '$lib/components/Error.svelte';
-  import type { ActionData } from './$types';
-  export let form: ActionData;
+  } from '$lib/components/ui/tabs';
+
+  export let form;
   $: redirectTo = $page.url.searchParams.get('redirectTo') ?? '/';
   const text = 'Create account or login at chientrm.com';
 </script>

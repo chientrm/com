@@ -1,17 +1,17 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import H3 from '$components/typo/H3.svelte';
-  import { Button } from '$components/ui/button';
-  import { Card, CardContent, CardFooter } from '$components/ui/card';
-  import { Label } from '$components/ui/label';
-  import { Textarea } from '$components/ui/textarea';
   import Ask from '$lib/components/Ask.svelte';
   import Error from '$lib/components/Error.svelte';
+  import H3 from '$lib/components/typo/H3.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import { Card, CardContent, CardFooter } from '$lib/components/ui/card';
+  import { Label } from '$lib/components/ui/label';
+  import { Textarea } from '$lib/components/ui/textarea';
   import { autoSubmit } from '$lib/helpers/form';
-  import type { ActionData, PageData } from './$types';
-  export let data: PageData;
-  export let form: ActionData;
-  let f: HTMLFormElement;
+  export let data;
+  export let form;
+
+  let formEl: HTMLFormElement;
   $: meta = data.content;
 </script>
 
@@ -39,7 +39,7 @@
     {#each data.replies as { id, content, username, fromNow }, index}
       <Ask {index} {id} {content} {username} {fromNow} />
     {/each}
-    <form method="POST" action="?/reply" use:enhance bind:this={f}>
+    <form method="POST" action="?/reply" use:enhance bind:this={formEl}>
       <Card>
         <CardContent class="space-y-2">
           <Error error={form?.message} />
@@ -49,7 +49,7 @@
               name="reply"
               value={data.reply}
               maxlength="5000"
-              on:keydown={(e) => autoSubmit(f, e)}
+              on:keydown={(e) => autoSubmit(formEl, e)}
             />
           </div>
         </CardContent>

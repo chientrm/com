@@ -1,8 +1,7 @@
-<script lang="ts">
+<script>
   import { enhance } from '$app/forms';
   import Counter from '$lib/components/Counter.svelte';
-  import type { PageData } from './$types';
-  export let data: PageData;
+  export let data;
 </script>
 
 <svelte:head>

@@ -1,6 +1,8 @@
-<script lang="ts">
-  import H2 from '$components/typo/H2.svelte';
-  import { Button } from '$components/ui/button';
+<script>
+  import { enhance } from '$app/forms';
+  import Ask from '$lib/components/Ask.svelte';
+  import H2 from '$lib/components/typo/H2.svelte';
+  import { Button } from '$lib/components/ui/button';
   import {
     Card,
     CardContent,
@@ -8,12 +10,11 @@
     CardFooter,
     CardHeader,
     CardTitle
-  } from '$components/ui/card';
-  import Ask from '$lib/components/Ask.svelte';
-  import { Calendar, Mail } from 'lucide-svelte';
-  import type { PageData } from './$types';
-  import { enhance } from '$app/forms';
-  export let data: PageData;
+  } from '$lib/components/ui/card';
+  import MaterialSymbolsCalendarClockOutline from '~icons/material-symbols/calendar-clock-outline';
+  import MaterialSymbolsMailOutline from '~icons/material-symbols/mail-outline';
+
+  export let data;
   const text = 'You account at chientrm.com';
 </script>
 
@@ -31,7 +32,7 @@
   </CardHeader>
   <CardContent class="grid gap-4">
     <div class="flex items-center space-x-4 rounded-md border p-4">
-      <Mail />
+      <MaterialSymbolsMailOutline />
       <div class="flex-1 space-y-1">
         <p class="text-sm font-medium leading-none">Email</p>
         <p class="text-sm text-muted-foreground">
@@ -43,7 +44,7 @@
       </Button>
     </div>
     <div class="flex items-center space-x-4 rounded-md border p-4">
-      <Calendar />
+      <MaterialSymbolsCalendarClockOutline />
       <div class="flex-1 space-y-1">
         <p class="text-sm font-medium leading-none">Joined at</p>
         <p class="text-sm text-muted-foreground">

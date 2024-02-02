@@ -1,8 +1,8 @@
-<script lang="ts">
-  import Button from '$components/ui/button/Button.svelte';
+<script>
   import Ask from '$lib/components/Ask.svelte';
-  import type { PageData } from './$types';
-  export let data: PageData;
+  import { Button } from '$lib/components/ui/button';
+
+  export let data;
   const text = 'Thread on chientrm.com';
 </script>
 
@@ -15,7 +15,7 @@
 
 <Button href="/thread/new">New thread</Button>
 
-<ul class="flex flex-col gap-4 mt-4">
+<ul class="mt-4 flex flex-col gap-4">
   {#each data.threads as { id, username, content, fromNow }, index}
     <Ask {index} {id} {username} {content} {fromNow} elipsis={true} />
   {/each}

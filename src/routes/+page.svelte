@@ -1,12 +1,13 @@
-<script lang="ts">
-  import H1 from '$components/typo/H1.svelte';
-  import H2 from '$components/typo/H2.svelte';
-  import H3 from '$components/typo/H3.svelte';
-  import Lead from '$components/typo/Lead.svelte';
-  import { Button } from '$components/ui/button';
-  import { ExternalLink } from 'lucide-svelte';
-  import type { PageData } from './$types';
-  export let data: PageData;
+<script>
+  import H1 from '$lib/components/typo/H1.svelte';
+  import H2 from '$lib/components/typo/H2.svelte';
+  import H3 from '$lib/components/typo/H3.svelte';
+  import Lead from '$lib/components/typo/Lead.svelte';
+  import { Button } from '$lib/components/ui/button';
+  import CarbonLaunch from '~icons/carbon/launch';
+
+  export let data;
+
   const title = 'chientrm.com | You may find something useful here',
     description =
       'Build products nobody use to spread the boredomness over the world.';
@@ -22,10 +23,6 @@
 <H1>chientrm.com</H1>
 
 <Lead>{description}</Lead>
-
-{#if data.user && !data.user.email}
-  <Button href="/auth/change-email">Add email to reset password later</Button>
-{/if}
 
 <H2>Dicovers</H2>
 
@@ -47,13 +44,13 @@
   <li>
     <Button href="https://parallax.chientrm.com" target="_blank" variant="link">
       Parallax
-      <ExternalLink class="ml-2 h-4 w-4" />
+      <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
   </li>
   <li>
     <Button href="https://shitpostai.com" target="_blank" variant="link">
       ShitpostAI
-      <ExternalLink class="ml-2 h-4 w-4" />
+      <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
   </li>
   <li>
@@ -74,7 +71,7 @@
       variant="link"
     >
       Rocketmouse
-      <ExternalLink class="ml-2 h-4 w-4" />
+      <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
   </li>
 </ul>

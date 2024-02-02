@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { sign } from '$lib/helpers/crypt';
+import { sign } from '$lib/helpers/getPrivateKey';
 import { sendEmail } from '$lib/helpers/email';
 import { validate2 } from '$lib/helpers/validate';
 import { string } from 'yup';

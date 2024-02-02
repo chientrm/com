@@ -1,4 +1,4 @@
-import { verify } from '$lib/helpers/crypt';
+import { verify } from '$lib/helpers/getPrivateKey';
 import { hashPassword } from '$lib/helpers/password';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';

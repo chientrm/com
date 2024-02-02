@@ -1,27 +1,23 @@
 {
-	"useTabs": false,
-	"tabWidth": 2,
-	"singleQuote": true,
-	"trailingComma": "none",
-	"printWidth": 80,
-	"plugins": [
-		"prettier-plugin-svelte"
-	],
-	"pluginSearchDirs": [
-		"."
-	],
-	"overrides": [
-		{
-			"files": "*.svelte",
-			"options": {
-				"parser": "svelte"
-			}
-		},
-		{
-			"files": "*.svx",
-			"options": {
-				"parser": "markdown"
-			}
-		}
-	]
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 80,
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "pluginSearchDirs": ["."],
+  "overrides": [
+    {
+      "files": "*.svelte",
+      "options": {
+        "parser": "svelte"
+      }
+    },
+    {
+      "files": "*.svx",
+      "options": {
+        "parser": "markdown"
+      }
+    }
+  ]
 }

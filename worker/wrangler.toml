@@ -1,8 +1,0 @@
-name = "com-worker"
-main = "src/index.ts"
-compatibility_date = "2023-01-01"
-
-[[send_email]]
-type = "send_email"
-name = "SEB"
-destination_address = "chientrm@gmail.com"
