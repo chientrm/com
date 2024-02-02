@@ -1,15 +1,15 @@
 <script>
-  import { PUBLIC_OG_URL } from '$env/static/public';
+  import { PUBLIC_HOST } from '$env/static/public';
   import logo from '$lib/assets/chientrm.png';
   import ModeToggle from '$lib/components/ModeToggle.svelte';
   import * as Accordion from '$lib/components/ui/accordion';
-  import MdiGithub from '~icons/mdi/github';
   import { Button } from '$lib/components/ui/button';
   import { footerConfig, siteConfig } from '$lib/config';
-  import MingcuteSocialXLine from '~icons/mingcute/social-x-line';
-  import NotoFrog from '~icons/noto/frog';
   import { anonymousUsername } from '$lib/constants/string';
   import { ModeWatcher } from 'mode-watcher';
+  import MdiGithub from '~icons/mdi/github';
+  import MingcuteSocialXLine from '~icons/mingcute/social-x-line';
+  import NotoFrog from '~icons/noto/frog';
   import '../app.pcss';
   export let data;
 </script>
@@ -19,8 +19,8 @@
   <meta name="keywords" content="chientrm, blogs, tools" />
   <meta name="author" content="chientrm" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={PUBLIC_OG_URL} />
-  <meta property="og:image" content={`${PUBLIC_OG_URL}${logo}`} />
+  <meta property="og:url" content={PUBLIC_HOST} />
+  <meta property="og:image" content={`${PUBLIC_HOST}${logo}`} />
 </svelte:head>
 
 <ModeWatcher />
