@@ -4,7 +4,6 @@ import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { fail, redirect } from '@sveltejs/kit';
 import { ref, string } from 'yup';
-import type { Actions } from './$types';
 
 export const actions = {
   login: async ({ request, locals, cookies, url }) => {
@@ -30,10 +29,9 @@ export const actions = {
         .bind(username)
         .first<{ createdAt: Date; passwordHash: string }>();
     if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
-      return { loginMessage: 'Invalid username or password' };
+      return { loginMessage: 'invalid username or password' };
     }
-    const { createdAt } = dbUser;
-    await auth(cookies, { username, createdAt });
+    await auth(cookies, { username });
     throw redirect(303, url.searchParams.get('redirectTo')!);
   },
   register: async ({ request, locals, cookies, url }) => {
@@ -60,12 +58,12 @@ export const actions = {
       passwordHash = await hashPassword(password);
     try {
       const result = await locals.D1.prepare(
-          'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
-        )
-          .bind(username, passwordHash)
-          .first<{ createdAt: Date }>(),
-        { createdAt } = result!;
-      await auth(cookies, { username, createdAt });
+        'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
+      )
+        .bind(username, passwordHash)
+        .first<{ createdAt: Date }>();
+      await auth(cookies, { username });
+      throw redirect(303, url.searchParams.get('redirectTo')!);
     } catch (e: any) {
       if (unique(e)) {
         const registerMessage = 'username is already existed';
@@ -73,6 +71,5 @@ export const actions = {
       }
       throw e;
     }
-    throw redirect(303, url.searchParams.get('redirectTo')!);
   }
-} satisfies Actions;
+};

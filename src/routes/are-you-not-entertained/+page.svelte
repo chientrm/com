@@ -3,21 +3,12 @@
   import Error from '$lib/components/Error.svelte';
   import Result from '$lib/components/Result.svelte';
   import { Button } from '$lib/components/ui/button';
-  import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
-  } from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import dayjs from 'dayjs';
   import InfiniteLoading from 'svelte-infinite-loading';
   export let data;
   export let form;
-  const text = 'Are you not entertained? Visit chientrm.com';
   let tweetsDiv: HTMLDivElement;
   let approvedAt = new Date();
   interface Tweet {
@@ -48,40 +39,21 @@
   }
 </script>
 
-<svelte:head>
-  <title>{text}</title>
-  <meta name="description" content={text} />
-  <meta property="og:title" content={text} />
-  <meta property="og:description" content={text} />
-</svelte:head>
-
 {#if data.reviewCount != null}
   <a href="are-you-not-entertained/review">Review ({data.reviewCount})</a>
 {/if}
 
 <form method="POST" action="?/submit" use:enhance>
-  <Card class="w-[400px]">
-    <CardHeader>
-      <CardTitle>Submit tweet</CardTitle>
-      <CardDescription>
-        Submit your favorite tweet here to share with other.
-      </CardDescription>
-      {#if form?.result}
-        <Result result={form?.result} />
-      {:else}
-        <Error error={form?.message} />
-      {/if}
-    </CardHeader>
-    <CardContent class="space-y-2">
-      <div class="space-y-1">
-        <Label for="url">Tweet url</Label>
-        <Input id="url" name="url" value={data.url} />
-      </div>
-    </CardContent>
-    <CardFooter>
-      <Button>Submit</Button>
-    </CardFooter>
-  </Card>
+  {#if form?.result}
+    <Result result={form?.result} />
+  {:else}
+    <Error error={form?.message} />
+  {/if}
+  <div class="space-y-1">
+    <Label for="url">tweet url</Label>
+    <Input id="url" name="url" value={data.url} required />
+  </div>
+  <Button type="submit">submit</Button>
 </form>
 
 <div bind:this={tweetsDiv}>

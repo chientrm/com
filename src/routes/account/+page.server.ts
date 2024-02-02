@@ -14,5 +14,5 @@ export const load = async ({ locals }) => {
     }>()
     .then((result) => result.results ?? [])
     .then((threadss) => threadss.map(addFromNow));
-  return { threads, username };
+  return { threads, username, title: 'account', description: username };
 };

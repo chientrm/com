@@ -1,12 +1,15 @@
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load = (({ url }) => {
+export const load = ({ url }) => {
   const content = url.searchParams.get('content') ?? '';
-  return { content };
-}) satisfies PageServerLoad;
+  return {
+    content,
+    title: 'new thread',
+    description: 'new thread on chientrm.com.'
+  };
+};
 
 export const actions = {
   default: async ({ request, locals }) => {
@@ -29,4 +32,4 @@ export const actions = {
       { id } = result!;
     throw redirect(303, `/thread/${id}`);
   }
-} satisfies Actions;
+};

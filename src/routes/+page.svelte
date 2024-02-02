@@ -1,49 +1,18 @@
 <script>
-  import H1 from '$lib/components/typo/H1.svelte';
-  import H2 from '$lib/components/typo/H2.svelte';
-  import H3 from '$lib/components/typo/H3.svelte';
-  import Lead from '$lib/components/typo/Lead.svelte';
   import { Button } from '$lib/components/ui/button';
   import CarbonLaunch from '~icons/carbon/launch';
-
-  export let data;
-
-  const title = 'chientrm.com | You may find something useful here',
-    description =
-      'Build products nobody use to spread the boredomness over the world.';
 </script>
 
-<svelte:head>
-  <title>{title}</title>
-  <meta name="description" content={description} />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-</svelte:head>
-
-<H1>chientrm.com</H1>
-
-<Lead>{description}</Lead>
-
-<H2>Dicovers</H2>
-
-<ul class="my-6 ml-6 list-disc [&>li]:mt-2">
+<ul>
   <li>
-    <Button href="/my-son" variant="link">My son</Button>
-  </li>
-  <li>
-    <Button href="/nirvana" variant="link">Nirvana</Button>
-  </li>
-  <li>
-    <Button href="/blogs/snowflake-id-for-serverless-runtime" variant="link">
-      Snowflake Id
+    <Button href="https://torrentchill.com" target="_blank" variant="link">
+      TorrentChill
+      <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
   </li>
   <li>
-    <Button href="/thread" variant="link">Thread</Button>
-  </li>
-  <li>
-    <Button href="https://parallax.chientrm.com" target="_blank" variant="link">
-      Parallax
+    <Button href="https://pewxpew.com" target="_blank" variant="link">
+      PewXPew
       <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
   </li>
@@ -52,17 +21,6 @@
       ShitpostAI
       <CarbonLaunch class="ml-2 h-4 w-4" />
     </Button>
-  </li>
-  <li>
-    <Button href="/counter" variant="link">Counter</Button>
-  </li>
-  <li>
-    <Button href="/are-you-not-entertained" variant="link">
-      Are you not entertained?
-    </Button>
-  </li>
-  <li>
-    <Button href="/globe" variant="link">Globe</Button>
   </li>
   <li>
     <Button
@@ -75,14 +33,22 @@
     </Button>
   </li>
 </ul>
-
-<H2>change logs</H2>
-
-{#each data.logs as { fromNow, changes }}
-  <H3>{fromNow}</H3>
-  <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
-    {#each changes as change}
-      <li>{change}</li>
-    {/each}
-  </ul>
-{/each}
+<ul>
+  <li>
+    <Button href="/blog" variant="link">blog</Button>
+  </li>
+  <li>
+    <Button href="/thread" variant="link">thread</Button>
+  </li>
+  <li>
+    <Button href="/globe" variant="link">globe</Button>
+  </li>
+  <li>
+    <Button href="/are-you-not-entertained" variant="link">
+      are you not entertained?
+    </Button>
+  </li>
+  <li>
+    <Button href="/changelogs" variant="link">changelogs</Button>
+  </li>
+</ul>

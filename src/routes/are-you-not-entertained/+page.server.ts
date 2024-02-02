@@ -3,9 +3,8 @@ import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
 import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ locals, url }) => {
+export const load = async ({ locals, url }) => {
   const _url = url.searchParams.get('url') ?? '';
   let reviewCount: number | null = null;
   if (locals.user?.username === adminUsername) {
@@ -14,8 +13,13 @@ export const load = (async ({ locals, url }) => {
     ).first<{ reviewCount: number }>();
     reviewCount = result!.reviewCount;
   }
-  return { reviewCount, url: _url };
-}) satisfies PageServerLoad;
+  return {
+    reviewCount,
+    url: _url,
+    title: 'submit tweet',
+    description: 'submit your favorite tweet here to share with other.'
+  };
+};
 
 export const actions = {
   submit: async ({ request, locals }) => {
@@ -47,4 +51,4 @@ export const actions = {
       }
     }
   }
-} satisfies Actions;
+};

@@ -1,12 +1,10 @@
 ---
-title: Snowflake id generation for serverless runtime
+title: snowflake id generation for serverless runtime
 description: >
-  Snowflake id generation for serverless runtime.
+  snowflake id generation for serverless runtime.
 authors: chientrm
 tag: [snowflake id, serverless]
 ---
-
-# Unique id generation methods
 
 ## Timestamp
 

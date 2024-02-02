@@ -17,26 +17,40 @@ export const footerConfig: {
   {
     name: 'chientrm.com',
     items: [
-      { name: 'Thread', href: '/thread' },
-      { name: 'Globe', href: '/globe' },
-      { name: 'Counter', href: '/counter' }
+      { name: 'thread', href: '/thread' },
+      { name: 'blog', href: '/blog' },
+      { name: 'globe', href: '/globe' },
+      { name: 'are you not entertained?', href: '/are-you-not-entertained' },
+      { name: 'changelogs', href: '/changelogs' }
     ]
   },
   {
-    name: 'Backlinks',
+    name: 'backlinks',
     items: [
-      { name: 'TorrentChill.com', href: 'https://torrentchill.com' },
-      { name: 'ShitpostAI.com', href: 'https://shitpostai.com' },
-      { name: 'PewXPew', href: 'https://pewxpew.com' },
-      { name: 'RocketMouse', href: 'https://rocketmouse.chientrm.com' }
+      {
+        name: 'TorrentChill.com',
+        href: 'https://torrentchill.com',
+        target: '_blank'
+      },
+      {
+        name: 'ShitpostAI.com',
+        href: 'https://shitpostai.com',
+        target: '_blank'
+      },
+      { name: 'PewXPew', href: 'https://pewxpew.com', target: '_blank' },
+      {
+        name: 'RocketMouse',
+        href: 'https://rocketmouse.chientrm.com',
+        target: '_blank'
+      }
     ]
   },
   {
-    name: 'Company',
+    name: 'company',
     items: [
-      { name: 'About', href: '/about' },
-      { name: 'X', href: siteConfig.twitter, target: '_blank' },
-      { name: 'FAQ', href: '/faq' }
+      { name: 'about', href: '/about' },
+      { name: 'x', href: siteConfig.twitter, target: '_blank' },
+      { name: 'faq', href: '/faq' }
     ]
   }
 ];

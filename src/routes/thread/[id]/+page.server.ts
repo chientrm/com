@@ -4,7 +4,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { string } from 'yup';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ params, locals, url }) => {
+export const load = async ({ params, locals, url }) => {
   const { id } = params,
     result = await locals.D1.prepare(
       'select username, parentId, content, createdAt from Com_Thread where id=?1'
@@ -40,9 +40,11 @@ export const load = (async ({ params, locals, url }) => {
     createdAt,
     fromNow: fromNow(createdAt),
     reply,
-    replies
+    replies,
+    title: username,
+    description: 'ask'
   };
-}) satisfies PageServerLoad;
+};
 
 export const actions = {
   reply: async ({ params, request, locals }) => {
@@ -64,4 +66,4 @@ export const actions = {
       .bind(username, reply, id)
       .first<{ id: number }>();
   }
-} satisfies Actions;
+};
