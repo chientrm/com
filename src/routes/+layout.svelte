@@ -39,7 +39,7 @@
             {siteConfig.name}
           </span>
         </a>
-        <a href="/thread">thread</a>
+        <a href="/thread" class="max-md:hidden">thread</a>
         <div class="grow"></div>
         {#if data.user.username === anonymousUsername}
           <Button href="/auth">Sign Up</Button>
@@ -52,7 +52,7 @@
           <Button
             href={siteConfig.twitter}
             target="_blank"
-            class="w-9 px-0"
+            class="w-9 px-0 max-md:hidden"
             variant="ghost"
           >
             <MingcuteSocialXLine class="h-4 w-4" />
@@ -61,7 +61,7 @@
           <Button
             href={siteConfig.github}
             target="_blank"
-            class="w-9 px-0"
+            class="w-9 px-0 max-md:hidden"
             variant="ghost"
           >
             <MdiGithub class="h-4 w-4" />
