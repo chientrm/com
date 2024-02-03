@@ -21,6 +21,15 @@ declare global {
     interface User extends JWTPayload {
       username: string;
     }
+    interface Post {
+      slug: string;
+      title: string;
+      description: string;
+      date: string;
+      published: boolean;
+      authors: string;
+      tags: string[];
+    }
   }
 
   declare module '*?webp' {

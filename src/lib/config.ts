@@ -7,7 +7,8 @@ export const siteConfig = {
   github: 'https://github.com/chientrm/com',
   email: 'admin@chientrm.com',
   mailto: 'mailto:admin@chientrm.com',
-  twitter: 'https://x.com/realchientrm'
+  twitter: 'https://x.com/realchientrm',
+  medium: 'https://chientrm.medium.com'
 };
 
 export const footerConfig: {
@@ -18,7 +19,7 @@ export const footerConfig: {
     name: 'chientrm.com',
     items: [
       { name: 'thread', href: '/thread' },
-      { name: 'blog', href: '/blog' },
+      { name: 'blog', href: siteConfig.medium, target: '_blank' },
       { name: 'globe', href: '/globe' },
       { name: 'changelogs', href: '/changelogs' }
     ]

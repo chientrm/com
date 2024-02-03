@@ -19,12 +19,13 @@
     ? $page.data.title
     : `${siteConfig.name} - ${siteConfig.title}`;
   $: description = $page.data?.description ?? siteConfig.description;
+  $: keywords = $page.data?.keywords ?? siteConfig.keywords;
 </script>
 
 <svelte:head>
   <title>{title}</title>
   <meta name="description" content={description} />
-  <meta name="keywords" content={siteConfig.keywords} />
+  <meta name="keywords" content={keywords} />
   <meta name="author" content="realchientrm" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content={PUBLIC_HOST} />
@@ -61,7 +62,14 @@
           <NotoFrog class="mr-2 h-6 w-6" />
           {siteConfig.name}
         </Button>
-        <Button href="/blog" variant="link" class="max-sm:hidden">blog</Button>
+        <Button
+          href={siteConfig.medium}
+          variant="link"
+          class="max-sm:hidden"
+          target="_blank"
+        >
+          blog
+        </Button>
         <Button href="/thread" variant="link" class="max-sm:hidden">
           thread
         </Button>
