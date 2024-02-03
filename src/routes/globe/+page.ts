@@ -1,6 +1,6 @@
 import countriesUrl from '$lib/assets/geojson/WB_countries_Admin0_lowres.geojson';
+import { siteConfig } from '$lib/config';
 import graticuleUrl from 'vite-geograticule:graticule10';
-import type { PageLoad } from './$types';
 
 export const load = async ({ fetch, data: { countryCode } }) => {
   const [countries, graticule] = await Promise.all([
@@ -16,7 +16,7 @@ export const load = async ({ fetch, data: { countryCode } }) => {
     graticule,
     countryCode,
     centerOfMass,
-    title: 'globe',
-    description: 'globe on chientrm.com'
+    title: siteConfig.globe.title,
+    description: siteConfig.globe.description
   };
 };

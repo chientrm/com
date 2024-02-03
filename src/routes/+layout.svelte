@@ -20,20 +20,21 @@
     : `${siteConfig.name} - ${siteConfig.title}`;
   $: description = $page.data?.description ?? siteConfig.description;
   $: keywords = $page.data?.keywords ?? siteConfig.keywords;
+  $: author = $page.data?.author ?? 'realchientrm';
 </script>
 
 <svelte:head>
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="keywords" content={keywords} />
-  <meta name="author" content="realchientrm" />
+  <meta name="author" content={author} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content={PUBLIC_HOST} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content="{PUBLIC_HOST}${logo}" />
   <meta name="twitter:image:alt" content={siteConfig.name} />
-  <meta name="twitter:creator" content="realchientrm" />
+  <meta name="twitter:creator" content={author} />
   <meta property="og:title" content={title} />
   <meta property="og:type" content="article" />
   <meta property="og:url" content={PUBLIC_HOST + $page.url.pathname} />

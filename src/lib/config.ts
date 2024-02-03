@@ -8,7 +8,9 @@ export const siteConfig = {
   email: 'admin@chientrm.com',
   mailto: 'mailto:admin@chientrm.com',
   twitter: 'https://x.com/realchientrm',
-  medium: 'https://chientrm.medium.com'
+  medium: 'https://chientrm.medium.com',
+  deep: { title: 'deep', description: 'make the perfect image for tweeting' },
+  globe: { title: 'globe', description: 'check world stats with globe' }
 };
 
 export const footerConfig: {

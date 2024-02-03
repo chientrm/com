@@ -1,8 +1,24 @@
 <script>
   import { Button } from '$lib/components/ui/button';
+  import { siteConfig } from '$lib/config';
   import CarbonLaunch from '~icons/carbon/launch';
 </script>
 
+<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Apps</h3>
+<ul>
+  <li>
+    <Button href="/deep" variant="link">
+      {siteConfig.deep.title} - {siteConfig.deep.description}
+    </Button>
+  </li>
+  <li>
+    <Button href="/globe" variant="link">
+      {siteConfig.globe.title} - {siteConfig.globe.description}
+    </Button>
+  </li>
+</ul>
+
+<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Backlinks</h3>
 <ul>
   <li>
     <Button href="https://torrentchill.com" target="_blank" variant="link">
@@ -33,15 +49,13 @@
     </Button>
   </li>
 </ul>
+<h3 class="scroll-m-20 text-2xl font-semibold tracking-tight">Discover</h3>
 <ul>
   <li>
     <Button href="/blog" variant="link">blog</Button>
   </li>
   <li>
     <Button href="/thread" variant="link">thread</Button>
-  </li>
-  <li>
-    <Button href="/globe" variant="link">globe</Button>
   </li>
   <li>
     <Button href="/changelogs" variant="link">changelogs</Button>

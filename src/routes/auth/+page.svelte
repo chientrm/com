@@ -3,46 +3,36 @@
   import { page } from '$app/stores';
   import Error from '$lib/components/Error.svelte';
   import { Button } from '$lib/components/ui/button';
-  import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
-  } from '$lib/components/ui/card';
+  import * as Card from '$lib/components/ui/card';
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
-  import {
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger
-  } from '$lib/components/ui/tabs';
+  import * as Tab from '$lib/components/ui/tabs';
 
   export let form;
   $: redirectTo = $page.url.searchParams.get('redirectTo') ?? '/';
 </script>
 
 <div class="flex flex-row justify-center">
-  <Tabs value="login" class="w-[400px]">
-    <TabsList class="grid w-full grid-cols-2">
-      <TabsTrigger value="login">login</TabsTrigger>
-      <TabsTrigger value="register">register</TabsTrigger>
-    </TabsList>
-    <TabsContent value="login">
+  <Tab.Root value="login" class="w-[400px]">
+    <Tab.TabsList class="grid w-full grid-cols-2">
+      <Tab.TabsTrigger value="login">login</Tab.TabsTrigger>
+      <Tab.TabsTrigger value="register">register</Tab.TabsTrigger>
+    </Tab.TabsList>
+    <Tab.TabsContent value="login">
       <form
         method="POST"
         action={`?/login&redirectTo=${redirectTo}`}
         use:enhance
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>login</CardTitle>
-            <CardDescription>login to existing account.</CardDescription>
+        <Card.Root>
+          <Card.CardHeader>
+            <Card.CardTitle>login</Card.CardTitle>
+            <Card.CardDescription
+              >login to existing account.</Card.CardDescription
+            >
             <Error error={form?.loginMessage} />
-          </CardHeader>
-          <CardContent class="space-y-2">
+          </Card.CardHeader>
+          <Card.CardContent class="space-y-2">
             <div class="space-y-1">
               <Label for="username">username</Label>
               <Input id="username" name="username" />
@@ -51,26 +41,26 @@
               <Label for="password">password</Label>
               <Input id="password" name="password" type="password" />
             </div>
-          </CardContent>
-          <CardFooter>
+          </Card.CardContent>
+          <Card.CardFooter>
             <Button type="submit">login</Button>
-          </CardFooter>
-        </Card>
+          </Card.CardFooter>
+        </Card.Root>
       </form>
-    </TabsContent>
-    <TabsContent value="register">
+    </Tab.TabsContent>
+    <Tab.TabsContent value="register">
       <form
         method="POST"
         action={`?/register&redirectTo=${redirectTo}`}
         use:enhance
       >
-        <Card>
-          <CardHeader>
-            <CardTitle>register</CardTitle>
-            <CardDescription>register new account.</CardDescription>
+        <Card.Root>
+          <Card.CardHeader>
+            <Card.CardTitle>register</Card.CardTitle>
+            <Card.CardDescription>register new account.</Card.CardDescription>
             <Error error={form?.registerMessage} />
-          </CardHeader>
-          <CardContent class="space-y-2">
+          </Card.CardHeader>
+          <Card.CardContent class="space-y-2">
             <div class="space-y-1">
               <Label for="username">username</Label>
               <Input id="username" name="username" type="text" />
@@ -87,12 +77,12 @@
                 type="password"
               />
             </div>
-          </CardContent>
-          <CardFooter>
+          </Card.CardContent>
+          <Card.CardFooter>
             <Button type="submit">register</Button>
-          </CardFooter>
-        </Card>
+          </Card.CardFooter>
+        </Card.Root>
       </form>
-    </TabsContent>
-  </Tabs>
+    </Tab.TabsContent>
+  </Tab.Root>
 </div>
