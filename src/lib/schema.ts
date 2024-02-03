@@ -10,7 +10,7 @@ export const Users = sqliteTable('users', {
 });
 
 export const Threads = sqliteTable('threads', {
-  id: integer('username').primaryKey({ autoIncrement: true }),
+  id: integer('id').primaryKey({ autoIncrement: true }),
   parentId: integer('parentId'),
   username: text('username').notNull(),
   content: text('content').notNull(),
