@@ -1,6 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import Ask from '$lib/components/Ask.svelte';
+  import Ask from '$lib/components/Thread.svelte';
   import Error from '$lib/components/Error.svelte';
   import { Button } from '$lib/components/ui/button';
   import { Card, CardContent, CardFooter } from '$lib/components/ui/card';

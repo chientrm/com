@@ -13,5 +13,5 @@ export const fromNow = (
 
 export const addFromNow = <T extends { createdAt: string }>(entry: T) => ({
   ...entry,
-  fromNow: fromNow(entry.createdAt)
+  fromNow: dayjs(entry.createdAt).fromNow()
 });

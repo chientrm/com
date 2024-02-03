@@ -1,5 +1,5 @@
 <script>
-  import Ask from '$lib/components/Ask.svelte';
+  import Ask from '$lib/components/Thread.svelte';
   import { Button } from '$lib/components/ui/button';
   export let data;
 </script>
