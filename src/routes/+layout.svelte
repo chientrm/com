@@ -169,8 +169,8 @@
         class="mt-12 flex flex-col space-x-0 space-y-4 text-sm font-medium sm:flex-row sm:space-x-6 sm:space-y-0"
       >
         <span>copyright &copy; 2024</span>
-        <a href="/terms" class="text-muted-foreground">terms of Service</a>
-        <a href="/privacy" class="text-muted-foreground">privacy Policy</a>
+        <a href="/terms" class="text-muted-foreground">terms of service</a>
+        <a href="/privacy" class="text-muted-foreground">privacy policy</a>
         <a href="/cookies" class="text-muted-foreground">cookies</a>
       </div>
     </div>
