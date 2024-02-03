@@ -71,9 +71,6 @@
         >
           blog
         </Button>
-        <Button href="/thread" variant="link" class="max-sm:hidden">
-          thread
-        </Button>
         <div class="grow"></div>
         {#if data.user.username === anonymousUsername}
           <Button href="/auth">sign up</Button>
