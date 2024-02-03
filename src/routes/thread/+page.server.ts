@@ -1,12 +1,12 @@
-import { fromNow } from '$lib/helpers/day';
+import { addFromNow } from '$lib/helpers/day';
+import { Threads } from '$lib/schema';
+import { desc, isNull } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
-  const result = await locals.D1.prepare(
-      'select id, username, content, createdAt from Com_Thread where parentId is null order by createdAt DESC'
-    ).all<{ id: number; username: string; content: string; createdAt: Date }>(),
-    threads = (result.results ?? []).map((thread) => ({
-      ...thread,
-      fromNow: fromNow(thread.createdAt)
-    }));
+  const threads = await locals.db.query.Threads.findMany({
+    columns: { id: true, username: true, content: true, createdAt: true },
+    where: isNull(Threads.parentId),
+    orderBy: [desc(Threads.createdAt)]
+  }).then((threads) => threads.map(addFromNow));
   return { threads, title: 'thread', description: 'all threads.' };
 };

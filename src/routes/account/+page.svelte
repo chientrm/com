@@ -1,5 +1,6 @@
 <script>
   import Ask from '$lib/components/Ask.svelte';
+  import { Button } from '$lib/components/ui/button';
   export let data;
 </script>
 
@@ -8,3 +9,5 @@
     <Ask {index} {id} {content} {username} {fromNow} />
   {/each}
 </ul>
+
+<Button href="/account/logout" variant="outline">logout</Button>

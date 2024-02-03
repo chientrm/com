@@ -1,18 +1,18 @@
-import { adminUsername } from '$lib/constants/string';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
+import { Ents } from '$lib/schema';
 import { redirect } from '@sveltejs/kit';
+import { isNull, sql } from 'drizzle-orm';
 import { string } from 'yup';
 
 export const load = async ({ locals, url }) => {
   const _url = url.searchParams.get('url') ?? '';
   let reviewCount: number | null = null;
-  if (locals.user?.username === adminUsername) {
-    const result = await locals.D1.prepare(
-      'select count(*) as reviewCount from Com_Ent where approvedAt is null'
-    ).first<{ reviewCount: number }>();
-    reviewCount = result!.reviewCount;
-  }
+  const result = await locals.db
+    .select({ count: sql<string>`count(*)` })
+    .from(Ents)
+    .where(isNull(Ents.approvedAt));
+  reviewCount = parseInt(result[0].count);
   return {
     reviewCount,
     url: _url,
@@ -38,11 +38,7 @@ export const actions = {
     }
     const { username } = locals.user;
     try {
-      await locals.D1.prepare(
-        'insert into Com_Ent(url, username) values(?1, ?2)'
-      )
-        .bind(url, username)
-        .run();
+      await locals.db.insert(Ents).values({ url, username });
       return { result: 'Submit successfully.' };
     } catch (e) {
       if (unique(e)) {

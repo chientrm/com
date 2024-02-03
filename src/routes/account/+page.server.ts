@@ -1,18 +1,16 @@
 import { addFromNow } from '$lib/helpers/day';
+import { Threads } from '$lib/schema';
+import { and, eq, inArray } from 'drizzle-orm';
 
 export const load = async ({ locals }) => {
   const { username } = locals.user;
-  const threads = await locals.D1.prepare(
-    'select id, username, content, createdAt from Com_Thread where username != ?1 and parentId in (select id from Com_Thread where username=?1)'
-  )
-    .bind(username)
-    .all<{
-      id: number;
-      username: string;
-      content: string;
-      createdAt: Date;
-    }>()
-    .then((result) => result.results ?? [])
-    .then((threadss) => threadss.map(addFromNow));
+  const ids = await locals.db.query.Threads.findMany({
+    columns: { id: true },
+    where: eq(Threads.username, username)
+  }).then((threads) => threads.map(({ id }) => id));
+  const threads = await locals.db.query.Threads.findMany({
+    columns: { id: true, username: true, content: true, createdAt: true },
+    where: and(eq(Threads.username, username), inArray(Threads.parentId, ids))
+  }).then((threads) => threads.map(addFromNow));
   return { threads, username, title: 'account', description: username };
 };

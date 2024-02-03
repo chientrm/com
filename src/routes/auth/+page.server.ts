@@ -2,7 +2,9 @@ import { auth } from '$lib/helpers/auth';
 import { hashPassword, validatePassword } from '$lib/helpers/password';
 import { unique } from '$lib/helpers/unique';
 import { validate2 } from '$lib/helpers/validate';
+import { Users } from '$lib/schema';
 import { fail, redirect } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
 import { ref, string } from 'yup';
 
 export const actions = {
@@ -22,13 +24,12 @@ export const actions = {
     if (loginMessage) {
       return { loginMessage };
     }
-    const { username, password } = form!,
-      dbUser = await locals.D1.prepare(
-        'select createdAt, passwordHash from Com_User where username=?1'
-      )
-        .bind(username)
-        .first<{ createdAt: Date; passwordHash: string }>();
-    if (!dbUser || !(await validatePassword(password, dbUser.passwordHash))) {
+    const { username, password } = form!;
+    const user = await locals.db.query.Users.findFirst({
+      columns: { passwordHash: true },
+      where: eq(Users.username, username)
+    });
+    if (!user || !(await validatePassword(password, user.passwordHash))) {
       return { loginMessage: 'invalid username or password' };
     }
     await auth(cookies, { username });
@@ -57,11 +58,7 @@ export const actions = {
     const { username, password } = form!,
       passwordHash = await hashPassword(password);
     try {
-      const result = await locals.D1.prepare(
-        'insert into Com_User(username, passwordHash) values(?1, ?2) returning createdAt'
-      )
-        .bind(username, passwordHash)
-        .first<{ createdAt: Date }>();
+      await locals.db.insert(Users).values({ username, passwordHash });
       await auth(cookies, { username });
       throw redirect(303, url.searchParams.get('redirectTo')!);
     } catch (e: any) {

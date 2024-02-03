@@ -1,4 +1,5 @@
 import { validate2 } from '$lib/helpers/validate';
+import { Threads } from '$lib/schema';
 import { redirect } from '@sveltejs/kit';
 import { string } from 'yup';
 
@@ -23,13 +24,12 @@ export const actions = {
     if (!locals.user) {
       throw redirect(303, `/auth?redirectTo=/thread/new?content=${content}`);
     }
-    const { username } = locals.user!,
-      result = await locals.D1.prepare(
-        'insert into Com_Thread(username, content) values(?1, ?2) returning id'
-      )
-        .bind(username, content)
-        .first<{ id: number }>(),
-      { id } = result!;
+    const { username } = locals.user!;
+    const result = await locals.db
+      .insert(Threads)
+      .values({ username, content })
+      .returning({ id: Threads.id });
+    const { id } = result[0];
     throw redirect(303, `/thread/${id}`);
   }
 };

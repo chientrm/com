@@ -1,32 +1,29 @@
 import { adminUsername } from '$lib/constants/string';
-import { getTweet } from '$lib/helpers/get_tweet';
+import { getTweet2 } from '$lib/helpers/get_tweet';
 import { validate } from '$lib/helpers/validate';
-import { redirect } from '@sveltejs/kit';
+import { Ents } from '$lib/schema';
+import { error } from '@sveltejs/kit';
+import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 import { string } from 'yup';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
-  if (locals.user?.username !== adminUsername) {
-    throw redirect(302, '/');
-  }
-  const result = await locals.D1.prepare(
-      'select url from Com_Ent where approvedAt is null order by createdAt desc'
-    ).all<{ url: string }>(),
-    urls = (result.results ?? []).map((i) => i.url),
-    tweets = await Promise.all(urls.map(getTweet));
+export const load = async ({ locals }) => {
+  const tweets = await locals.db.query.Ents.findMany({
+    columns: { url: true },
+    where: isNull(Ents.approvedAt),
+    orderBy: [desc(Ents.createdAt)]
+  }).then((ents) => Promise.all(ents.map(getTweet2)));
   return { tweets };
-}) satisfies PageServerLoad;
+};
 
 export const actions = {
   approve: async ({ request, locals }) => {
-    if (locals.user?.username !== adminUsername) {
-      throw redirect(302, '/');
+    if (locals.user.username !== adminUsername) {
+      error(401);
     }
     const { url } = await validate(request, { url: string().required() });
-    await locals.D1.prepare(
-      'update Com_Ent set approvedAt = CURRENT_TIMESTAMP where url = ?1 and approvedAt is null'
-    )
-      .bind(url)
-      .run();
+    await locals.db
+      .update(Ents)
+      .set({ approvedAt: sql`CURRENT_TIMESTAMP` })
+      .where(and(eq(Ents.url, url), isNull(Ents.approvedAt)));
   }
-} satisfies Actions;
+};

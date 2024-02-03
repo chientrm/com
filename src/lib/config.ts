@@ -20,7 +20,6 @@ export const footerConfig: {
       { name: 'thread', href: '/thread' },
       { name: 'blog', href: '/blog' },
       { name: 'globe', href: '/globe' },
-      { name: 'are you not entertained?', href: '/are-you-not-entertained' },
       { name: 'changelogs', href: '/changelogs' }
     ]
   },

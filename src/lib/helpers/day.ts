@@ -11,7 +11,7 @@ export const fromNow = (
   date: string | number | dayjs.Dayjs | Date | null | undefined
 ) => dayjs(date).fromNow();
 
-export const addFromNow = <T extends { createdAt: Date }>(entry: T) => ({
+export const addFromNow = <T extends { createdAt: string }>(entry: T) => ({
   ...entry,
   fromNow: fromNow(entry.createdAt)
 });

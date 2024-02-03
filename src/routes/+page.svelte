@@ -44,11 +44,6 @@
     <Button href="/globe" variant="link">globe</Button>
   </li>
   <li>
-    <Button href="/are-you-not-entertained" variant="link">
-      are you not entertained?
-    </Button>
-  </li>
-  <li>
     <Button href="/changelogs" variant="link">changelogs</Button>
   </li>
 </ul>

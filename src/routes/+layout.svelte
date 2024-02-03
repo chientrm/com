@@ -69,8 +69,8 @@
         {#if data.user.username === anonymousUsername}
           <Button href="/auth">sign up</Button>
         {:else}
-          <Button href="/account">
-            {data.user.username} ({data.count})
+          <Button href="/account" variant="secondary">
+            {data.user.username}
           </Button>
         {/if}
         <nav class="flex items-center">
