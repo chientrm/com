@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
   import { PUBLIC_HOST } from '$env/static/public';
   import logo from '$lib/assets/chientrm.png';
@@ -13,6 +13,7 @@
   import MingcuteSocialXLine from '~icons/mingcute/social-x-line';
   import NotoFrog from '~icons/noto/frog';
   import '../app.pcss';
+  import { onMount } from 'svelte';
   export let data;
 
   $: title = $page.data?.title
@@ -21,6 +22,14 @@
   $: description = $page.data?.description ?? siteConfig.description;
   $: keywords = $page.data?.keywords ?? siteConfig.keywords;
   $: author = $page.data?.author ?? 'realchientrm';
+  let joke: string | undefined;
+  onMount(() => {
+    fetch('/api/joke')
+      .then((res) => res.json<{ result: { response: string } }>())
+      .then((data) => {
+        joke = data.result.response;
+      });
+  });
 </script>
 
 <svelte:head>
@@ -110,6 +119,12 @@
         <PageHeader.Description>
           {$page.data.description}
         </PageHeader.Description>
+        🐸 Making a joke:
+        {#if !joke}
+          ...
+        {:else}
+          {joke}
+        {/if}
         <slot />
       </PageHeader.Root>
     </div>

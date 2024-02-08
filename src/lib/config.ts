@@ -20,7 +20,6 @@ export const footerConfig: {
   {
     name: 'chientrm.com',
     items: [
-      { name: 'thread', href: '/thread' },
       { name: 'blog', href: siteConfig.medium, target: '_blank' },
       { name: 'globe', href: '/globe' },
       { name: 'changelogs', href: '/changelogs' }
