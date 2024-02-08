@@ -1,7 +1,7 @@
 import { ACCOUNT_ID, API_TOKEN } from '$env/static/private';
 
 export const GET = ({ setHeaders }) => {
-  setHeaders({ 'cache-control': 'public,max-age=31536000,immutable' });
+  setHeaders({ 'cache-control': 'public,max-age=1800,immutable' });
   return fetch(
     `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/@hf/thebloke/llama-2-13b-chat-awq`,
     {
