@@ -10,7 +10,7 @@
             name: ghost
             state: present
       - file:
-        path: /var/www/ghost
-        state: directory
-        owner: ghost
-        group: ghost
+            path: /var/www/ghost
+            state: directory
+            owner: ghost
+            group: ghost
