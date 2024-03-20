@@ -8,12 +8,14 @@
       - package:
             name:
                 - curl
+                - ca-certificates
+                - gnupg
                 - python3-pip
                 - libpq-dev
                 - postgresql
             state: present
       - apt_key:
-            url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+            url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
             state: present
       - apt_repository:
             repo: 'deb https://deb.nodesource.com/node_20.x {{ ansible_distribution_release }} main'
