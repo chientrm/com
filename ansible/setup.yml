@@ -1,0 +1,11 @@
+---
+- hosts: servers
+  become: true
+  tasks:
+      - apt:
+            upgrade: yes
+            update_cache: yes
+      - package:
+            name:
+                - curl
+            state: present
