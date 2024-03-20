@@ -10,6 +10,6 @@
                 - '3306:3306'
             volumes:
                 - ${PWD}/mysql:/var/lib/mysql
-            environment:
+            env:
                 MYSQL_USER: '{{ db_user }}'
                 MYSQL_PASSWORD: '{{ db_password }}'
