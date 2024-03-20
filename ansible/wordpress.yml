@@ -5,6 +5,7 @@
             name: wordpress
             image: wordpress:latest
             restart_policy: always
+            state: started
             ports:
                 - '8080:80'
             volumes:
