@@ -1,0 +1,15 @@
+- hosts: servers
+  become: yes
+  tasks:
+      - docker_container:
+            name: db
+            image: mysql:8.0
+            restart_policy: always
+            state: started
+            ports:
+                - '3306:3306'
+            volumes:
+                - ${PWD}/mysql:/var/lib/mysql
+            environment:
+                MYSQL_USER: '{{ db_user }}'
+                MYSQL_PASSWORD: '{{ db_password }}'

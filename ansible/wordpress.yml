@@ -1,0 +1,27 @@
+- hosts: servers
+  become: yes
+  vars:
+      wordpress_image: wordpress:latest
+      mysql_image: mysql:8.0
+      wordpress_port: 8080
+      docroot: /var/www/html
+      db_name: exampledb
+      db_user: exampleuser
+      db_password: examplepass
+
+  tasks:
+      - docker_container:
+            name: wordpress
+            image: '{{ wordpress_image }}'
+            restart_policy: always
+            ports:
+                - '{{ wordpress_port }}:80'
+            volumes:
+                - wordpress:/var/www/html
+            environment:
+                WORDPRESS_DB_HOST: db
+                WORDPRESS_DB_USER: '{{ db_user }}'
+                WORDPRESS_DB_PASSWORD: '{{ db_password }}'
+                WORDPRESS_DB_NAME: '{{ db_name }}'
+            links:
+                - db # Ensures dependency
