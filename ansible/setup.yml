@@ -22,3 +22,7 @@
       - package:
             name: nodejs
             state: present
+      - npm:
+            name: ghost-cli
+            global: yes
+            state: present
