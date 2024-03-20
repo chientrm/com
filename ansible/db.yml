@@ -2,8 +2,8 @@
   become: yes
   tasks:
       - pip:
-        name: pymysql
-        state: present
+            name: pymysql
+            state: present
       - docker_container:
             name: db
             image: mysql:8.0
