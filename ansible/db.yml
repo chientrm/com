@@ -1,22 +1,22 @@
 - hosts: servers
   become: yes
+  vars:
+      databases:
+          - name: wordpress
   tasks:
-      - apt:
-            name: python3-pip
+      - package:
+            name: '{{ item }}'
             state: present
-      - pip:
-            name: pymysql
-            state: present
-      - docker_container:
-            name: db
-            image: mysql:8.0
-            restart_policy: always
+            with_items:
+                - python3-mysqldb
+                - mysql-server
+      - service:
+            name: mysql
             state: started
-            ports:
-                - '3306:3306'
-            volumes:
-                - db:/var/lib/mysql
-            env:
-                MYSQL_USER: '{{ db_user }}'
-                MYSQL_PASSWORD: '{{ db_password }}'
-                MYSQL_RANDOM_ROOT_PASSWORD: '1'
+            enabled: yes
+      - mysql_db:
+            name: '{{ item.name }}'
+            state: present
+            login_user: root
+            login_password: '{{ mysql_root_password }}'
+        with_items: '{{ databases }}'
