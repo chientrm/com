@@ -1,6 +1,10 @@
 - hosts: servers
   become: yes
   tasks:
+      - mysql_query:
+            login_user: '{{ db_user }}'
+            login_password: '{{ db_password }}'
+            query: CREATE DATABASE IF NOT EXISTS wordpress
       - docker_container:
             name: wordpress
             image: wordpress:latest
