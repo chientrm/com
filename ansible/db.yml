@@ -5,6 +5,7 @@
   tasks:
       - package:
             name:
+                - python3-mysqldb
                 - mysql-server
             state: present
       - service:
