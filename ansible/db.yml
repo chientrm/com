@@ -1,8 +1,7 @@
 - hosts: servers
   become: yes
   vars:
-      databases:
-          - name: wordpress
+      mysql_root_password: '{{ mysql_root_password }}'
   tasks:
       - package:
             name: '{{ item }}'
@@ -15,8 +14,8 @@
             state: started
             enabled: yes
       - mysql_db:
-            name: '{{ item.name }}'
+            name:
+                - wordpress
             state: present
             login_user: root
             login_password: '{{ mysql_root_password }}'
-        with_items: '{{ databases }}'
