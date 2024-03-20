@@ -4,11 +4,9 @@
       mysql_root_password: '{{ mysql_root_password }}'
   tasks:
       - package:
-            name: '{{ item }}'
-            state: present
-            with_items:
-                - python3-mysqldb
+            name:
                 - mysql-server
+            state: present
       - service:
             name: mysql
             state: started
