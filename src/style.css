@@ -110,7 +110,7 @@ nav {
   display: flex;
   justify-content: center;
   gap: 20px;
-  background-color: #333;
+  background-color: #444;
   padding: 15px 20px;
   border-radius: 12px;
   position: fixed;
@@ -135,6 +135,59 @@ nav button {
 }
 
 nav button:hover {
+  background-color: #535bf2;
+  transform: scale(1.05);
+}
+
+/* Form styles */
+form {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #2a2a3b;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form h2 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #ffffff;
+  text-align: center;
+}
+
+form input {
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #646cff;
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: white;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+form input:focus {
+  border-color: #535bf2;
+  background-color: #333;
+  outline: none;
+}
+
+form button {
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  font-weight: 600;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+form button:hover {
   background-color: #535bf2;
   transform: scale(1.05);
 }
@@ -187,5 +240,32 @@ nav button:hover {
 
   .read-the-docs {
     color: #555;
+  }
+
+  form {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  form h2 {
+    color: #213547;
+  }
+
+  form input {
+    background-color: #f9f9f9;
+    color: #213547;
+  }
+
+  form input:focus {
+    background-color: #e0e0e0;
+  }
+
+  form button {
+    background-color: #646cff;
+    color: white;
+  }
+
+  form button:hover {
+    background-color: #535bf2;
   }
 }
