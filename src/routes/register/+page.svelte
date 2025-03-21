@@ -14,11 +14,9 @@
     Username:
     <input type="text" bind:value={username} required />
   </label>
-  <br />
   <label>
     Password:
     <input type="password" bind:value={password} required />
   </label>
-  <br />
   <button type="submit">Register</button>
 </form>
