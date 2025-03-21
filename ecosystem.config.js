@@ -1,8 +1,8 @@
-module.exports = {
+export default {
   apps: [
     {
       name: "com",
-      script: "build/index.js",
+      script: "./build/index.js",
       instances: 1, // Single instance
       exec_mode: "fork", // Use fork mode
       env: {
