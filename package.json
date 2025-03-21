@@ -9,9 +9,13 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "drizzle-kit": "^0.30.5",
+    "tsx": "^4.19.3",
     "vite": "^6.2.0"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.0",
+    "drizzle-orm": "^0.40.1",
     "express": "^4.21.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
