@@ -1,22 +1,19 @@
-<script>
-  let username = '';
-  let password = '';
-
-  function handleRegister() {
-    // Handle registration logic here
-    console.log('Registering with', { username, password });
-  }
-</script>
+<nav>
+  <a href="/">Home</a>
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+</nav>
 
 <h1>Register</h1>
-<form on:submit|preventDefault={handleRegister}>
-  <label>
-    Username:
-    <input type="text" bind:value={username} required />
-  </label>
-  <label>
-    Password:
-    <input type="password" bind:value={password} required />
-  </label>
+<form>
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" required />
+  
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required />
+  
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required />
+  
   <button type="submit">Register</button>
 </form>
