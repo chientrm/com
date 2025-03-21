@@ -1,1 +1,0 @@
-ALTER TABLE threads ADD `id` integer PRIMARY KEY NOT NULL;
