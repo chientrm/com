@@ -8,11 +8,6 @@ fastify.register(fastifyStatic, {
     prefix: '/', // Serve files under the root URL
 });
 
-// Define a sample route
-fastify.get('/', async (request, reply) => {
-    return { message: 'Hello, Fastify!' };
-});
-
 // Define a sample API route
 fastify.get('/api/message', async (request, reply) => {
     return { message: 'Hello, Fastify!' };
