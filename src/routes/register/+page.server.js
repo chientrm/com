@@ -11,20 +11,9 @@ export const actions = {
             return { success: false, error: 'Username and password are required.' };
         }
 
-        try {
-            // Check if username already exists
-            const existingUser = await users.findOneAsync({ username });
+        // Insert user into the database
+        await users.insertAsync({ _id: username, password, createdAt: new Date() });
 
-            if (existingUser) {
-                return { success: false, error: 'Username already exists.' };
-            }
-
-            // Insert user into the database
-            await users.insertAsync({ username, password, createdAt: new Date() });
-
-            return { success: true };
-        } catch (error) {
-            return { success: false, error: 'An error occurred during registration.' };
-        }
+        return { success: true };
     }
 };
