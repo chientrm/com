@@ -4,24 +4,43 @@ import './style.css';
 import javascriptLogo from './javascript.svg';
 import viteLogo from '/vite.svg';
 
+function NavBar({ setView }) {
+    return (
+        <nav style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <button onClick={() => setView('home')}>Home</button>
+            <button onClick={() => setView('login')}>Login</button>
+            <button onClick={() => setView('register')}>Register</button>
+        </nav>
+    );
+}
+
 function App() {
+    const [view, setView] = useState('home');
+
     return (
         <div>
-            <a href="https://vite.dev" target="_blank">
-                <img src={viteLogo} className="logo" alt="Vite logo" />
-            </a>
-            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-                <img src={javascriptLogo} className="logo vanilla" alt="JavaScript logo" />
-            </a>
-            <h1>Hello Vite!</h1>
-            <div className="card">
-                <Counter />
+            <NavBar setView={setView} />
+            <div>
+                {view === 'home' && (
+                    <div>
+                        <a href="https://vite.dev" target="_blank">
+                            <img src={viteLogo} className="logo" alt="Vite logo" />
+                        </a>
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
+                            <img src={javascriptLogo} className="logo vanilla" alt="JavaScript logo" />
+                        </a>
+                        <h1>Hello Vite!</h1>
+                        <div className="card">
+                            <Counter />
+                        </div>
+                        <p className="read-the-docs">
+                            Click on the Vite logo to learn more
+                        </p>
+                    </div>
+                )}
+                {view === 'login' && <LoginForm />}
+                {view === 'register' && <RegisterForm />}
             </div>
-            <p className="read-the-docs">
-                Click on the Vite logo to learn more
-            </p>
-            <LoginForm />
-            <RegisterForm />
         </div>
     );
 }
