@@ -20,5 +20,8 @@
 		"onlyBuiltDependencies": [
 			"esbuild"
 		]
+	},
+	"dependencies": {
+		"@seald-io/nedb": "^4.1.1"
 	}
 }
