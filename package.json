@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "prod": "pm2 start server.js --name com"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "fastify": "^5.2.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "pm2": "^5.3.0"
   }
 }
