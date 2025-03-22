@@ -524,30 +524,58 @@ function Weather() {
         );
     }, []);
 
+    const chartData = forecast
+        ? {
+              labels: forecast.daily.map((day) =>
+                  new Date(day.dt * 1000).toLocaleDateString('en-US', {
+                      weekday: 'long',
+                      month: 'short',
+                      day: 'numeric',
+                  })
+              ),
+              datasets: [
+                  {
+                      label: 'Day Temperature (°C)',
+                      data: forecast.daily.map((day) => day.temp.day),
+                      backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 1,
+                  },
+                  {
+                      label: 'Night Temperature (°C)',
+                      data: forecast.daily.map((day) => day.temp.night),
+                      backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                      borderColor: 'rgba(153, 102, 255, 1)',
+                      borderWidth: 1,
+                  },
+              ],
+          }
+        : null;
+
     return (
-        <div className="text-center">
+        <div className="h-full overflow-auto text-center">
             <h1 className="text-3xl font-bold mb-4">Weather Forecast</h1>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
-                <div>
-                    {forecast.daily.map((day, index) => (
-                        <div key={index} className="mb-4">
-                            <p>
-                                <strong>Date:</strong>{' '}
-                                {new Date(day.dt * 1000).toLocaleDateString()}
-                            </p>
-                            <p>
-                                <strong>Temperature:</strong> {day.temp.day}°C
-                            </p>
-                            <p>
-                                <strong>Weather:</strong>{' '}
-                                {day.weather[0].description}
-                            </p>
-                        </div>
-                    ))}
+                <div className="mb-6">
+                    <Bar
+                        data={chartData}
+                        options={{
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: '7-Day Weather Forecast',
+                                },
+                            },
+                        }}
+                    />
                 </div>
             ) : (
                 <p>No weather data available.</p>
