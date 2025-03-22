@@ -31,11 +31,15 @@ async function verifyCaptcha(token) {
     return data.success;
 }
 
-app.use(
-    express.static(
-        path.join(path.dirname(new URL(import.meta.url).pathname), 'dist')
-    )
-);
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Serve static files from the dist folder
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Fallback to index.html for SPA routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
 
 app.use(express.json());
 
