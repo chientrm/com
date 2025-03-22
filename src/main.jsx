@@ -541,7 +541,8 @@ function ServiceLogs() {
     }, [serviceName]);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-full min-h-screen">
+            {/* Ensure the container fills the screen */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">
                     Logs for Service: {serviceName}
@@ -557,13 +558,13 @@ function ServiceLogs() {
                     <ArrowPathIcon className="h-5 w-5" />
                 </button>
             </div>
-            {/* Removed the "Back to Services" link */}
             {isLoading ? (
                 <p className="text-center text-blue-500">Loading...</p>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 border border-gray-300 rounded-md overflow-auto">
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
+                    {/* Ensure the table container allows scrolling */}
                     <LogTable logs={logs} />
                 </div>
             )}
