@@ -16,6 +16,7 @@ const PORT = process.env.PORT;
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
+const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
 
 // Utility functions
 async function verifyCaptcha(token) {
@@ -296,6 +297,34 @@ app.get(
         );
     }
 );
+
+app.get('/api/weather', async (req, res) => {
+    const { lat, lng } = req.query;
+
+    if (!lat || !lng) {
+        return res
+            .status(400)
+            .json({ message: 'Latitude and longitude are required.' });
+    }
+
+    console.log('OPENWEATHER_API_KEY:', OPENWEATHER_API_KEY); // Debugging log
+
+    const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude=minutely,hourly,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+        console.error(
+            `Error fetching weather data: ${response.status} ${response.statusText}`
+        );
+        if (response.status === 401) {
+            return res.status(401).json({ message: 'Invalid API key.' });
+        }
+        return res
+            .status(response.status)
+            .json({ message: 'Failed to fetch weather data.' });
+    }
+    const data = await response.json();
+    res.json(data);
+});
 
 ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

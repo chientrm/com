@@ -82,8 +82,7 @@ function NavBar() {
         <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
-                {/* Remove Weather link */}
-                {/* <NavLink to="/weather" label="Weather" /> */}
+                <NavLink to="/weather" label="Weather" />
             </div>
             <div className="flex gap-6">
                 {links.map((link) => (
@@ -481,6 +480,82 @@ function RegisterForm() {
     );
 }
 
+function Weather() {
+    const [forecast, setForecast] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!navigator.geolocation) {
+            setError('Geolocation is not supported by your browser.');
+            setLoading(false);
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                fetch(`/api/weather?lat=${latitude}&lng=${longitude}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            console.error(
+                                `Error fetching weather data: ${response.status} ${response.statusText}`
+                            );
+                            throw new Error(
+                                `HTTP error! status: ${response.status}`
+                            );
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log(data); // Debugging log
+                        setForecast(data);
+                        setLoading(false);
+                    })
+                    .catch((err) => {
+                        setError('Failed to fetch weather data.');
+                        setLoading(false);
+                    });
+            },
+            (err) => {
+                setError('Failed to retrieve your location.');
+                setLoading(false);
+            }
+        );
+    }, []);
+
+    return (
+        <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">Weather Forecast</h1>
+            {loading ? (
+                <p>Loading...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
+                <div>
+                    {forecast.daily.map((day, index) => (
+                        <div key={index} className="mb-4">
+                            <p>
+                                <strong>Date:</strong>{' '}
+                                {new Date(day.dt * 1000).toLocaleDateString()}
+                            </p>
+                            <p>
+                                <strong>Temperature:</strong> {day.temp.day}°C
+                            </p>
+                            <p>
+                                <strong>Weather:</strong>{' '}
+                                {day.weather[0].description}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p>No weather data available.</p>
+            )}
+        </div>
+    );
+}
+
 function App() {
     return (
         <Router>
@@ -505,6 +580,7 @@ function App() {
                             path="/admin/journalctl/:serviceName"
                             element={<ServiceLogs />}
                         />
+                        <Route path="/weather" element={<Weather />} />
                     </Routes>
                 </div>
             </div>
