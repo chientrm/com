@@ -703,7 +703,12 @@ function LogTable({ logs }) {
                             {log.host}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.service}
+                            <Link
+                                to={`/admin/journalctl/${log.service}`}
+                                className="text-blue-500 hover:underline"
+                            >
+                                {log.service}
+                            </Link>
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                             {log.pid}
