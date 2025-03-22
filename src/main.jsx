@@ -90,6 +90,10 @@ function App() {
                         path="/admin/journalctl"
                         element={<JournalctlLogs />}
                     />
+                    <Route
+                        path="/admin/systemctl"
+                        element={<SystemctlServices />}
+                    />
                 </Routes>
             </div>
         </Router>
@@ -298,6 +302,12 @@ function Admin() {
                 >
                     View System Logs
                 </Link>
+                <Link
+                    to="/admin/systemctl"
+                    className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover ml-4"
+                >
+                    View Services
+                </Link>
             </div>
         </div>
     );
@@ -478,6 +488,54 @@ function JournalctlLogs() {
                             </table>
                         )}
                     </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function SystemctlServices() {
+    const [services, setServices] = useState([]);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchServices = async () => {
+            const response = await fetch('/api/admin/systemctl', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        'authToken'
+                    )}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const serviceRows = data.services
+                    .split('\n')
+                    .filter((line) => line.trim());
+                setServices(serviceRows);
+            } else {
+                const errorMessage =
+                    response.status === 403
+                        ? 'Access denied: You do not have permission to view services'
+                        : 'Failed to fetch services';
+                setError(errorMessage);
+            }
+        };
+
+        fetchServices();
+    }, []);
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <h2 className="text-2xl font-bold mb-4">System Services</h2>
+            {error ? (
+                <p className="text-red-500">{error}</p>
+            ) : (
+                <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
+                    <pre className="p-4 text-sm whitespace-pre-wrap">
+                        {services.join('\n')}
+                    </pre>
                 </div>
             )}
         </div>

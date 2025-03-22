@@ -160,6 +160,28 @@ app.get(
     }
 );
 
+app.get(
+    '/api/admin/systemctl',
+    authenticateToken,
+    authenticateAdmin,
+    (req, res) => {
+        exec(
+            'systemctl list-units --type=service --no-pager',
+            (error, stdout, stderr) => {
+                if (error) {
+                    return res
+                        .status(500)
+                        .json({
+                            message: 'Failed to fetch services',
+                            error: stderr,
+                        });
+                }
+                res.json({ services: stdout });
+            }
+        );
+    }
+);
+
 ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
