@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
@@ -14,6 +15,7 @@ const PORT = process.env.PORT;
 
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
+const JWT_SECRET = process.env.TURNSTILE_SECRET;
 
 async function verifyCaptcha(token) {
     const response = await fetch(
@@ -65,6 +67,22 @@ async function findUserByUsername(username) {
         .get();
 }
 
+function generateToken(username) {
+    return jwt.sign({ username }, JWT_SECRET, { expiresIn: '30d' });
+}
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+        if (err) return res.sendStatus(403);
+        req.user = { username: payload.username }; // Extract username from payload
+        next();
+    });
+}
+
 app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
@@ -83,7 +101,8 @@ app.post('/api/login', async (req, res) => {
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        res.json({ message: 'Login successful', username });
+        const token = generateToken(username);
+        res.json({ message: 'Login successful', username, token });
     } else {
         sendErrorResponse(res, 401, 'Invalid username or password');
     }
@@ -106,7 +125,12 @@ app.post('/api/register', async (req, res) => {
 
     await db.insert(usersTable).values({ username, passwordHash });
 
-    res.json({ message: 'Registration successful', username });
+    const token = generateToken(username);
+    res.json({ message: 'Registration successful', username, token });
+});
+
+app.get('/api/check-auth', authenticateToken, (req, res) => {
+    res.sendStatus(200);
 });
 
 ViteExpress.listen(app, PORT, () => {

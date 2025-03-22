@@ -6,11 +6,19 @@ import './style.css';
 import viteLogo from '/vite.svg';
 
 function NavBar() {
-    const links = [
-        { to: '/', label: 'Home' },
-        { to: '/login', label: 'Login' },
-        { to: '/register', label: 'Register' },
-    ];
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const links = isLoggedIn
+        ? [{ to: '/profile', label: 'Profile' }]
+        : [
+              { to: '/login', label: 'Login' },
+              { to: '/register', label: 'Register' },
+          ];
 
     return (
         <nav className="flex justify-between items-center mb-5">
@@ -18,7 +26,7 @@ function NavBar() {
                 <NavLink to="/" label="Home" />
             </div>
             <div className="flex gap-4">
-                {links.slice(1).map((link) => (
+                {links.map((link) => (
                     <NavLink key={link.to} to={link.to} label={link.label} />
                 ))}
             </div>
@@ -46,6 +54,7 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
             </div>
         </Router>
@@ -193,7 +202,13 @@ function AuthForm({
             body: JSON.stringify({ ...formData, captchaToken }),
         });
         const data = await response.json();
-        alert(data.message);
+        if (response.ok) {
+            localStorage.setItem('authToken', data.token);
+            alert(data.message);
+            window.location.href = '/';
+        } else {
+            alert(data.message);
+        }
     };
 
     return (
@@ -249,6 +264,14 @@ function AuthForm({
                 {title}
             </button>
         </form>
+    );
+}
+
+function Profile() {
+    return (
+        <div className="text-center">
+            <h1 className="text-3xl font-bold">Welcome to your profile!</h1>
+        </div>
     );
 }
 
