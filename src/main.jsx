@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
     Link,
@@ -270,6 +270,184 @@ function ServiceLogs() {
     );
 }
 
+function LoginForm() {
+    const [formData, setFormData] = useState({ username: '', password: '' });
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('');
+    const widgetId = 'turnstile-widget-login';
+    const widgetRef = useRef(null);
+
+    useEffect(() => {
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: (token) => setCaptchaToken(token),
+        });
+
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setServerError('');
+        if (!captchaToken)
+            return setServerError('Please complete the CAPTCHA.');
+
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, captchaToken }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            localStorage.setItem('authToken', data.token);
+            window.location.href = '/';
+        } else {
+            setServerError(data.message);
+        }
+    };
+
+    return (
+        <form
+            className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md space-y-4"
+            onSubmit={handleSubmit}
+        >
+            <h2 className="text-xl font-semibold text-gray-800">Login</h2>
+            {serverError && (
+                <p className="text-sm text-red-600">{serverError}</p>
+            )}
+            <input
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleInputChange}
+            />
+            <input
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+            />
+            <div id={widgetId} className="mb-4"></div>
+            <button
+                className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                type="submit"
+            >
+                Login
+            </button>
+        </form>
+    );
+}
+
+function RegisterForm() {
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        confirmPassword: '',
+    });
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('');
+    const widgetId = 'turnstile-widget-register';
+    const widgetRef = useRef(null);
+
+    useEffect(() => {
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: (token) => setCaptchaToken(token),
+        });
+
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setServerError('');
+        if (!captchaToken)
+            return setServerError('Please complete the CAPTCHA.');
+
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...formData, captchaToken }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            localStorage.setItem('authToken', data.token);
+            window.location.href = '/';
+        } else {
+            setServerError(data.message);
+        }
+    };
+
+    return (
+        <form
+            className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md space-y-4"
+            onSubmit={handleSubmit}
+        >
+            <h2 className="text-xl font-semibold text-gray-800">Register</h2>
+            {serverError && (
+                <p className="text-sm text-red-600">{serverError}</p>
+            )}
+            <input
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                type="text"
+                name="username"
+                placeholder="Username"
+                value={formData.username}
+                onChange={handleInputChange}
+            />
+            <input
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+            />
+            <input
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+            />
+            <div id={widgetId} className="mb-4"></div>
+            <button
+                className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                type="submit"
+            >
+                Register
+            </button>
+        </form>
+    );
+}
+
 function App() {
     return (
         <Router>
@@ -278,28 +456,8 @@ function App() {
                 <div className="flex-1 overflow-hidden px-4 py-6">
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route
-                            path="/login"
-                            element={
-                                <AuthForm
-                                    title="Login"
-                                    apiEndpoint="/api/login"
-                                    widgetId="turnstile-widget-login"
-                                    simpleValidation
-                                />
-                            }
-                        />
-                        <Route
-                            path="/register"
-                            element={
-                                <AuthForm
-                                    title="Register"
-                                    apiEndpoint="/api/register"
-                                    widgetId="turnstile-widget-register"
-                                    includePasswordConfirmation
-                                />
-                            }
-                        />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/register" element={<RegisterForm />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route
@@ -344,12 +502,22 @@ function AuthForm({
     const [captchaToken, setCaptchaToken] = useState(null);
     const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState('');
+    const widgetRef = useRef(null); // Use a ref to track the widget instance
 
     useEffect(() => {
-        window.turnstile.render(`#${widgetId}`, {
+        // Render the Turnstile widget
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
             sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
             callback: (token) => setCaptchaToken(token),
         });
+
+        // Cleanup function to destroy the widget when unmounting
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`); // Properly destroy the widget
+                widgetRef.current = null; // Reset the ref
+            }
+        };
     }, [widgetId]);
 
     const handleInputChange = (e) => {
@@ -411,7 +579,6 @@ function AuthForm({
             window.location.href = '/';
         } else {
             setServerError(data.message);
-            window.turnstile.reset(`#${widgetId}`);
         }
     };
 
