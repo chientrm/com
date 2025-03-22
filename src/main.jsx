@@ -297,16 +297,16 @@ function Admin() {
             <p className="text-lg mt-2">Welcome to the admin panel.</p>
             <div className="mt-4">
                 <Link
-                    to="/admin/journalctl"
+                    to="/admin/systemctl"
                     className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover"
                 >
-                    View System Logs
+                    View Services
                 </Link>
                 <Link
-                    to="/admin/systemctl"
+                    to="/admin/journalctl"
                     className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover ml-4"
                 >
-                    View Services
+                    View System Logs
                 </Link>
             </div>
         </div>
