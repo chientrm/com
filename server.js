@@ -12,7 +12,7 @@ dotenv.config(); // Load environment variables from .env
 const app = express();
 const PORT = process.env.PORT;
 
-const db = drizzle(process.env.DB);
+const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
 
 async function verifyCaptcha(token) {
