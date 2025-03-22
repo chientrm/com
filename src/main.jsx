@@ -7,10 +7,14 @@ import viteLogo from '/vite.svg';
 
 function NavBar() {
     return (
-        <nav className="flex gap-4 mb-5">
-            <Link to="/" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Home</Link>
-            <Link to="/login" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Login</Link>
-            <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Register</Link>
+        <nav className="flex justify-between items-center mb-5">
+            <div className="flex gap-4">
+                <Link to="/" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Home</Link>
+            </div>
+            <div className="flex gap-4">
+                <Link to="/login" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Login</Link>
+                <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Register</Link>
+            </div>
         </nav>
     );
 }
