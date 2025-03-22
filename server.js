@@ -297,50 +297,6 @@ app.get(
     }
 );
 
-// Mock weather data (replace with an actual API call if needed)
-function getWeatherForecast() {
-    return {
-        location: 'Your City',
-        forecast: [
-            {
-                day: 'Monday',
-                rainChance: '20%',
-                temperature: '25°C',
-                humidity: '60%',
-            },
-            {
-                day: 'Tuesday',
-                rainChance: '50%',
-                temperature: '22°C',
-                humidity: '70%',
-            },
-            {
-                day: 'Wednesday',
-                rainChance: '80%',
-                temperature: '20°C',
-                humidity: '85%',
-            },
-            {
-                day: 'Thursday',
-                rainChance: '10%',
-                temperature: '27°C',
-                humidity: '50%',
-            },
-            {
-                day: 'Friday',
-                rainChance: '30%',
-                temperature: '24°C',
-                humidity: '65%',
-            },
-        ],
-    };
-}
-
-app.get('/api/weather', (req, res) => {
-    const weatherData = getWeatherForecast();
-    res.json(weatherData);
-});
-
 ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
