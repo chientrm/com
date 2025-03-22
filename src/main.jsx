@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import './style.css';
 import javascriptLogo from './javascript.svg';
+import "./style.css";
 import viteLogo from '/vite.svg';
 
 function NavBar({ setView }) {
     return (
-        <nav style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <button onClick={() => setView('home')}>Home</button>
-            <button onClick={() => setView('login')}>Login</button>
-            <button onClick={() => setView('register')}>Register</button>
+        <nav className="flex gap-4 mb-5">
+            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={() => setView('home')}>Home</button>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={() => setView('login')}>Login</button>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={() => setView('register')}>Register</button>
         </nav>
     );
 }
@@ -18,22 +18,22 @@ function App() {
     const [view, setView] = useState('home');
 
     return (
-        <div>
+        <div className="p-5">
             <NavBar setView={setView} />
             <div>
                 {view === 'home' && (
-                    <div>
+                    <div className="text-center">
                         <a href="https://vite.dev" target="_blank">
-                            <img src={viteLogo} className="logo" alt="Vite logo" />
+                            <img src={viteLogo} className="w-20 mx-auto mb-4" alt="Vite logo" />
                         </a>
                         <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-                            <img src={javascriptLogo} className="logo vanilla" alt="JavaScript logo" />
+                            <img src={javascriptLogo} className="w-20 mx-auto mb-4" alt="JavaScript logo" />
                         </a>
-                        <h1>Hello Vite!</h1>
-                        <div className="card">
+                        <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
+                        <div className="card p-4 border rounded shadow">
                             <Counter />
                         </div>
-                        <p className="read-the-docs">
+                        <p className="mt-4 text-gray-600">
                             Click on the Vite logo to learn more
                         </p>
                     </div>
@@ -49,7 +49,7 @@ function Counter() {
     const [count, setCount] = useState(0);
 
     return (
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button className="px-4 py-2 bg-green-500 text-white rounded" onClick={() => setCount((count) => count + 1)}>
             Count is {count}
         </button>
     );
@@ -71,21 +71,23 @@ function LoginForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Login</h2>
+        <form className="max-w-sm mx-auto p-4 border rounded shadow" onSubmit={handleSubmit}>
+            <h2 className="text-2xl font-bold mb-4">Login</h2>
             <input
+                className="w-full mb-3 p-2 border rounded"
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
             <input
+                className="w-full mb-3 p-2 border rounded"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit">Login</button>
+            <button className="w-full px-4 py-2 bg-blue-500 text-white rounded" type="submit">Login</button>
         </form>
     );
 }
@@ -106,21 +108,23 @@ function RegisterForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2>Register</h2>
+        <form className="max-w-sm mx-auto p-4 border rounded shadow" onSubmit={handleSubmit}>
+            <h2 className="text-2xl font-bold mb-4">Register</h2>
             <input
+                className="w-full mb-3 p-2 border rounded"
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
             <input
+                className="w-full mb-3 p-2 border rounded"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button type="submit">Register</button>
+            <button className="w-full px-4 py-2 bg-blue-500 text-white rounded" type="submit">Register</button>
         </form>
     );
 }
