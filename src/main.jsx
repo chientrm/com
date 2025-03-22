@@ -8,14 +8,25 @@ import { decodeJwt } from 'jose'; // Use jose for decoding
 
 function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
-        setIsLoggedIn(!!token);
+        if (token) {
+            const decoded = decodeJwt(token); // Decode using jose
+            setIsLoggedIn(true);
+            setIsAdmin(decoded.role === 'admin'); // Check if the role is admin
+        } else {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+        }
     }, []);
 
     const links = isLoggedIn
-        ? [{ to: '/profile', label: 'Profile' }]
+        ? [
+              { to: '/profile', label: 'Profile' },
+              ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []), // Show Admin link if user is admin
+          ]
         : [
               { to: '/login', label: 'Login' },
               { to: '/register', label: 'Register' },
@@ -56,6 +67,8 @@ function App() {
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/register" element={<RegisterForm />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/admin" element={<Admin />} />{' '}
+                    {/* Admin route */}
                 </Routes>
             </div>
         </Router>
@@ -307,6 +320,15 @@ function Profile() {
             >
                 Logout
             </button>
+        </div>
+    );
+}
+
+function Admin() {
+    return (
+        <div className="text-center">
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-lg mt-2">Welcome to the admin panel.</p>
         </div>
     );
 }
