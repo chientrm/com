@@ -8,34 +8,22 @@ importers:
 
   .:
     dependencies:
-      '@libsql/client':
-        specifier: ^0.15.0
-        version: 0.15.0
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
-      drizzle-orm:
-        specifier: ^0.40.1
-        version: 0.40.1(@libsql/client@0.15.0)(gel@2.0.1)
       express:
         specifier: ^4.21.2
         version: 4.21.2
       node-fetch:
         specifier: ^3.3.2
         version: 3.3.2
-      react:
-        specifier: ^19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.0.0(react@19.0.0)
-      react-router-dom:
-        specifier: ^7.4.0
-        version: 7.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
+      '@libsql/client':
+        specifier: ^0.15.0
+        version: 0.15.0
       '@tailwindcss/vite':
         specifier: ^4.0.15
         version: 4.0.15(vite@6.2.2(@types/node@22.13.11)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3))
@@ -45,9 +33,21 @@ importers:
       drizzle-kit:
         specifier: ^0.30.5
         version: 0.30.5
+      drizzle-orm:
+        specifier: ^0.40.1
+        version: 0.40.1(@libsql/client@0.15.0)(gel@2.0.1)
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
+      react-router-dom:
+        specifier: ^7.4.0
+        version: 7.4.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwindcss:
         specifier: ^4.0.15
         version: 4.0.15
