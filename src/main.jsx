@@ -541,7 +541,8 @@ function ServiceLogs() {
     }, [serviceName]);
 
     return (
-        <div className="flex flex-col h-full min-h-screen">
+        <div className="flex flex-col h-full">
+            {/* Ensure the container fills the screen */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">
                     Logs for Service: {serviceName}
@@ -562,8 +563,7 @@ function ServiceLogs() {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 overflow-auto border border-gray-300 rounded-md max-h-[calc(100vh-150px)]">
-                    {/* Added max height to prevent excessive overflow */}
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
                     <LogTable logs={logs} />
                 </div>
             )}
