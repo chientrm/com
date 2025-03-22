@@ -1,46 +1,51 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import javascriptLogo from './javascript.svg';
 import "./style.css";
 import viteLogo from '/vite.svg';
 
-function NavBar({ setView }) {
+function NavBar() {
     return (
         <nav className="flex gap-4 mb-5">
-            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" onClick={() => setView('home')}>Home</button>
-            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" onClick={() => setView('login')}>Login</button>
-            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" onClick={() => setView('register')}>Register</button>
+            <Link to="/" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Home</Link>
+            <Link to="/login" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Login</Link>
+            <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Register</Link>
         </nav>
     );
 }
 
 function App() {
-    const [view, setView] = useState('home');
-
     return (
-        <div className="p-5">
-            <NavBar setView={setView} />
-            <div>
-                {view === 'home' && (
-                    <div className="text-center">
-                        <a href="https://vite.dev" target="_blank">
-                            <img src={viteLogo} className="w-20 mx-auto mb-4" alt="Vite logo" />
-                        </a>
-                        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-                            <img src={javascriptLogo} className="w-20 mx-auto mb-4" alt="JavaScript logo" />
-                        </a>
-                        <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
-                        <div className="card p-4 border rounded-md shadow-md">
-                            <Counter />
-                        </div>
-                        <p className="mt-4 text-muted-foreground">
-                            Click on the Vite logo to learn more
-                        </p>
-                    </div>
-                )}
-                {view === 'login' && <LoginForm />}
-                {view === 'register' && <RegisterForm />}
+        <Router>
+            <div className="p-5">
+                <NavBar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/register" element={<RegisterForm />} />
+                </Routes>
             </div>
+        </Router>
+    );
+}
+
+function Home() {
+    return (
+        <div className="text-center">
+            <a href="https://vite.dev" target="_blank">
+                <img src={viteLogo} className="w-20 mx-auto mb-4" alt="Vite logo" />
+            </a>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
+                <img src={javascriptLogo} className="w-20 mx-auto mb-4" alt="JavaScript logo" />
+            </a>
+            <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
+            <div className="card p-4 border rounded-md shadow-md">
+                <Counter />
+            </div>
+            <p className="mt-4 text-muted-foreground">
+                Click on the Vite logo to learn more
+            </p>
         </div>
     );
 }
