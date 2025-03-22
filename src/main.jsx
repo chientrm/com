@@ -546,6 +546,27 @@ function Weather() {
                       borderColor: 'rgba(153, 102, 255, 1)',
                       borderWidth: 1,
                   },
+                  {
+                      label: 'Humidity (%)',
+                      data: forecast.daily.map((day) => day.humidity),
+                      backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                      borderColor: 'rgba(255, 206, 86, 1)',
+                      borderWidth: 1,
+                  },
+                  {
+                      label: 'Wind Speed (m/s)',
+                      data: forecast.daily.map((day) => day.wind_speed),
+                      backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      borderWidth: 1,
+                  },
+                  {
+                      label: 'UV Index',
+                      data: forecast.daily.map((day) => day.uvi),
+                      backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                      borderColor: 'rgba(255, 99, 132, 1)',
+                      borderWidth: 1,
+                  },
               ],
           }
         : null;
@@ -578,59 +599,6 @@ function Weather() {
                                 },
                             }}
                         />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {forecast.daily.map((day, index) => (
-                            <div
-                                key={index}
-                                className="p-4 border rounded-lg shadow-md bg-white"
-                            >
-                                <h2 className="text-lg font-bold">
-                                    {new Date(day.dt * 1000).toLocaleDateString(
-                                        'en-US',
-                                        {
-                                            weekday: 'long',
-                                            month: 'short',
-                                            day: 'numeric',
-                                        }
-                                    )}
-                                </h2>
-                                <p className="text-sm text-gray-600">
-                                    {day.summary}
-                                </p>
-                                <p>
-                                    <strong>Day Temp:</strong> {day.temp.day}°C
-                                </p>
-                                <p>
-                                    <strong>Night Temp:</strong>{' '}
-                                    {day.temp.night}°C
-                                </p>
-                                <p>
-                                    <strong>Humidity:</strong> {day.humidity}%
-                                </p>
-                                <p>
-                                    <strong>Wind:</strong> {day.wind_speed} m/s
-                                    at {day.wind_deg}°
-                                </p>
-                                <p>
-                                    <strong>Sunrise:</strong>{' '}
-                                    {new Date(
-                                        day.sunrise * 1000
-                                    ).toLocaleTimeString('en-US')}
-                                </p>
-                                <p>
-                                    <strong>Sunset:</strong>{' '}
-                                    {new Date(
-                                        day.sunset * 1000
-                                    ).toLocaleTimeString('en-US')}
-                                </p>
-                                {day.rain && (
-                                    <p>
-                                        <strong>Rain:</strong> {day.rain} mm
-                                    </p>
-                                )}
-                            </div>
-                        ))}
                     </div>
                 </div>
             ) : (
