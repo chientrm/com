@@ -543,7 +543,7 @@ function ServiceLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
     const [isRawMode, setIsRawMode] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchLogs = async () => {
         setIsLoading(true);
@@ -557,11 +557,7 @@ function ServiceLogs() {
             const data = await response.json();
             setLogs(data.logs.split('\n').filter((line) => line));
         } else {
-            const errorMessage =
-                response.status === 403
-                    ? 'Access denied: You do not have permission to view logs'
-                    : 'Failed to fetch logs';
-            setError(errorMessage);
+            setError('Failed to fetch logs.');
         }
         setIsLoading(false);
     };
@@ -612,7 +608,7 @@ function ServiceLogs() {
                                 {logs.join('\n')}
                             </pre>
                         ) : (
-                            <LogTable logs={logs} />
+                            <LogTable logs={logs} isServiceRoute={true} />
                         )}
                     </div>
                 </div>
@@ -621,7 +617,7 @@ function ServiceLogs() {
     );
 }
 
-function LogTable({ logs }) {
+function LogTable({ logs, isServiceRoute = false }) {
     const [expandedRows, setExpandedRows] = useState(new Set());
 
     const parseLogs = (logRows) =>
@@ -693,12 +689,16 @@ function LogTable({ logs }) {
                             {log.host}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            <Link
-                                to={`/admin/journalctl/${log.service}`}
-                                className="text-blue-500 hover:underline"
-                            >
-                                {log.service}
-                            </Link>
+                            {isServiceRoute ? (
+                                log.service
+                            ) : (
+                                <Link
+                                    to={`/admin/journalctl/${log.service}`}
+                                    className="text-blue-500 hover:underline"
+                                >
+                                    {log.service}
+                                </Link>
+                            )}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                             {log.pid}
