@@ -6,14 +6,23 @@ import "./style.css";
 import viteLogo from '/vite.svg';
 
 function NavBar() {
+    const links = [
+        { to: "/", label: "Home" },
+        { to: "/login", label: "Login" },
+        { to: "/register", label: "Register" },
+    ];
+
     return (
         <nav className="flex justify-between items-center mb-5">
             <div className="flex gap-4">
                 <Link to="/" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Home</Link>
             </div>
             <div className="flex gap-4">
-                <Link to="/login" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Login</Link>
-                <Link to="/register" className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">Register</Link>
+                {links.slice(1).map((link) => (
+                    <Link key={link.to} to={link.to} className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm">
+                        {link.label}
+                    </Link>
+                ))}
             </div>
         </nav>
     );
@@ -26,8 +35,8 @@ function App() {
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/login" element={<AuthForm type="login" />} />
+                    <Route path="/register" element={<AuthForm type="register" />} />
                 </Routes>
             </div>
         </Router>
@@ -64,13 +73,15 @@ function Counter() {
     );
 }
 
-function LoginForm() {
+function AuthForm({ type }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const isLogin = type === "login";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('/api/login', {
+        const endpoint = isLogin ? '/api/login' : '/api/register';
+        const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),
@@ -81,7 +92,7 @@ function LoginForm() {
 
     return (
         <form className="max-w-sm mx-auto p-4 border rounded-md shadow-md" onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
+            <h2 className="text-2xl font-bold mb-4">{isLogin ? "Login" : "Register"}</h2>
             <input
                 className="w-full mb-3 p-2 border rounded-md shadow-sm"
                 type="text"
@@ -96,44 +107,9 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" type="submit">Login</button>
-        </form>
-    );
-}
-
-function RegisterForm() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        });
-        const data = await response.json();
-        alert(data.message);
-    };
-
-    return (
-        <form className="max-w-sm mx-auto p-4 border rounded-md shadow-md" onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold mb-4">Register</h2>
-            <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" type="submit">Register</button>
+            <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm" type="submit">
+                {isLogin ? "Login" : "Register"}
+            </button>
         </form>
     );
 }
