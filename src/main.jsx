@@ -565,19 +565,19 @@ function SystemctlServices() {
                         <table className="table-auto w-full border-collapse">
                             <thead>
                                 <tr className="bg-gray-200">
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/6">
                                         Unit
                                     </th>
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
                                         Load
                                     </th>
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
                                         Active
                                     </th>
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
                                         Sub
                                     </th>
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                    <th className="border border-gray-300 px-2 py-2 text-left w-7/12">
                                         Description
                                     </th>
                                 </tr>
@@ -593,19 +593,19 @@ function SystemctlServices() {
                                                     : 'bg-gray-100'
                                             }
                                         >
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
                                                 {service.unit}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
                                                 {service.load}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
                                                 {service.active}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
                                                 {service.sub}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
                                                 {service.description}
                                             </td>
                                         </tr>
