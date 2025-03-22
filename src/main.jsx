@@ -486,40 +486,27 @@ function Weather() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!navigator.geolocation) {
-            setError('Geolocation is not supported by your browser.');
-            setLoading(false);
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const { latitude, longitude } = position.coords;
-                try {
-                    const response = await fetch(
-                        `/api/weather?lat=${latitude}&lng=${longitude}`
+        const fetchWeather = async () => {
+            try {
+                const response = await fetch(`/api/weather`);
+                if (!response.ok) {
+                    throw new Error(
+                        `Error fetching weather data: ${response.status} ${response.statusText}`
                     );
-                    if (!response.ok) {
-                        throw new Error(
-                            `Error fetching weather data: ${response.status} ${response.statusText}`
-                        );
-                    }
-                    const data = await response.json();
-                    if (!data || !data.daily || data.daily.length === 0) {
-                        throw new Error('No weather data available.');
-                    }
-                    setForecast(data);
-                } catch (err) {
-                    setError(err.message);
-                } finally {
-                    setLoading(false);
                 }
-            },
-            (err) => {
-                setError('Failed to retrieve your location.');
+                const data = await response.json();
+                if (!data || !data.daily || data.daily.length === 0) {
+                    throw new Error('No weather data available.');
+                }
+                setForecast(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
                 setLoading(false);
             }
-        );
+        };
+
+        fetchWeather();
     }, []);
 
     const chartData = forecast
@@ -581,7 +568,7 @@ function Weather() {
             ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
                 <div>
                     <h2 className="text-xl font-semibold mb-4">
-                        Location: {forecast.timezone.replace('_', ' ')}
+                        Location: Ho Chi Minh City
                     </h2>
                     <div className="mb-6">
                         <Bar

@@ -299,13 +299,9 @@ app.get(
 );
 
 app.get('/api/weather', async (req, res) => {
-    const { lat, lng } = req.query;
-
-    if (!lat || !lng) {
-        return res
-            .status(400)
-            .json({ message: 'Latitude and longitude are required.' });
-    }
+    // Fixed coordinates for Ho Chi Minh City
+    const lat = 10.7769;
+    const lng = 106.7009;
 
     const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude=minutely,hourly,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`;
     const response = await fetch(url);
