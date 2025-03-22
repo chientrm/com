@@ -28,12 +28,12 @@ function NavBar() {
 
     const links = isLoggedIn
         ? [
-              { to: '/profile', label: 'Profile' },
-              ...(isAdmin ? [{ to: '/admin', label: 'Admin Dashboard' }] : []),
+              { to: '/profile', label: 'My Profile' },
+              ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
           ]
         : [
-              { to: '/login', label: 'Login' },
-              { to: '/register', label: 'Register' },
+              { to: '/login', label: 'Sign In' },
+              { to: '/register', label: 'Sign Up' },
           ];
 
     return (
@@ -54,7 +54,7 @@ function NavLink({ to, label }) {
     return (
         <Link
             to={to}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover"
         >
             {label}
         </Link>
@@ -304,20 +304,20 @@ function Profile() {
 function Admin() {
     return (
         <div className="text-center">
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            <h1 className="text-3xl font-bold">Admin Panel</h1>
             <p className="text-lg mt-2">Manage system services and logs.</p>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-center gap-4">
                 <Link
                     to="/admin/systemctl"
                     className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 >
-                    View Services
+                    Services
                 </Link>
                 <Link
                     to="/admin/journalctl"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 ml-4"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 >
-                    View Logs
+                    Logs
                 </Link>
             </div>
         </div>
@@ -327,9 +327,8 @@ function Admin() {
 function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [expandedRows, setExpandedRows] = useState(new Set());
     const [isRawMode, setIsRawMode] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchLogs = async () => {
         setIsLoading(true);
@@ -341,14 +340,9 @@ function JournalctlLogs() {
 
         if (response.ok) {
             const data = await response.json();
-            const logRows = data.logs.split('\n').filter((line) => line);
-            setLogs(logRows);
+            setLogs(data.logs.split('\n').filter((line) => line));
         } else {
-            const errorMessage =
-                response.status === 403
-                    ? 'Access denied: You do not have permission to view logs'
-                    : 'Failed to fetch logs';
-            setError(errorMessage);
+            setError('Failed to fetch logs.');
         }
         setIsLoading(false);
     };
@@ -366,9 +360,7 @@ function JournalctlLogs() {
                         className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                         onClick={() => setIsRawMode(!isRawMode)}
                     >
-                        {isRawMode
-                            ? 'Switch to Table View'
-                            : 'Switch to Raw View'}
+                        {isRawMode ? 'Table View' : 'Raw View'}
                     </button>
                     <button
                         className="text-blue-500 hover:text-blue-700"
@@ -589,9 +581,7 @@ function ServiceLogs() {
                         className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                         onClick={() => setIsRawMode(!isRawMode)}
                     >
-                        {isRawMode
-                            ? 'Switch to Table View'
-                            : 'Switch to Raw View'}
+                        {isRawMode ? 'Table View' : 'Raw View'}
                     </button>
                     <button
                         className="text-blue-500 hover:text-blue-700"

@@ -53,7 +53,7 @@ function sendErrorResponse(res, statusCode, message) {
 }
 
 async function findUserByUsername(username) {
-    return await db
+    return db
         .select()
         .from(usersTable)
         .where(eq(usersTable.username, username))
@@ -61,7 +61,7 @@ async function findUserByUsername(username) {
 }
 
 async function generateToken(username, role = null) {
-    return await new SignJWT({ username, role })
+    return new SignJWT({ username, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('30d')
         .sign(new TextEncoder().encode(JWT_SECRET));
@@ -71,8 +71,7 @@ async function generateToken(username, role = null) {
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-    if (!token)
-        return res.status(401).json({ message: 'Unauthorized access.' });
+    if (!token) return sendErrorResponse(res, 401, 'Unauthorized access.');
 
     try {
         const { payload } = await jwtVerify(
@@ -82,13 +81,13 @@ async function authenticateToken(req, res, next) {
         req.user = { username: payload.username, role: payload.role };
         next();
     } catch {
-        return res.status(403).json({ message: 'Access forbidden.' });
+        sendErrorResponse(res, 403, 'Access forbidden.');
     }
 }
 
 async function authenticateAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
-        return res.status(403).json({ message: 'Admin privileges required.' });
+        return sendErrorResponse(res, 403, 'Admin privileges required.');
     }
     next();
 }
@@ -103,7 +102,7 @@ app.post('/api/login', async (req, res) => {
         return sendErrorResponse(
             res,
             400,
-            'Both username and password are required.'
+            'Username and password are required.'
         );
     }
 
@@ -154,10 +153,7 @@ app.get(
     (req, res) => {
         exec('journalctl -n 100', (error, stdout, stderr) => {
             if (error) {
-                return res.status(500).json({
-                    message: 'Failed to retrieve logs.',
-                    error: stderr,
-                });
+                return sendErrorResponse(res, 500, 'Failed to retrieve logs.');
             }
             res.json({ logs: stdout });
         });
@@ -173,10 +169,11 @@ app.get(
             'systemctl list-units --type=service --no-pager --no-legend',
             (error, stdout, stderr) => {
                 if (error) {
-                    return res.status(500).json({
-                        message: 'Failed to retrieve services.',
-                        error: stderr,
-                    });
+                    return sendErrorResponse(
+                        res,
+                        500,
+                        'Failed to retrieve services.'
+                    );
                 }
                 res.json({ services: stdout });
             }
@@ -194,10 +191,11 @@ app.get(
             `journalctl -u ${serviceName} -n 100 --no-pager`,
             (error, stdout, stderr) => {
                 if (error) {
-                    return res.status(500).json({
-                        message: `Failed to retrieve logs for service: ${serviceName}`,
-                        error: stderr,
-                    });
+                    return sendErrorResponse(
+                        res,
+                        500,
+                        `Failed to retrieve logs for service: ${serviceName}`
+                    );
                 }
                 res.json({ logs: stdout });
             }
