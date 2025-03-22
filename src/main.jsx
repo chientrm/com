@@ -9,9 +9,21 @@ import {
 } from 'react-router-dom';
 import { decodeJwt } from 'jose';
 import './style.css';
-import { ArrowPathIcon } from '@heroicons/react/24/outline'; // Import the icon
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
-function NavBar() {
+// Utility functions
+function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('authToken');
+    return fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            Authorization: `Bearer ${token}`,
+        },
+    });
+}
+
+function useAuth() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
@@ -27,6 +39,13 @@ function NavBar() {
         }
     }, []);
 
+    return { isLoggedIn, isAdmin };
+}
+
+// Components
+function NavBar() {
+    const { isLoggedIn, isAdmin } = useAuth();
+
     const links = isLoggedIn
         ? [
               { to: '/profile', label: 'My Profile' },
@@ -39,7 +58,6 @@ function NavBar() {
 
     return (
         <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
-            {/* Added 'sticky top-0 z-10' to make the header sticky */}
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
             </div>
@@ -63,13 +81,201 @@ function NavLink({ to, label }) {
     );
 }
 
+function LogTable({ logs }) {
+    const [expandedRows, setExpandedRows] = useState(new Set());
+
+    const toggleRowExpansion = (index) => {
+        const newExpandedRows = new Set(expandedRows);
+        if (newExpandedRows.has(index)) {
+            newExpandedRows.delete(index);
+        } else {
+            newExpandedRows.add(index);
+        }
+        setExpandedRows(newExpandedRows);
+    };
+
+    return (
+        <div className="h-full overflow-auto">
+            <table className="table-auto w-full border-collapse border border-gray-200">
+                <thead>
+                    <tr className="bg-gray-100">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Timestamp
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Hostname
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Service
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            PID
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Priority
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Message
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {logs.map((log, index) => (
+                        <tr
+                            key={index}
+                            className={
+                                index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                            }
+                        >
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
+                                {new Date(
+                                    parseInt(log.timestamp, 10)
+                                ).toLocaleString()}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
+                                {log.host || 'N/A'}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
+                                {log.service ? (
+                                    <Link
+                                        to={`/admin/journalctl/${log.service}`}
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        {log.service}
+                                    </Link>
+                                ) : (
+                                    'N/A'
+                                )}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
+                                {log.pid || 'N/A'}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
+                                {log.level || 'N/A'}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                                <div
+                                    className={`relative overflow-hidden ${
+                                        expandedRows.has(index)
+                                            ? ''
+                                            : 'line-clamp-1'
+                                    }`}
+                                >
+                                    {log.message || 'N/A'}
+                                    {!expandedRows.has(index) &&
+                                        log.message &&
+                                        log.message.length > 100 && (
+                                            <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
+                                                <button
+                                                    onClick={() =>
+                                                        toggleRowExpansion(
+                                                            index
+                                                        )
+                                                    }
+                                                >
+                                                    More
+                                                </button>
+                                            </span>
+                                        )}
+                                </div>
+                                {expandedRows.has(index) && log.message && (
+                                    <button
+                                        className="text-blue-500 hover:underline mt-1"
+                                        onClick={() =>
+                                            toggleRowExpansion(index)
+                                        }
+                                    >
+                                        Less
+                                    </button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
+function LogsPage({ title, fetchLogs }) {
+    const [logs, setLogs] = useState([]);
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const loadLogs = async () => {
+        setIsLoading(true);
+        try {
+            const data = await fetchLogs();
+            setLogs(data.logs);
+        } catch (err) {
+            setError('Failed to fetch logs.');
+        }
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        loadLogs();
+    }, []);
+
+    return (
+        <div className="flex flex-col h-full">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">{title}</h2>
+                <button
+                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                        isLoading ? 'animate-spin' : ''
+                    }`}
+                    onClick={loadLogs}
+                    title="Refresh Logs"
+                    disabled={isLoading}
+                >
+                    <ArrowPathIcon className="h-5 w-5" />
+                </button>
+            </div>
+            {isLoading ? (
+                <p className="text-center text-blue-500">Loading...</p>
+            ) : error ? (
+                <p className="text-red-500">{error}</p>
+            ) : (
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
+                    <LogTable logs={logs} />
+                </div>
+            )}
+        </div>
+    );
+}
+
+function JournalctlLogs() {
+    return (
+        <LogsPage
+            title="System Logs"
+            fetchLogs={() =>
+                fetchWithAuth('/api/admin/journalctl').then((res) => res.json())
+            }
+        />
+    );
+}
+
+function ServiceLogs() {
+    const { serviceName } = useParams();
+    return (
+        <LogsPage
+            title={`Logs for Service: ${serviceName}`}
+            fetchLogs={() =>
+                fetchWithAuth(`/api/admin/journalctl/${serviceName}`).then(
+                    (res) => res.json()
+                )
+            }
+        />
+    );
+}
+
 function App() {
     return (
         <Router>
             <div className="h-screen flex flex-col">
                 <NavBar />
                 <div className="flex-1 overflow-hidden px-4 py-6">
-                    {/* Added padding to the main content */}
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route
@@ -333,62 +539,6 @@ function Admin() {
     );
 }
 
-function JournalctlLogs() {
-    const [logs, setLogs] = useState([]);
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const fetchLogs = async () => {
-        setIsLoading(true);
-        const response = await fetch('/api/admin/journalctl', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            setLogs(data.logs); // Ensure logs are treated as an array
-        } else {
-            setError('Failed to fetch logs.');
-        }
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        fetchLogs();
-    }, []);
-
-    return (
-        <div className="flex flex-col h-full">
-            {' '}
-            {/* Ensure the container fills the screen */}
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">System Logs</h2>
-                <button
-                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                        isLoading ? 'animate-spin' : ''
-                    }`}
-                    onClick={fetchLogs}
-                    title="Refresh Logs"
-                    disabled={isLoading}
-                >
-                    <ArrowPathIcon className="h-5 w-5" />
-                </button>
-            </div>
-            {isLoading ? (
-                <p className="text-center text-blue-500">Loading...</p>
-            ) : error ? (
-                <p className="text-red-500">{error}</p>
-            ) : (
-                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
-                    <LogTable logs={logs} />
-                </div>
-            )}
-        </div>
-    );
-}
-
 function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
@@ -509,181 +659,6 @@ function SystemctlServices() {
                     </table>
                 </div>
             )}
-        </div>
-    );
-}
-
-function ServiceLogs() {
-    const { serviceName } = useParams();
-    const [logs, setLogs] = useState([]);
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const fetchLogs = async () => {
-        setIsLoading(true);
-        const response = await fetch(`/api/admin/journalctl/${serviceName}`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            setLogs(data.logs); // Ensure logs are treated as an array
-        } else {
-            setError('Failed to fetch logs.');
-        }
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        fetchLogs();
-    }, [serviceName]);
-
-    return (
-        <div className="flex flex-col h-full">
-            {/* Ensure the container fills the screen */}
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">
-                    Logs for Service: {serviceName}
-                </h2>
-                <button
-                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                        isLoading ? 'animate-spin' : ''
-                    }`}
-                    onClick={fetchLogs}
-                    title="Refresh Logs"
-                    disabled={isLoading}
-                >
-                    <ArrowPathIcon className="h-5 w-5" />
-                </button>
-            </div>
-            {isLoading ? (
-                <p className="text-center text-blue-500">Loading...</p>
-            ) : error ? (
-                <p className="text-red-500">{error}</p>
-            ) : (
-                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
-                    <LogTable logs={logs} />
-                </div>
-            )}
-        </div>
-    );
-}
-
-function LogTable({ logs }) {
-    const [expandedRows, setExpandedRows] = useState(new Set());
-
-    const toggleRowExpansion = (index) => {
-        const newExpandedRows = new Set(expandedRows);
-        if (newExpandedRows.has(index)) {
-            newExpandedRows.delete(index);
-        } else {
-            newExpandedRows.add(index);
-        }
-        setExpandedRows(newExpandedRows);
-    };
-
-    return (
-        <div className="h-full overflow-auto">
-            {/* Ensure the table fills the container and allows scrolling */}
-            <table className="table-auto w-full border-collapse border border-gray-200">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            Timestamp
-                        </th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            Hostname
-                        </th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            Service
-                        </th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            PID
-                        </th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            Priority
-                        </th>
-                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
-                            Message
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {logs.map((log, index) => (
-                        <tr
-                            key={index}
-                            className={
-                                index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                            }
-                        >
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
-                                {new Date(
-                                    parseInt(log.timestamp, 10)
-                                ).toLocaleString()}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
-                                {log.host || 'N/A'}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
-                                {log.service ? (
-                                    <Link
-                                        to={`/admin/journalctl/${log.service}`}
-                                        className="text-blue-500 hover:underline"
-                                    >
-                                        {log.service}
-                                    </Link>
-                                ) : (
-                                    'N/A'
-                                )}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
-                                {log.pid || 'N/A'}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
-                                {log.level || 'N/A'}
-                            </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
-                                <div
-                                    className={`relative overflow-hidden ${
-                                        expandedRows.has(index)
-                                            ? ''
-                                            : 'line-clamp-1'
-                                    }`}
-                                >
-                                    {log.message || 'N/A'}
-                                    {!expandedRows.has(index) &&
-                                        log.message &&
-                                        log.message.length > 100 && (
-                                            <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
-                                                <button
-                                                    onClick={() =>
-                                                        toggleRowExpansion(
-                                                            index
-                                                        )
-                                                    }
-                                                >
-                                                    More
-                                                </button>
-                                            </span>
-                                        )}
-                                </div>
-                                {expandedRows.has(index) && log.message && (
-                                    <button
-                                        className="text-blue-500 hover:underline mt-1"
-                                        onClick={() =>
-                                            toggleRowExpansion(index)
-                                        }
-                                    >
-                                        Less
-                                    </button>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
         </div>
     );
 }
