@@ -408,22 +408,22 @@ function JournalctlLogs() {
                                                     : 'bg-gray-100'
                                             }
                                         >
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.timestamp}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.host}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.service}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.pid}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.level}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            <td className="border border-gray-300 px-4 py-2 text-sm whitespace-pre-wrap">
                                                 {log.message}
                                             </td>
                                         </tr>
