@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import javascriptLogo from './javascript.svg';
 import './style.css';
-import viteLogo from './vite.svg';
+import viteLogo from '/vite.svg';
 
 function NavBar() {
     const links = [

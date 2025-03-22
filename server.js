@@ -5,6 +5,7 @@ import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import fetch from 'node-fetch';
 import path from 'path';
+import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
 
 dotenv.config();
@@ -77,6 +78,6 @@ app.post('/api/register', async (req, res) => {
     res.json({ message: 'Registration successful', username });
 });
 
-app.listen(PORT, () => {
+ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });

@@ -60,6 +60,9 @@ importers:
       vite:
         specifier: ^6.2.0
         version: 6.2.2(@types/node@22.13.11)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)
+      vite-express:
+        specifier: ^0.20.0
+        version: 0.20.0
 
 packages:
 
@@ -1028,6 +1031,9 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  express-static-gzip@2.2.0:
+    resolution: {integrity: sha512-4ZQ0pHX0CAauxmzry2/8XFLM6aZA4NBvg9QezSlsEO1zLnl7vMFa48/WIcjzdfOiEUS4S1npPPKP2NHHYAp6qg==}
+
   express@4.21.2:
     resolution: {integrity: sha512-28HqgMZAmih1Czt9ny7qr6ek2qddF4FclbMzwhCREB6OFfH+rXAnuNCwo1/wFvrtbgsQDb4kSbX9de9lFbrXnA==}
     engines: {node: '>= 0.10.0'}
@@ -1503,6 +1509,9 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+
+  vite-express@0.20.0:
+    resolution: {integrity: sha512-2HcPLoHFjSJIilDDLGstF2X9gxuitTPpAI012j7O6JpEPpcOFvz+lLoA+UlOJG030+uk7ZaWoyG1lC0h15/Ltg==}
 
   vite@6.2.2:
     resolution: {integrity: sha512-yW7PeMM+LkDzc7CgJuRLMW2Jz0FxMOsVJ8Lv3gpgW9WLcb9cTW+121UEr1hvmfR7w3SegR5ItvYyzVz1vxNJgQ==}
@@ -2240,6 +2249,13 @@ snapshots:
 
   etag@1.8.1: {}
 
+  express-static-gzip@2.2.0:
+    dependencies:
+      parseurl: 1.3.3
+      serve-static: 1.16.2
+    transitivePeerDependencies:
+      - supports-color
+
   express@4.21.2:
     dependencies:
       accepts: 1.3.8
@@ -2737,6 +2753,13 @@ snapshots:
   utils-merge@1.0.1: {}
 
   vary@1.1.2: {}
+
+  vite-express@0.20.0:
+    dependencies:
+      express-static-gzip: 2.2.0
+      picocolors: 1.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   vite@6.2.2(@types/node@22.13.11)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3):
     dependencies:
