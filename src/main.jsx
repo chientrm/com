@@ -347,7 +347,7 @@ function Admin() {
 }
 
 function JournalctlLogs() {
-    const [logs, setLogs] = useState('');
+    const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -362,7 +362,8 @@ function JournalctlLogs() {
 
             if (response.ok) {
                 const data = await response.json();
-                setLogs(data.logs);
+                const logRows = data.logs.split('\n').filter((line) => line); // Split logs into rows
+                setLogs(logRows);
             } else {
                 const errorMessage =
                     response.status === 403
@@ -376,14 +377,40 @@ function JournalctlLogs() {
     }, []);
 
     return (
-        <div className="mt-4 text-left">
+        <div className="flex flex-col min-h-screen">
             <h2 className="text-2xl font-bold mb-2">System Logs</h2>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <pre className="bg-gray-100 p-4 rounded-md shadow-md overflow-auto max-h-96">
-                    {logs}
-                </pre>
+                <div className="flex-1 overflow-hidden">
+                    <div className="h-full overflow-auto border border-gray-300 rounded-md">
+                        <table className="table-auto w-full border-collapse">
+                            <thead>
+                                <tr className="bg-gray-200">
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Log Entry
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {logs.map((log, index) => (
+                                    <tr
+                                        key={index}
+                                        className={
+                                            index % 2 === 0
+                                                ? 'bg-white'
+                                                : 'bg-gray-100'
+                                        }
+                                    >
+                                        <td className="border border-gray-300 px-4 py-2 text-sm">
+                                            {log}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             )}
         </div>
     );
