@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
@@ -29,7 +29,7 @@ app.post('/api/login', async (req, res) => {
         .where(eq(usersTable.username, username))
         .get();
 
-    if (user && (await bcrypt.compare(password, user.passwordHash))) {
+    if (user && bcrypt.compareSync(password, user.passwordHash)) {
         res.json({ message: 'Login successful', username });
     } else {
         res.status(401).json({ message: 'Invalid username or password' });
@@ -40,7 +40,7 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
 
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
 
     await db.insert(usersTable).values({ username, passwordHash });
 
