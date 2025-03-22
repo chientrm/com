@@ -7,22 +7,22 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "serve": "nodemon server.js",
-        "start": "nohup node server.js > server.log 2>&1 &"
+        "serve": "nodemon server.js"
     },
     "devDependencies": {
+        "@libsql/client": "^0.15.0",
         "@tailwindcss/vite": "^4.0.15",
         "autoprefixer": "^10.4.21",
         "drizzle-kit": "^0.30.5",
-        "nodemon": "^3.1.9",
-        "tailwindcss": "^4.0.15",
-        "tsx": "^4.19.3",
-        "vite": "^6.2.0",
         "drizzle-orm": "^0.40.1",
-        "@libsql/client": "^0.15.0",
+        "esbuild": "^0.25.1",
+        "nodemon": "^3.1.9",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-router-dom": "^7.4.0"
+        "react-router-dom": "^7.4.0",
+        "tailwindcss": "^4.0.15",
+        "tsx": "^4.19.3",
+        "vite": "^6.2.0"
     },
     "dependencies": {
         "bcryptjs": "^3.0.2",
