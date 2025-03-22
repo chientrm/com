@@ -559,6 +559,9 @@ function Weather() {
                 <p className="text-red-500">{error}</p>
             ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
                 <div>
+                    <h2 className="text-xl font-semibold mb-4">
+                        Location: {forecast.timezone.replace('_', ' ')}
+                    </h2>
                     <div className="mb-6">
                         <Bar
                             data={chartData}
