@@ -327,77 +327,61 @@ function Admin() {
 function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [expandedRows, setExpandedRows] = useState(new Set()); // Track expanded rows
-    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and table modes
+    const [expandedRows, setExpandedRows] = useState(new Set());
+    const [isRawMode, setIsRawMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+
+    const fetchLogs = async () => {
+        setIsLoading(true);
+        const response = await fetch('/api/admin/journalctl', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const logRows = data.logs.split('\n').filter((line) => line);
+            setLogs(logRows);
+        } else {
+            const errorMessage =
+                response.status === 403
+                    ? 'Access denied: You do not have permission to view logs'
+                    : 'Failed to fetch logs';
+            setError(errorMessage);
+        }
+        setIsLoading(false);
+    };
 
     useEffect(() => {
-        const fetchLogs = async () => {
-            const response = await fetch('/api/admin/journalctl', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                        'authToken'
-                    )}`,
-                },
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const logRows = data.logs.split('\n').filter((line) => line);
-                setLogs(logRows);
-            } else {
-                const errorMessage =
-                    response.status === 403
-                        ? 'Access denied: You do not have permission to view logs'
-                        : 'Failed to fetch logs';
-                setError(errorMessage);
-            }
-        };
-
         fetchLogs();
     }, []);
-
-    const parseLogs = (logRows) =>
-        logRows
-            .map((log) => {
-                const match = log.match(
-                    /^(\w+\s+\d+\s+\d+:\d+:\d+)\s+([\w-]+)\s+([\w-]+)\[(\d+)\]:\s+(\w+)\s+(.*)$/
-                );
-                if (match) {
-                    return {
-                        timestamp: match[1],
-                        host: match[2],
-                        service: match[3],
-                        pid: match[4],
-                        level: match[5],
-                        message: match[6],
-                    };
-                }
-                return null;
-            })
-            .filter(Boolean); // Remove null entries
-
-    const toggleRowExpansion = (index) => {
-        const newExpandedRows = new Set(expandedRows);
-        if (newExpandedRows.has(index)) {
-            newExpandedRows.delete(index);
-        } else {
-            newExpandedRows.add(index);
-        }
-        setExpandedRows(newExpandedRows);
-    };
 
     return (
         <div className="flex flex-col min-h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Logs</h2>
-                <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                    onClick={() => setIsRawMode(!isRawMode)}
-                >
-                    {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                        onClick={() => setIsRawMode(!isRawMode)}
+                    >
+                        {isRawMode
+                            ? 'Switch to Table View'
+                            : 'Switch to Raw View'}
+                    </button>
+                    <button
+                        className="text-blue-500 hover:text-blue-700"
+                        onClick={fetchLogs}
+                        title="Refresh Logs"
+                    >
+                        🔄
+                    </button>
+                </div>
             </div>
-            {error ? (
+            {isLoading ? (
+                <p className="text-center text-blue-500">Loading...</p>
+            ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
@@ -407,96 +391,7 @@ function JournalctlLogs() {
                                 {logs.join('\n')}
                             </pre>
                         ) : (
-                            <table className="table-auto w-full border-collapse">
-                                <thead>
-                                    <tr className="bg-gray-200">
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            Timestamp
-                                        </th>
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            Host
-                                        </th>
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            Service
-                                        </th>
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            PID
-                                        </th>
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            Level
-                                        </th>
-                                        <th className="border border-gray-300 px-4 py-2 text-left">
-                                            Message
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {parseLogs(logs).map((log, index) => (
-                                        <tr
-                                            key={index}
-                                            className={
-                                                index % 2 === 0
-                                                    ? 'bg-white'
-                                                    : 'bg-gray-100'
-                                            }
-                                        >
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                                                {log.timestamp}
-                                            </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                                                {log.host}
-                                            </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                                                {log.service}
-                                            </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                                                {log.pid}
-                                            </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                                                {log.level}
-                                            </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm">
-                                                <div
-                                                    className={`relative overflow-hidden ${
-                                                        expandedRows.has(index)
-                                                            ? ''
-                                                            : 'line-clamp-1'
-                                                    }`}
-                                                >
-                                                    {log.message}
-                                                    {!expandedRows.has(index) &&
-                                                        log.message.length >
-                                                            100 && (
-                                                            <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
-                                                                <button
-                                                                    onClick={() =>
-                                                                        toggleRowExpansion(
-                                                                            index
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    More
-                                                                </button>
-                                                            </span>
-                                                        )}
-                                                </div>
-                                                {expandedRows.has(index) && (
-                                                    <button
-                                                        className="text-blue-500 hover:underline mt-1"
-                                                        onClick={() =>
-                                                            toggleRowExpansion(
-                                                                index
-                                                            )
-                                                        }
-                                                    >
-                                                        Less
-                                                    </button>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <LogTable logs={logs} />
                         )}
                     </div>
                 </div>
@@ -508,63 +403,78 @@ function JournalctlLogs() {
 function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
-    const [mode, setMode] = useState('table'); // Default to table mode
+    const [mode, setMode] = useState('table');
+    const [isLoading, setIsLoading] = useState(false); // Loading state
 
-    useEffect(() => {
-        const fetchServices = async () => {
-            const response = await fetch('/api/admin/systemctl', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem(
-                        'authToken'
-                    )}`,
-                },
-            });
+    const fetchServices = async () => {
+        setIsLoading(true);
+        const response = await fetch('/api/admin/systemctl', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                const serviceRows = data.services
-                    .split('\n')
-                    .map((line) => line.trim()) // Trim spaces on both sides
-                    .filter((line) => line); // Remove empty lines
-                setServices(serviceRows);
-            } else {
-                const errorMessage =
-                    response.status === 403
-                        ? 'Access denied: You do not have permission to view services'
-                        : 'Failed to fetch services';
-                setError(errorMessage);
-            }
-        };
+        if (response.ok) {
+            const data = await response.json();
+            const serviceRows = data.services
+                .split('\n')
+                .map((line) => line.trim())
+                .filter((line) => line);
+            setServices(serviceRows);
+        } else {
+            const errorMessage =
+                response.status === 403
+                    ? 'Access denied: You do not have permission to view services'
+                    : 'Failed to fetch services';
+            setError(errorMessage);
+        }
+        setIsLoading(false);
+    };
 
-        fetchServices();
-    }, []);
-
+    // Define parseServices function
     const parseServices = (rawServices) => {
         return rawServices.map((line) => {
-            const parts = line.split(/\s+/); // Split by one or more spaces
+            const parts = line.split(/\s+/);
             const unit = parts[0];
             const load = parts[1];
             const active = parts[2];
             const sub = parts[3];
-            const description = parts.slice(4).join(' '); // Join the remaining parts as the description
+            const description = parts.slice(4).join(' ');
             return { unit, load, active, sub, description };
         });
     };
+
+    useEffect(() => {
+        fetchServices();
+    }, []);
 
     return (
         <div className="flex flex-col min-h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Services</h2>
-                <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                    onClick={() => setMode(mode === 'table' ? 'raw' : 'table')}
-                >
-                    {mode === 'table'
-                        ? 'Switch to Raw View'
-                        : 'Switch to Table View'}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                        onClick={() =>
+                            setMode(mode === 'table' ? 'raw' : 'table')
+                        }
+                    >
+                        {mode === 'table'
+                            ? 'Switch to Raw View'
+                            : 'Switch to Table View'}
+                    </button>
+                    <button
+                        className="text-blue-500 hover:text-blue-700"
+                        onClick={fetchServices}
+                        title="Refresh Services"
+                    >
+                        🔄
+                    </button>
+                </div>
             </div>
-            {error ? (
+            {isLoading ? (
+                <p className="text-center text-blue-500">Loading...</p>
+            ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
@@ -637,36 +547,34 @@ function SystemctlServices() {
 }
 
 function ServiceLogs() {
-    const { serviceName } = useParams(); // Use useParams to get the serviceName
+    const { serviceName } = useParams();
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and table modes
+    const [isRawMode, setIsRawMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+
+    const fetchLogs = async () => {
+        setIsLoading(true);
+        const response = await fetch(`/api/admin/journalctl/${serviceName}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            setLogs(data.logs.split('\n').filter((line) => line));
+        } else {
+            const errorMessage =
+                response.status === 403
+                    ? 'Access denied: You do not have permission to view logs'
+                    : 'Failed to fetch logs';
+            setError(errorMessage);
+        }
+        setIsLoading(false);
+    };
 
     useEffect(() => {
-        const fetchLogs = async () => {
-            const response = await fetch(
-                `/api/admin/journalctl/${serviceName}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                            'authToken'
-                        )}`,
-                    },
-                }
-            );
-
-            if (response.ok) {
-                const data = await response.json();
-                setLogs(data.logs.split('\n').filter((line) => line));
-            } else {
-                const errorMessage =
-                    response.status === 403
-                        ? 'Access denied: You do not have permission to view logs'
-                        : 'Failed to fetch logs';
-                setError(errorMessage);
-            }
-        };
-
         fetchLogs();
     }, [serviceName]);
 
@@ -676,12 +584,23 @@ function ServiceLogs() {
                 <h2 className="text-2xl font-bold">
                     Logs for Service: {serviceName}
                 </h2>
-                <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                    onClick={() => setIsRawMode(!isRawMode)}
-                >
-                    {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                        onClick={() => setIsRawMode(!isRawMode)}
+                    >
+                        {isRawMode
+                            ? 'Switch to Table View'
+                            : 'Switch to Raw View'}
+                    </button>
+                    <button
+                        className="text-blue-500 hover:text-blue-700"
+                        onClick={fetchLogs}
+                        title="Refresh Logs"
+                    >
+                        🔄
+                    </button>
+                </div>
             </div>
             <div className="mb-4">
                 <Link
@@ -691,7 +610,9 @@ function ServiceLogs() {
                     &larr; Back to Services
                 </Link>
             </div>
-            {error ? (
+            {isLoading ? (
+                <p className="text-center text-blue-500">Loading...</p>
+            ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
@@ -711,7 +632,7 @@ function ServiceLogs() {
 }
 
 function LogTable({ logs }) {
-    const [expandedRows, setExpandedRows] = useState(new Set()); // Track expanded rows
+    const [expandedRows, setExpandedRows] = useState(new Set());
 
     const parseLogs = (logRows) =>
         logRows
@@ -731,7 +652,7 @@ function LogTable({ logs }) {
                 }
                 return null;
             })
-            .filter(Boolean); // Remove null entries
+            .filter(Boolean);
 
     const toggleRowExpansion = (index) => {
         const newExpandedRows = new Set(expandedRows);
