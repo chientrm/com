@@ -67,8 +67,8 @@ async function findUserByUsername(username) {
         .get();
 }
 
-async function generateToken(username) {
-    return await new SignJWT({ username })
+async function generateToken(username, role = null) {
+    return await new SignJWT({ username, role }) // Include role in the token
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('30d')
         .sign(new TextEncoder().encode(JWT_SECRET));
@@ -109,7 +109,7 @@ app.post('/api/login', async (req, res) => {
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        const token = await generateToken(username);
+        const token = await generateToken(username, user.role || 'user'); // Default to 'user' if role is null
         res.json({ message: 'Login successful', username, token });
     } else {
         sendErrorResponse(res, 401, 'Invalid username or password');
@@ -131,9 +131,10 @@ app.post('/api/register', async (req, res) => {
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
 
-    await db.insert(usersTable).values({ username, passwordHash });
+    // Default role for new users is 'user'
+    await db.insert(usersTable).values({ username, passwordHash, role: null }); // Set role to null by default
 
-    const token = await generateToken(username);
+    const token = await generateToken(username, null); // Pass null for role
     res.json({ message: 'Registration successful', username, token });
 });
 
