@@ -306,6 +306,7 @@ function Admin() {
 function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
+    const [expandedRows, setExpandedRows] = useState(new Set()); // Track expanded rows
     const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and parsed modes
 
     useEffect(() => {
@@ -353,6 +354,16 @@ function JournalctlLogs() {
                 return null;
             })
             .filter(Boolean); // Remove null entries
+
+    const toggleRowExpansion = (index) => {
+        const newExpandedRows = new Set(expandedRows);
+        if (newExpandedRows.has(index)) {
+            newExpandedRows.delete(index);
+        } else {
+            newExpandedRows.add(index);
+        }
+        setExpandedRows(newExpandedRows);
+    };
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -423,8 +434,43 @@ function JournalctlLogs() {
                                             <td className="border border-gray-300 px-4 py-2 text-sm truncate">
                                                 {log.level}
                                             </td>
-                                            <td className="border border-gray-300 px-4 py-2 text-sm whitespace-pre-wrap">
-                                                {log.message}
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                <div
+                                                    className={`relative overflow-hidden ${
+                                                        expandedRows.has(index)
+                                                            ? ''
+                                                            : 'line-clamp-1'
+                                                    }`}
+                                                >
+                                                    {log.message}
+                                                    {!expandedRows.has(index) &&
+                                                        log.message.length >
+                                                            100 && (
+                                                            <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
+                                                                <button
+                                                                    onClick={() =>
+                                                                        toggleRowExpansion(
+                                                                            index
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    More
+                                                                </button>
+                                                            </span>
+                                                        )}
+                                                </div>
+                                                {expandedRows.has(index) && (
+                                                    <button
+                                                        className="text-blue-500 hover:underline mt-1"
+                                                        onClick={() =>
+                                                            toggleRowExpansion(
+                                                                index
+                                                            )
+                                                        }
+                                                    >
+                                                        Less
+                                                    </button>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
