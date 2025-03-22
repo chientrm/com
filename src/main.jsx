@@ -44,11 +44,8 @@ function App() {
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<AuthForm type="login" />} />
-                    <Route
-                        path="/register"
-                        element={<AuthForm type="register" />}
-                    />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/register" element={<RegisterForm />} />
                 </Routes>
             </div>
         </Router>
@@ -99,19 +96,18 @@ function Counter() {
     );
 }
 
-function AuthForm({ type }) {
+function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [captchaToken, setCaptchaToken] = useState(null);
-    const isLogin = type === 'login';
 
     useEffect(() => {
         const handleTurnstileCallback = (token) => {
             setCaptchaToken(token);
         };
 
-        window.turnstile.render('#turnstile-widget', {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY, // Load sitekey from .env
+        window.turnstile.render('#turnstile-widget-login', {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
             callback: handleTurnstileCallback,
         });
     }, []);
@@ -122,8 +118,7 @@ function AuthForm({ type }) {
             alert('Please complete the CAPTCHA');
             return;
         }
-        const endpoint = isLogin ? '/api/login' : '/api/register';
-        const response = await fetch(endpoint, {
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, captchaToken }),
@@ -137,9 +132,7 @@ function AuthForm({ type }) {
             className="max-w-sm mx-auto p-4 border rounded-md shadow-md"
             onSubmit={handleSubmit}
         >
-            <h2 className="text-2xl font-bold mb-4">
-                {isLogin ? 'Login' : 'Register'}
-            </h2>
+            <h2 className="text-2xl font-bold mb-4">Login</h2>
             <input
                 className="w-full mb-3 p-2 border rounded-md shadow-sm"
                 type="text"
@@ -154,12 +147,74 @@ function AuthForm({ type }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <div id="turnstile-widget" className="mb-3"></div>
+            <div id="turnstile-widget-login" className="mb-3"></div>
             <button
                 className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
                 type="submit"
             >
-                {isLogin ? 'Login' : 'Register'}
+                Login
+            </button>
+        </form>
+    );
+}
+
+function RegisterForm() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [captchaToken, setCaptchaToken] = useState(null);
+
+    useEffect(() => {
+        const handleTurnstileCallback = (token) => {
+            setCaptchaToken(token);
+        };
+
+        window.turnstile.render('#turnstile-widget-register', {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: handleTurnstileCallback,
+        });
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!captchaToken) {
+            alert('Please complete the CAPTCHA');
+            return;
+        }
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, captchaToken }),
+        });
+        const data = await response.json();
+        alert(data.message);
+    };
+
+    return (
+        <form
+            className="max-w-sm mx-auto p-4 border rounded-md shadow-md"
+            onSubmit={handleSubmit}
+        >
+            <h2 className="text-2xl font-bold mb-4">Register</h2>
+            <input
+                className="w-full mb-3 p-2 border rounded-md shadow-sm"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+                className="w-full mb-3 p-2 border rounded-md shadow-sm"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <div id="turnstile-widget-register" className="mb-3"></div>
+            <button
+                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
+                type="submit"
+            >
+                Register
             </button>
         </form>
     );
