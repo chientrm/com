@@ -627,15 +627,15 @@ function LogTable({ logs }) {
                                 index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                             }
                         >
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                 {new Date(
                                     parseInt(log.timestamp, 10)
                                 ).toLocaleString()}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                 {log.host || 'N/A'}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                 {log.service ? (
                                     <Link
                                         to={`/admin/journalctl/${log.service}`}
@@ -647,10 +647,10 @@ function LogTable({ logs }) {
                                     'N/A'
                                 )}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                 {log.pid || 'N/A'}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                 {log.level || 'N/A'}
                             </td>
                             <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
