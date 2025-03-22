@@ -86,6 +86,13 @@ function NavLink({ to, label }) {
 
 function LogTable({ logs }) {
     const [expandedRows, setExpandedRows] = useState(new Set());
+    const tableRef = useRef(null);
+
+    useEffect(() => {
+        if (tableRef.current) {
+            tableRef.current.scrollTop = tableRef.current.scrollHeight; // Auto-scroll to the bottom
+        }
+    }, [logs]); // Trigger scrolling whenever logs are updated
 
     const toggleRowExpansion = (index) => {
         const newExpandedRows = new Set(expandedRows);
@@ -98,7 +105,7 @@ function LogTable({ logs }) {
     };
 
     return (
-        <div className="h-full overflow-auto">
+        <div ref={tableRef} className="h-full overflow-auto">
             <table className="table-auto w-full border-collapse border border-gray-200">
                 <thead>
                     <tr className="bg-gray-100">
