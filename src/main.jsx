@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import javascriptLogo from './javascript.svg';
@@ -102,15 +102,31 @@ function Counter() {
 function AuthForm({ type }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [captchaToken, setCaptchaToken] = useState(null);
     const isLogin = type === 'login';
+
+    useEffect(() => {
+        const handleTurnstileCallback = (token) => {
+            setCaptchaToken(token);
+        };
+
+        window.turnstile.render('#turnstile-widget', {
+            sitekey: '0x4AAAAAABCA7YwvtpzhF6Pp',
+            callback: handleTurnstileCallback,
+        });
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!captchaToken) {
+            alert('Please complete the CAPTCHA');
+            return;
+        }
         const endpoint = isLogin ? '/api/login' : '/api/register';
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password, captchaToken }),
         });
         const data = await response.json();
         alert(data.message);
@@ -138,6 +154,7 @@ function AuthForm({ type }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
+            <div id="turnstile-widget" className="mb-3"></div>
             <button
                 className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
                 type="submit"
