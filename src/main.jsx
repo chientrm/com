@@ -69,6 +69,11 @@ function App() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/admin" element={<Admin />} />{' '}
                     {/* Admin route */}
+                    <Route
+                        path="/admin/journalctl"
+                        element={<JournalctlLogs />}
+                    />{' '}
+                    {/* Journalctl route */}
                 </Routes>
             </div>
         </Router>
@@ -329,6 +334,52 @@ function Admin() {
         <div className="text-center">
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <p className="text-lg mt-2">Welcome to the admin panel.</p>
+            <JournalctlLogs />
+        </div>
+    );
+}
+
+function JournalctlLogs() {
+    const [logs, setLogs] = useState('');
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchLogs = async () => {
+            const response = await fetch('/api/admin/journalctl', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        'authToken'
+                    )}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setLogs(data.logs);
+            } else {
+                const errorMessage =
+                    response.status === 403
+                        ? 'Access denied: You do not have permission to view logs'
+                        : 'Failed to fetch logs';
+                setError(errorMessage);
+            }
+        };
+
+        fetchLogs().catch(() =>
+            setError('An unexpected error occurred while fetching logs')
+        );
+    }, []);
+
+    return (
+        <div className="mt-4 text-left">
+            <h2 className="text-2xl font-bold mb-2">System Logs</h2>
+            {error ? (
+                <p className="text-red-500">{error}</p>
+            ) : (
+                <pre className="bg-gray-100 p-4 rounded-md shadow-md overflow-auto max-h-96">
+                    {logs}
+                </pre>
+            )}
         </div>
     );
 }

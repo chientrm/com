@@ -7,6 +7,7 @@ import { SignJWT, jwtVerify } from 'jose'; // Replace jsonwebtoken with jose
 import fetch from 'node-fetch';
 import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
+import { exec } from 'child_process';
 
 dotenv.config();
 
@@ -84,11 +85,18 @@ async function authenticateToken(req, res, next) {
             token,
             new TextEncoder().encode(JWT_SECRET)
         );
-        req.user = { username: payload.username }; // Extract username from payload
+        req.user = { username: payload.username, role: payload.role }; // Extract username and role from payload
         next();
     } catch (err) {
         return res.sendStatus(403);
     }
+}
+
+async function authenticateAdmin(req, res, next) {
+    if (req.user.role !== 'admin') {
+        return res.sendStatus(403); // Forbidden if not admin
+    }
+    next();
 }
 
 app.use(express.json());
@@ -143,6 +151,22 @@ app.post('/api/register', async (req, res) => {
 app.get('/api/check-auth', authenticateToken, (req, res) => {
     res.sendStatus(200);
 });
+
+app.get(
+    '/api/admin/journalctl',
+    authenticateToken,
+    authenticateAdmin,
+    (req, res) => {
+        exec('journalctl -n 100', (error, stdout, stderr) => {
+            if (error) {
+                return res
+                    .status(500)
+                    .json({ message: 'Failed to fetch logs', error: stderr });
+            }
+            res.json({ logs: stdout });
+        });
+    }
+);
 
 ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
