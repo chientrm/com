@@ -1,17 +1,19 @@
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
+import fetch from 'node-fetch';
 import path from 'path';
 import { usersTable } from './schema.js';
-import fetch from 'node-fetch';
+
+dotenv.config(); // Load environment variables from .env
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT;
 
-const db = drizzle('file:local.db');
+const db = drizzle(process.env.DB);
 const SALT_ROUNDS = 12;
-const TURNSTILE_SECRET = 'your-turnstile-secret-key';
 
 async function verifyCaptcha(token) {
     const response = await fetch(
@@ -20,7 +22,7 @@ async function verifyCaptcha(token) {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
-                secret: TURNSTILE_SECRET,
+                secret: process.env.TURNSTILE_SECRET,
                 response: token,
             }),
         }
