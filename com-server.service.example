@@ -1,0 +1,14 @@
+[Unit]
+Description=Com Server
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+WorkingDirectory=/home/chientrm/com
+ExecStart=/usr/bin/node /home/chientrm/com/server/index.js
+Restart=always
+User=your-username
+Group=your-groupname
+
+[Install]
+WantedBy=multi-user.target
