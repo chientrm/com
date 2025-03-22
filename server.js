@@ -45,31 +45,47 @@ function validatePassword(password) {
     return typeof password === 'string' && password.length >= 8; // Simplified for login
 }
 
+function sendErrorResponse(res, statusCode, message) {
+    res.status(statusCode).json({ message });
+}
+
+async function handleCaptchaVerification(captchaToken, res) {
+    if (!(await verifyCaptcha(captchaToken))) {
+        sendErrorResponse(res, 400, 'CAPTCHA verification failed');
+        return false;
+    }
+    return true;
+}
+
+async function findUserByUsername(username) {
+    return await db
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.username, username))
+        .get();
+}
+
 app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
     const { username, password, captchaToken } = req.body;
 
-    if (!validateUsername(username) || !validatePassword(password)) {
-        return res
-            .status(400)
-            .json({ message: 'Invalid username or password format' });
+    if (!username || !password) {
+        return sendErrorResponse(
+            res,
+            400,
+            'Username and password are required'
+        );
     }
 
-    if (!(await verifyCaptcha(captchaToken))) {
-        return res.status(400).json({ message: 'CAPTCHA verification failed' });
-    }
+    if (!(await handleCaptchaVerification(captchaToken, res))) return;
 
-    const user = await db
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.username, username))
-        .get();
+    const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
         res.json({ message: 'Login successful', username });
     } else {
-        res.status(401).json({ message: 'Invalid username or password' });
+        sendErrorResponse(res, 401, 'Invalid username or password');
     }
 });
 
@@ -77,14 +93,14 @@ app.post('/api/register', async (req, res) => {
     const { username, password, captchaToken } = req.body;
 
     if (!validateUsername(username) || !validatePassword(password)) {
-        return res
-            .status(400)
-            .json({ message: 'Invalid username or password format' });
+        return sendErrorResponse(
+            res,
+            400,
+            'Invalid username or password format'
+        );
     }
 
-    if (!(await verifyCaptcha(captchaToken))) {
-        return res.status(400).json({ message: 'CAPTCHA verification failed' });
-    }
+    if (!(await handleCaptchaVerification(captchaToken, res))) return;
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
 

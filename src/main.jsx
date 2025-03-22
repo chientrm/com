@@ -126,41 +126,33 @@ function AuthForm({
     includePasswordConfirmation = false,
     simpleValidation = false,
 }) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [captchaToken, setCaptchaToken] = useState(null);
-    const [errors, setErrors] = useState({
+    const [formData, setFormData] = useState({
         username: '',
         password: '',
         confirmPassword: '',
     });
+    const [captchaToken, setCaptchaToken] = useState(null);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        const handleTurnstileCallback = (token) => {
-            setCaptchaToken(token);
-        };
-
         window.turnstile.render(`#${widgetId}`, {
             sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: handleTurnstileCallback,
+            callback: (token) => setCaptchaToken(token),
         });
     }, [widgetId]);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
     const validateInputs = () => {
-        const newErrors = {
-            username: '',
-            password: '',
-            confirmPassword: '',
-        };
+        const newErrors = {};
+        const { username, password, confirmPassword } = formData;
 
         if (simpleValidation) {
-            if (!username) {
-                newErrors.username = 'Username is required.';
-            }
-            if (!password) {
-                newErrors.password = 'Password is required.';
-            }
+            if (!username) newErrors.username = 'Username is required.';
+            if (!password) newErrors.password = 'Password is required.';
         } else {
             const usernameRegex = /^[a-zA-Z0-9_]+$/;
             const passwordRegex =
@@ -187,26 +179,18 @@ function AuthForm({
         }
 
         setErrors(newErrors);
-        return (
-            !newErrors.username &&
-            !newErrors.password &&
-            !newErrors.confirmPassword
-        );
+        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validateInputs()) {
-            return;
-        }
-        if (!captchaToken) {
-            alert('Please complete the CAPTCHA');
-            return;
-        }
+        if (!validateInputs()) return;
+        if (!captchaToken) return alert('Please complete the CAPTCHA');
+
         const response = await fetch(apiEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, captchaToken }),
+            body: JSON.stringify({ ...formData, captchaToken }),
         });
         const data = await response.json();
         alert(data.message);
@@ -221,9 +205,10 @@ function AuthForm({
             <input
                 className="w-full mb-1 p-2 border rounded-md shadow-sm"
                 type="text"
+                name="username"
                 placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={formData.username}
+                onChange={handleInputChange}
             />
             {errors.username && (
                 <p className="text-red-500 text-sm mb-3">{errors.username}</p>
@@ -231,9 +216,10 @@ function AuthForm({
             <input
                 className="w-full mb-1 p-2 border rounded-md shadow-sm"
                 type="password"
+                name="password"
                 placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleInputChange}
             />
             {errors.password && (
                 <p className="text-red-500 text-sm mb-3">{errors.password}</p>
@@ -243,9 +229,10 @@ function AuthForm({
                     <input
                         className="w-full mb-1 p-2 border rounded-md shadow-sm"
                         type="password"
+                        name="confirmPassword"
                         placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
                     />
                     {errors.confirmPassword && (
                         <p className="text-red-500 text-sm mb-3">
