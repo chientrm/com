@@ -42,9 +42,7 @@ function validateUsername(username) {
 }
 
 function validatePassword(password) {
-    const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return typeof password === 'string' && passwordRegex.test(password);
+    return typeof password === 'string' && password.length >= 8; // Simplified for login
 }
 
 app.use(express.json());

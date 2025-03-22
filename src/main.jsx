@@ -103,6 +103,7 @@ function LoginForm() {
             title="Login"
             apiEndpoint="/api/login"
             widgetId="turnstile-widget-login"
+            simpleValidation={true}
         />
     );
 }
@@ -123,6 +124,7 @@ function AuthForm({
     apiEndpoint,
     widgetId,
     includePasswordConfirmation = false,
+    simpleValidation = false,
 }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -146,32 +148,42 @@ function AuthForm({
     }, [widgetId]);
 
     const validateInputs = () => {
-        const usernameRegex = /^[a-zA-Z0-9_]+$/;
-        const passwordRegex =
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         const newErrors = {
             username: '',
             password: '',
             confirmPassword: '',
         };
 
-        if (
-            !username ||
-            username.length < 3 ||
-            username.length > 20 ||
-            !usernameRegex.test(username)
-        ) {
-            newErrors.username =
-                'Username must be 3-20 characters and contain only letters, numbers, or underscores.';
-        }
+        if (simpleValidation) {
+            if (!username) {
+                newErrors.username = 'Username is required.';
+            }
+            if (!password) {
+                newErrors.password = 'Password is required.';
+            }
+        } else {
+            const usernameRegex = /^[a-zA-Z0-9_]+$/;
+            const passwordRegex =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-        if (!password || !passwordRegex.test(password)) {
-            newErrors.password =
-                'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
-        }
+            if (
+                !username ||
+                username.length < 3 ||
+                username.length > 20 ||
+                !usernameRegex.test(username)
+            ) {
+                newErrors.username =
+                    'Username must be 3-20 characters and contain only letters, numbers, or underscores.';
+            }
 
-        if (includePasswordConfirmation && password !== confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match.';
+            if (!password || !passwordRegex.test(password)) {
+                newErrors.password =
+                    'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
+            }
+
+            if (includePasswordConfirmation && password !== confirmPassword) {
+                newErrors.confirmPassword = 'Passwords do not match.';
+            }
         }
 
         setErrors(newErrors);
