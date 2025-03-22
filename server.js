@@ -8,7 +8,7 @@ import { usersTable } from './schema.js';
 const app = express();
 const PORT = 4000;
 
-const db = drizzle();
+const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12; // Increase salt rounds for better security
 
 app.use(
