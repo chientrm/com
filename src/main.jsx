@@ -10,6 +10,25 @@ import {
     useParams,
 } from 'react-router-dom';
 import './style.css';
+import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
@@ -63,6 +82,8 @@ function NavBar() {
         <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
+                <NavLink to="/weather" label="Weather" />{' '}
+                {/* Added Weather link */}
             </div>
             <div className="flex gap-6">
                 {links.map((link) => (
@@ -460,6 +481,128 @@ function RegisterForm() {
     );
 }
 
+function WeatherForecast() {
+    const [weather, setWeather] = useState(null);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+            try {
+                const response = await fetch('/api/weather');
+                if (response.ok) {
+                    const data = await response.json();
+                    setWeather(data);
+                } else {
+                    setError('Failed to fetch weather data.');
+                }
+            } catch (err) {
+                console.error('Error fetching weather data:', err);
+                setError('Failed to fetch weather data.');
+            }
+        };
+
+        fetchWeather();
+    }, []);
+
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
+    }
+
+    if (!weather) {
+        return <p className="text-blue-500">Loading weather data...</p>;
+    }
+
+    const chartData = {
+        labels: weather.forecast.map((day) => day.day),
+        datasets: [
+            {
+                label: 'Rain Chance (%)',
+                data: weather.forecast.map((day) =>
+                    parseInt(day.rainChance.replace('%', ''), 10)
+                ),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            },
+            {
+                label: 'Temperature (°C)',
+                data: weather.forecast.map((day) =>
+                    parseInt(day.temperature.replace('°C', ''), 10)
+                ),
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            },
+            {
+                label: 'Humidity (%)',
+                data: weather.forecast.map((day) =>
+                    parseInt(day.humidity.replace('%', ''), 10)
+                ),
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            },
+        ],
+    };
+
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Weather Forecast Chart',
+            },
+        },
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Weather Forecast for {weather.location}
+            </h2>
+            <table className="table-auto w-full border-collapse border border-gray-200 mb-6">
+                <thead>
+                    <tr className="bg-gray-100">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Day
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Rain Chance
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Temperature
+                        </th>
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
+                            Humidity
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {weather.forecast.map((day, index) => (
+                        <tr
+                            key={index}
+                            className={
+                                index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                            }
+                        >
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                                {day.day}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                                {day.rainChance}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                                {day.temperature}
+                            </td>
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
+                                {day.humidity}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <Bar data={chartData} options={chartOptions} />
+        </div>
+    );
+}
+
 function App() {
     return (
         <Router>
@@ -484,6 +627,7 @@ function App() {
                             path="/admin/journalctl/:serviceName"
                             element={<ServiceLogs />}
                         />
+                        <Route path="/weather" element={<WeatherForecast />} />
                     </Routes>
                 </div>
             </div>
