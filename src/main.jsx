@@ -111,7 +111,7 @@ function AuthForm({ type }) {
         };
 
         window.turnstile.render('#turnstile-widget', {
-            sitekey: '0x4AAAAAABCA7YwvtpzhF6Pp',
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY, // Load sitekey from .env
             callback: handleTurnstileCallback,
         });
     }, []);
