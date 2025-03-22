@@ -557,21 +557,13 @@ function ServiceLogs() {
                     <ArrowPathIcon className="h-5 w-5" />
                 </button>
             </div>
-            <div className="mb-4">
-                <Link
-                    to="/admin/systemctl"
-                    className="text-blue-500 hover:underline"
-                >
-                    &larr; Back to Services
-                </Link>
-            </div>
+            {/* Removed the "Back to Services" link */}
             {isLoading ? (
                 <p className="text-center text-blue-500">Loading...</p>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 border border-gray-300 rounded-md overflow-auto">
-                    {/* Reuse the LogTable component */}
                     <LogTable logs={logs} />
                 </div>
             )}
