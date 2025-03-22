@@ -306,6 +306,7 @@ function Admin() {
 function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
+    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and parsed modes
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -333,38 +334,104 @@ function JournalctlLogs() {
         fetchLogs();
     }, []);
 
+    const parseLogs = (logRows) =>
+        logRows
+            .map((log) => {
+                const match = log.match(
+                    /^(\w+\s+\d+\s+\d+:\d+:\d+)\s+([\w-]+)\s+([\w-]+)\[(\d+)\]:\s+(\w+)\s+(.*)$/
+                );
+                if (match) {
+                    return {
+                        timestamp: match[1],
+                        host: match[2],
+                        service: match[3],
+                        pid: match[4],
+                        level: match[5],
+                        message: match[6],
+                    };
+                }
+                return null;
+            })
+            .filter(Boolean); // Remove null entries
+
     return (
         <div className="flex flex-col min-h-screen">
-            <h2 className="text-2xl font-bold mb-2">System Logs</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">System Logs</h2>
+                <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                    onClick={() => setIsRawMode(!isRawMode)}
+                >
+                    {isRawMode ? 'Switch to Parsed View' : 'Switch to Raw View'}
+                </button>
+            </div>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
-                    <table className="table-auto w-full border-collapse">
-                        <thead>
-                            <tr className="bg-gray-200">
-                                <th className="border border-gray-300 px-4 py-2 text-left">
-                                    Log Entry
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {logs.map((log, index) => (
-                                <tr
-                                    key={index}
-                                    className={
-                                        index % 2 === 0
-                                            ? 'bg-white'
-                                            : 'bg-gray-100'
-                                    }
-                                >
-                                    <td className="border border-gray-300 px-4 py-2 text-sm">
-                                        {log}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
+                    <div className="h-full overflow-y-auto">
+                        {isRawMode ? (
+                            <pre className="p-4 text-sm whitespace-pre-wrap">
+                                {logs.join('\n')}
+                            </pre>
+                        ) : (
+                            <table className="table-auto w-full border-collapse">
+                                <thead>
+                                    <tr className="bg-gray-200">
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            Timestamp
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            Host
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            Service
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            PID
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            Level
+                                        </th>
+                                        <th className="border border-gray-300 px-4 py-2 text-left">
+                                            Message
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {parseLogs(logs).map((log, index) => (
+                                        <tr
+                                            key={index}
+                                            className={
+                                                index % 2 === 0
+                                                    ? 'bg-white'
+                                                    : 'bg-gray-100'
+                                            }
+                                        >
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.timestamp}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.host}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.service}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.pid}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.level}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                                {log.message}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
