@@ -149,7 +149,7 @@ function LoginForm() {
             />
             <div id="turnstile-widget-login" className="mb-3"></div>
             <button
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
+                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 type="submit"
             >
                 Login
@@ -211,7 +211,7 @@ function RegisterForm() {
             />
             <div id="turnstile-widget-register" className="mb-3"></div>
             <button
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
+                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 type="submit"
             >
                 Register
