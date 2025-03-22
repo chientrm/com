@@ -497,7 +497,7 @@ function JournalctlLogs() {
 function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
-    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and table modes
+    const [mode, setMode] = useState('table'); // Default to table mode
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -546,16 +546,18 @@ function SystemctlServices() {
                 <h2 className="text-2xl font-bold">System Services</h2>
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                    onClick={() => setIsRawMode(!isRawMode)}
+                    onClick={() => setMode(mode === 'table' ? 'raw' : 'table')}
                 >
-                    {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
+                    {mode === 'table'
+                        ? 'Switch to Raw View'
+                        : 'Switch to Table View'}
                 </button>
             </div>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
-                    {isRawMode ? (
+                    {mode === 'raw' ? (
                         <pre className="p-4 text-sm whitespace-pre-wrap">
                             {services.join('\n')}
                         </pre>
