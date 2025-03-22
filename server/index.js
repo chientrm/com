@@ -7,10 +7,10 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { usersTable } from './schema.js';
 
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = 4000;
 
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
