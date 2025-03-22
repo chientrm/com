@@ -212,6 +212,8 @@ app.get(
     authenticateToken,
     authenticateAdmin,
     (req, res) => {
+        const searchQuery = req.query.search?.toLowerCase() || '';
+
         exec(
             'systemctl list-units --type=service --no-pager --no-legend',
             (error, stdout, stderr) => {
@@ -222,7 +224,19 @@ app.get(
                         'Failed to retrieve services.'
                     );
                 }
-                res.json({ services: stdout });
+
+                let services = stdout
+                    .split('\n')
+                    .map((line) => line.trim())
+                    .filter((line) => line);
+
+                if (searchQuery) {
+                    services = services.filter((service) =>
+                        service.toLowerCase().includes(searchQuery)
+                    );
+                }
+
+                res.json({ services });
             }
         );
     }

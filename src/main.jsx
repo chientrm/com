@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { decodeJwt } from 'jose';
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
     Link,
@@ -7,9 +9,7 @@ import {
     Routes,
     useParams,
 } from 'react-router-dom';
-import { decodeJwt } from 'jose';
 import './style.css';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
@@ -710,22 +710,24 @@ function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const fetchServices = async () => {
         setIsLoading(true);
-        const response = await fetch('/api/admin/systemctl', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-            },
-        });
+        const response = await fetch(
+            `/api/admin/systemctl?search=${encodeURIComponent(searchQuery)}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        'authToken'
+                    )}`,
+                },
+            }
+        );
 
         if (response.ok) {
             const data = await response.json();
-            const serviceRows = data.services
-                .split('\n')
-                .map((line) => line.trim())
-                .filter((line) => line);
-            setServices(serviceRows);
+            setServices(data.services); // Use the array directly
         } else {
             const errorMessage =
                 response.status === 403
@@ -738,12 +740,19 @@ function SystemctlServices() {
 
     useEffect(() => {
         fetchServices();
-    }, []);
+    }, [searchQuery]);
 
     return (
         <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Services</h2>
+                <input
+                    type="text"
+                    placeholder="Search services..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                />
                 <button
                     className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
                         isLoading ? 'animate-spin' : ''
