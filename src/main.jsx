@@ -15,25 +15,25 @@ function NavBar() {
     return (
         <nav className="flex justify-between items-center mb-5">
             <div className="flex gap-4">
-                <Link
-                    to="/"
-                    className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
-                >
-                    Home
-                </Link>
+                <NavLink to="/" label="Home" />
             </div>
             <div className="flex gap-4">
                 {links.slice(1).map((link) => (
-                    <Link
-                        key={link.to}
-                        to={link.to}
-                        className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
-                    >
-                        {link.label}
-                    </Link>
+                    <NavLink key={link.to} to={link.to} label={link.label} />
                 ))}
             </div>
         </nav>
+    );
+}
+
+function NavLink({ to, label }) {
+    return (
+        <Link
+            to={to}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm"
+        >
+            {label}
+        </Link>
     );
 }
 
@@ -55,23 +55,16 @@ function App() {
 function Home() {
     return (
         <div className="text-center">
-            <a href="https://vite.dev" target="_blank">
-                <img
-                    src={viteLogo}
-                    className="w-20 mx-auto mb-4"
-                    alt="Vite logo"
-                />
-            </a>
-            <a
+            <ExternalLink
+                href="https://vite.dev"
+                imgSrc={viteLogo}
+                alt="Vite logo"
+            />
+            <ExternalLink
                 href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-                target="_blank"
-            >
-                <img
-                    src={javascriptLogo}
-                    className="w-20 mx-auto mb-4"
-                    alt="JavaScript logo"
-                />
-            </a>
+                imgSrc={javascriptLogo}
+                alt="JavaScript logo"
+            />
             <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
             <div className="card p-4 border rounded-md shadow-md">
                 <Counter />
@@ -80,6 +73,14 @@ function Home() {
                 Click on the Vite logo to
             </p>
         </div>
+    );
+}
+
+function ExternalLink({ href, imgSrc, alt }) {
+    return (
+        <a href={href} target="_blank">
+            <img src={imgSrc} className="w-20 mx-auto mb-4" alt={alt} />
+        </a>
     );
 }
 
@@ -97,68 +98,26 @@ function Counter() {
 }
 
 function LoginForm() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [captchaToken, setCaptchaToken] = useState(null);
-
-    useEffect(() => {
-        const handleTurnstileCallback = (token) => {
-            setCaptchaToken(token);
-        };
-
-        window.turnstile.render('#turnstile-widget-login', {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: handleTurnstileCallback,
-        });
-    }, []);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!captchaToken) {
-            alert('Please complete the CAPTCHA');
-            return;
-        }
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, captchaToken }),
-        });
-        const data = await response.json();
-        alert(data.message);
-    };
-
     return (
-        <form
-            className="max-w-sm mx-auto p-4 border rounded-md shadow-md"
-            onSubmit={handleSubmit}
-        >
-            <h2 className="text-2xl font-bold mb-4">Login</h2>
-            <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <div id="turnstile-widget-login" className="mb-3"></div>
-            <button
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                type="submit"
-            >
-                Login
-            </button>
-        </form>
+        <AuthForm
+            title="Login"
+            apiEndpoint="/api/login"
+            widgetId="turnstile-widget-login"
+        />
     );
 }
 
 function RegisterForm() {
+    return (
+        <AuthForm
+            title="Register"
+            apiEndpoint="/api/register"
+            widgetId="turnstile-widget-register"
+        />
+    );
+}
+
+function AuthForm({ title, apiEndpoint, widgetId }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [captchaToken, setCaptchaToken] = useState(null);
@@ -168,11 +127,11 @@ function RegisterForm() {
             setCaptchaToken(token);
         };
 
-        window.turnstile.render('#turnstile-widget-register', {
+        window.turnstile.render(`#${widgetId}`, {
             sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
             callback: handleTurnstileCallback,
         });
-    }, []);
+    }, [widgetId]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -180,7 +139,7 @@ function RegisterForm() {
             alert('Please complete the CAPTCHA');
             return;
         }
-        const response = await fetch('/api/register', {
+        const response = await fetch(apiEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password, captchaToken }),
@@ -194,7 +153,7 @@ function RegisterForm() {
             className="max-w-sm mx-auto p-4 border rounded-md shadow-md"
             onSubmit={handleSubmit}
         >
-            <h2 className="text-2xl font-bold mb-4">Register</h2>
+            <h2 className="text-2xl font-bold mb-4">{title}</h2>
             <input
                 className="w-full mb-3 p-2 border rounded-md shadow-sm"
                 type="text"
@@ -209,12 +168,12 @@ function RegisterForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            <div id="turnstile-widget-register" className="mb-3"></div>
+            <div id={widgetId} className="mb-3"></div>
             <button
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 type="submit"
             >
-                Register
+                {title}
             </button>
         </form>
     );
