@@ -4,7 +4,6 @@ import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import javascriptLogo from './javascript.svg';
 import './style.css';
 import viteLogo from '/vite.svg';
-import googleLogo from './google-icon-logo.svg';
 
 function NavBar() {
     const links = [
@@ -155,14 +154,6 @@ function LoginForm() {
             >
                 Login
             </button>
-            <button
-                className="w-full mt-3 px-4 py-2 bg-secondary text-secondary-foreground rounded-md shadow-sm hover:bg-secondary-hover flex items-center justify-center gap-2"
-                type="button"
-                onClick={() => (window.location.href = '/auth/google')}
-            >
-                <img src={googleLogo} alt="Google logo" className="w-5 h-5" />
-                Continue with Google
-            </button>
         </form>
     );
 }
@@ -224,14 +215,6 @@ function RegisterForm() {
                 type="submit"
             >
                 Register
-            </button>
-            <button
-                className="w-full mt-3 px-4 py-2 bg-secondary text-secondary-foreground rounded-md shadow-sm hover:bg-secondary-hover flex items-center justify-center gap-2"
-                type="button"
-                onClick={() => (window.location.href = '/auth/google')}
-            >
-                <img src={googleLogo} alt="Google logo" className="w-5 h-5" />
-                Continue with Google
             </button>
         </form>
     );
