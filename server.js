@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
-import { SignJWT, jwtVerify } from 'jose'; // Replace jsonwebtoken with jose
+import { SignJWT, jwtVerify } from 'jose';
 import fetch from 'node-fetch';
 import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
@@ -13,11 +13,11 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
-
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
 
+// Utility functions
 async function verifyCaptcha(token) {
     const response = await fetch(
         'https://challenges.cloudflare.com/turnstile/v0/siteverify',
@@ -35,7 +35,7 @@ async function verifyCaptcha(token) {
 }
 
 function validateUsername(username) {
-    const usernameRegex = /^[a-zA-Z0-9_]+$/; // Only alphanumeric and underscores
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
     return (
         typeof username === 'string' &&
         username.length >= 3 &&
@@ -45,19 +45,11 @@ function validateUsername(username) {
 }
 
 function validatePassword(password) {
-    return typeof password === 'string' && password.length >= 8; // Simplified for login
+    return typeof password === 'string' && password.length >= 8;
 }
 
 function sendErrorResponse(res, statusCode, message) {
     res.status(statusCode).json({ message });
-}
-
-async function handleCaptchaVerification(captchaToken, res) {
-    if (!(await verifyCaptcha(captchaToken))) {
-        sendErrorResponse(res, 400, 'CAPTCHA verification failed');
-        return false;
-    }
-    return true;
 }
 
 async function findUserByUsername(username) {
@@ -69,12 +61,13 @@ async function findUserByUsername(username) {
 }
 
 async function generateToken(username, role = null) {
-    return await new SignJWT({ username, role }) // Include role in the token
+    return await new SignJWT({ username, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('30d')
         .sign(new TextEncoder().encode(JWT_SECRET));
 }
 
+// Middleware
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
@@ -85,20 +78,21 @@ async function authenticateToken(req, res, next) {
             token,
             new TextEncoder().encode(JWT_SECRET)
         );
-        req.user = { username: payload.username, role: payload.role }; // Extract username and role from payload
+        req.user = { username: payload.username, role: payload.role };
         next();
-    } catch (err) {
+    } catch {
         return res.sendStatus(403);
     }
 }
 
 async function authenticateAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
-        return res.sendStatus(403); // Forbidden if not admin
+        return res.sendStatus(403);
     }
     next();
 }
 
+// Routes
 app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
@@ -112,14 +106,14 @@ app.post('/api/login', async (req, res) => {
         );
     }
 
-    if (!(await handleCaptchaVerification(captchaToken, res))) {
+    if (!(await verifyCaptcha(captchaToken))) {
         return sendErrorResponse(res, 400, 'CAPTCHA verification failed');
     }
 
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        const token = await generateToken(username, user.role || 'user'); // Default to 'user' if role is null
+        const token = await generateToken(username, user.role || 'user');
         res.json({ message: 'Login successful', username, token });
     } else {
         sendErrorResponse(res, 401, 'Invalid username or password');
@@ -137,14 +131,12 @@ app.post('/api/register', async (req, res) => {
         );
     }
 
-    if (!(await handleCaptchaVerification(captchaToken, res))) return;
+    if (!(await verifyCaptcha(captchaToken))) return;
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
+    await db.insert(usersTable).values({ username, passwordHash, role: null });
 
-    // Default role for new users is 'user'
-    await db.insert(usersTable).values({ username, passwordHash, role: null }); // Set role to null by default
-
-    const token = await generateToken(username, null); // Pass null for role
+    const token = await generateToken(username, null);
     res.json({ message: 'Registration successful', username, token });
 });
 

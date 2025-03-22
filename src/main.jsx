@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import javascriptLogo from './javascript.svg';
+import { decodeJwt } from 'jose';
 import './style.css';
-import viteLogo from '/vite.svg';
-import { decodeJwt } from 'jose'; // Use jose for decoding
 
 function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,9 +11,9 @@ function NavBar() {
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (token) {
-            const decoded = decodeJwt(token); // Decode using jose
+            const decoded = decodeJwt(token);
             setIsLoggedIn(true);
-            setIsAdmin(decoded.role === 'admin'); // Check if the role is admin
+            setIsAdmin(decoded.role === 'admin');
         } else {
             setIsLoggedIn(false);
             setIsAdmin(false);
@@ -25,7 +23,7 @@ function NavBar() {
     const links = isLoggedIn
         ? [
               { to: '/profile', label: 'Profile' },
-              ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []), // Show Admin link if user is admin
+              ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []),
           ]
         : [
               { to: '/login', label: 'Login' },
@@ -64,16 +62,34 @@ function App() {
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/register" element={<RegisterForm />} />
+                    <Route
+                        path="/login"
+                        element={
+                            <AuthForm
+                                title="Login"
+                                apiEndpoint="/api/login"
+                                widgetId="turnstile-widget-login"
+                                simpleValidation
+                            />
+                        }
+                    />
+                    <Route
+                        path="/register"
+                        element={
+                            <AuthForm
+                                title="Register"
+                                apiEndpoint="/api/register"
+                                widgetId="turnstile-widget-register"
+                                includePasswordConfirmation
+                            />
+                        }
+                    />
                     <Route path="/profile" element={<Profile />} />
-                    <Route path="/admin" element={<Admin />} />{' '}
-                    {/* Admin route */}
+                    <Route path="/admin" element={<Admin />} />
                     <Route
                         path="/admin/journalctl"
                         element={<JournalctlLogs />}
-                    />{' '}
-                    {/* Journalctl route */}
+                    />
                 </Routes>
             </div>
         </Router>
@@ -83,67 +99,8 @@ function App() {
 function Home() {
     return (
         <div className="text-center">
-            <ExternalLink
-                href="https://vite.dev"
-                imgSrc={viteLogo}
-                alt="Vite logo"
-            />
-            <ExternalLink
-                href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-                imgSrc={javascriptLogo}
-                alt="JavaScript logo"
-            />
             <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
-            <div className="card p-4 border rounded-md shadow-md">
-                <Counter />
-            </div>
-            <p className="mt-4 text-muted-foreground">
-                Click on the Vite logo to
-            </p>
         </div>
-    );
-}
-
-function ExternalLink({ href, imgSrc, alt }) {
-    return (
-        <a href={href} target="_blank">
-            <img src={imgSrc} className="w-20 mx-auto mb-4" alt={alt} />
-        </a>
-    );
-}
-
-function Counter() {
-    const [count, setCount] = useState(0);
-
-    return (
-        <button
-            className="px-4 py-2 bg-secondary text-secondary-foreground rounded-md shadow-sm"
-            onClick={() => setCount((count) => count + 1)}
-        >
-            Count is {count}
-        </button>
-    );
-}
-
-function LoginForm() {
-    return (
-        <AuthForm
-            title="Login"
-            apiEndpoint="/api/login"
-            widgetId="turnstile-widget-login"
-            simpleValidation={true}
-        />
-    );
-}
-
-function RegisterForm() {
-    return (
-        <AuthForm
-            title="Register"
-            apiEndpoint="/api/register"
-            widgetId="turnstile-widget-register"
-            includePasswordConfirmation={true}
-        />
     );
 }
 
@@ -161,7 +118,7 @@ function AuthForm({
     });
     const [captchaToken, setCaptchaToken] = useState(null);
     const [errors, setErrors] = useState({});
-    const [serverError, setServerError] = useState(''); // State for server error message
+    const [serverError, setServerError] = useState('');
 
     useEffect(() => {
         window.turnstile.render(`#${widgetId}`, {
@@ -213,7 +170,7 @@ function AuthForm({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setServerError(''); // Clear previous server error
+        setServerError('');
         if (!validateInputs()) return;
         if (!captchaToken) return setServerError('Please complete the CAPTCHA');
 
@@ -227,8 +184,8 @@ function AuthForm({
             localStorage.setItem('authToken', data.token);
             window.location.href = '/';
         } else {
-            setServerError(data.message); // Display server error message
-            window.turnstile.reset(`#${widgetId}`); // Reset CAPTCHA widget
+            setServerError(data.message);
+            window.turnstile.reset(`#${widgetId}`);
         }
     };
 
@@ -297,7 +254,7 @@ function Profile() {
     useEffect(() => {
         const token = localStorage.getItem('authToken');
         if (token) {
-            const decoded = decodeJwt(token); // Decode using jose
+            const decoded = decodeJwt(token);
             setUser(decoded);
         }
     }, []);
@@ -362,7 +319,7 @@ function JournalctlLogs() {
 
             if (response.ok) {
                 const data = await response.json();
-                const logRows = data.logs.split('\n').filter((line) => line); // Split logs into rows
+                const logRows = data.logs.split('\n').filter((line) => line);
                 setLogs(logRows);
             } else {
                 const errorMessage =
@@ -373,7 +330,7 @@ function JournalctlLogs() {
             }
         };
 
-        fetchLogs(); // No try-catch or .catch()
+        fetchLogs();
     }, []);
 
     return (
@@ -382,34 +339,32 @@ function JournalctlLogs() {
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 overflow-hidden">
-                    <div className="h-full overflow-auto border border-gray-300 rounded-md">
-                        <table className="table-auto w-full border-collapse">
-                            <thead>
-                                <tr className="bg-gray-200">
-                                    <th className="border border-gray-300 px-4 py-2 text-left">
-                                        Log Entry
-                                    </th>
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
+                    <table className="table-auto w-full border-collapse">
+                        <thead>
+                            <tr className="bg-gray-200">
+                                <th className="border border-gray-300 px-4 py-2 text-left">
+                                    Log Entry
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {logs.map((log, index) => (
+                                <tr
+                                    key={index}
+                                    className={
+                                        index % 2 === 0
+                                            ? 'bg-white'
+                                            : 'bg-gray-100'
+                                    }
+                                >
+                                    <td className="border border-gray-300 px-4 py-2 text-sm">
+                                        {log}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {logs.map((log, index) => (
-                                    <tr
-                                        key={index}
-                                        className={
-                                            index % 2 === 0
-                                                ? 'bg-white'
-                                                : 'bg-gray-100'
-                                        }
-                                    >
-                                        <td className="border border-gray-300 px-4 py-2 text-sm">
-                                            {log}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>
