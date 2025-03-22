@@ -65,47 +65,53 @@ function NavLink({ to, label }) {
 function App() {
     return (
         <Router>
-            <div className="p-5">
+            <div className="h-screen flex flex-col">
+                {' '}
+                {/* Ensure the app fills the screen */}
                 <NavBar />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route
-                        path="/login"
-                        element={
-                            <AuthForm
-                                title="Login"
-                                apiEndpoint="/api/login"
-                                widgetId="turnstile-widget-login"
-                                simpleValidation
-                            />
-                        }
-                    />
-                    <Route
-                        path="/register"
-                        element={
-                            <AuthForm
-                                title="Register"
-                                apiEndpoint="/api/register"
-                                widgetId="turnstile-widget-register"
-                                includePasswordConfirmation
-                            />
-                        }
-                    />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/admin" element={<Admin />} />
-                    <Route
-                        path="/admin/journalctl"
-                        element={<JournalctlLogs />}
-                    />
-                    <Route
-                        path="/admin/systemctl"
-                        element={<SystemctlServices />}
-                    />
-                    <Route
-                        path="/admin/journalctl/:serviceName"
-                        element={<ServiceLogs />}
-                    />
-                </Routes>
+                <div className="flex-1 overflow-hidden">
+                    {' '}
+                    {/* Allow content to fill remaining space */}
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/login"
+                            element={
+                                <AuthForm
+                                    title="Login"
+                                    apiEndpoint="/api/login"
+                                    widgetId="turnstile-widget-login"
+                                    simpleValidation
+                                />
+                            }
+                        />
+                        <Route
+                            path="/register"
+                            element={
+                                <AuthForm
+                                    title="Register"
+                                    apiEndpoint="/api/register"
+                                    widgetId="turnstile-widget-register"
+                                    includePasswordConfirmation
+                                />
+                            }
+                        />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/admin" element={<Admin />} />
+                        <Route
+                            path="/admin/journalctl"
+                            element={<JournalctlLogs />}
+                        />
+                        <Route
+                            path="/admin/systemctl"
+                            element={<SystemctlServices />}
+                        />
+                        <Route
+                            path="/admin/journalctl/:serviceName"
+                            element={<ServiceLogs />}
+                        />
+                    </Routes>
+                </div>
             </div>
         </Router>
     );
@@ -352,7 +358,9 @@ function JournalctlLogs() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-full">
+            {' '}
+            {/* Ensure the container fills the screen */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Logs</h2>
                 <button
@@ -371,7 +379,7 @@ function JournalctlLogs() {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
                     <LogTable logs={logs} />
                 </div>
             )}
@@ -414,7 +422,9 @@ function SystemctlServices() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen">
+        <div className="flex flex-col h-full">
+            {' '}
+            {/* Ensure the container fills the screen */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Services</h2>
                 <button
@@ -433,7 +443,7 @@ function SystemctlServices() {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
+                <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
                     <table className="table-auto w-full border-collapse">
                         <thead>
                             <tr className="bg-gray-200">
@@ -582,97 +592,107 @@ function LogTable({ logs }) {
     };
 
     return (
-        <table className="table-auto w-full border-collapse">
-            <thead>
-                <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        Timestamp
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        Hostname
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        Service
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        PID
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        Priority
-                    </th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">
-                        Message
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {logs.map((log, index) => (
-                    <tr
-                        key={index}
-                        className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}
-                    >
-                        <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {new Date(
-                                parseInt(log.timestamp, 10)
-                            ).toLocaleString()}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.host || 'N/A'}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.service ? (
-                                <Link
-                                    to={`/admin/journalctl/${log.service}`}
-                                    className="text-blue-500 hover:underline"
-                                >
-                                    {log.service}
-                                </Link>
-                            ) : (
-                                'N/A'
-                            )}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.pid || 'N/A'}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.level || 'N/A'}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm">
-                            <div
-                                className={`relative overflow-hidden ${
-                                    expandedRows.has(index)
-                                        ? ''
-                                        : 'line-clamp-1'
-                                }`}
-                            >
-                                {log.message || 'N/A'}
-                                {!expandedRows.has(index) &&
-                                    log.message &&
-                                    log.message.length > 100 && (
-                                        <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
-                                            <button
-                                                onClick={() =>
-                                                    toggleRowExpansion(index)
-                                                }
-                                            >
-                                                More
-                                            </button>
-                                        </span>
-                                    )}
-                            </div>
-                            {expandedRows.has(index) && log.message && (
-                                <button
-                                    className="text-blue-500 hover:underline mt-1"
-                                    onClick={() => toggleRowExpansion(index)}
-                                >
-                                    Less
-                                </button>
-                            )}
-                        </td>
+        <div className="h-full overflow-auto">
+            {' '}
+            {/* Ensure the table fills the container */}
+            <table className="table-auto w-full border-collapse">
+                <thead>
+                    <tr className="bg-gray-200">
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            Timestamp
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            Hostname
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            Service
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            PID
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            Priority
+                        </th>
+                        <th className="border border-gray-300 px-4 py-2 text-left">
+                            Message
+                        </th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {logs.map((log, index) => (
+                        <tr
+                            key={index}
+                            className={
+                                index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
+                            }
+                        >
+                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                {new Date(
+                                    parseInt(log.timestamp, 10)
+                                ).toLocaleString()}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                {log.host || 'N/A'}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                {log.service ? (
+                                    <Link
+                                        to={`/admin/journalctl/${log.service}`}
+                                        className="text-blue-500 hover:underline"
+                                    >
+                                        {log.service}
+                                    </Link>
+                                ) : (
+                                    'N/A'
+                                )}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                {log.pid || 'N/A'}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                {log.level || 'N/A'}
+                            </td>
+                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                                <div
+                                    className={`relative overflow-hidden ${
+                                        expandedRows.has(index)
+                                            ? ''
+                                            : 'line-clamp-1'
+                                    }`}
+                                >
+                                    {log.message || 'N/A'}
+                                    {!expandedRows.has(index) &&
+                                        log.message &&
+                                        log.message.length > 100 && (
+                                            <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
+                                                <button
+                                                    onClick={() =>
+                                                        toggleRowExpansion(
+                                                            index
+                                                        )
+                                                    }
+                                                >
+                                                    More
+                                                </button>
+                                            </span>
+                                        )}
+                                </div>
+                                {expandedRows.has(index) && log.message && (
+                                    <button
+                                        className="text-blue-500 hover:underline mt-1"
+                                        onClick={() =>
+                                            toggleRowExpansion(index)
+                                        }
+                                    >
+                                        Less
+                                    </button>
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
