@@ -10,7 +10,7 @@ import { usersTable } from './schema.js';
 dotenv.config();
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;

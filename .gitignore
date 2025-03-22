@@ -26,4 +26,3 @@ dist-ssr
 *.db
 *.log
 .env
-dist.js
