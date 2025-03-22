@@ -318,7 +318,7 @@ function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
     const [expandedRows, setExpandedRows] = useState(new Set()); // Track expanded rows
-    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and parsed modes
+    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and table modes
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -384,7 +384,7 @@ function JournalctlLogs() {
                     className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                     onClick={() => setIsRawMode(!isRawMode)}
                 >
-                    {isRawMode ? 'Switch to Parsed View' : 'Switch to Raw View'}
+                    {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
                 </button>
             </div>
             {error ? (
