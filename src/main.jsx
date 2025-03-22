@@ -683,6 +683,14 @@ function ServiceLogs() {
                     {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
                 </button>
             </div>
+            <div className="mb-4">
+                <Link
+                    to="/admin/systemctl"
+                    className="text-blue-500 hover:underline"
+                >
+                    &larr; Back to Services
+                </Link>
+            </div>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
