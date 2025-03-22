@@ -38,11 +38,11 @@ function NavBar() {
           ];
 
     return (
-        <nav className="flex justify-between items-center mb-5">
-            <div className="flex gap-4">
+        <nav className="flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+            <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-6">
                 {links.map((link) => (
                     <NavLink key={link.to} to={link.to} label={link.label} />
                 ))}
@@ -55,7 +55,7 @@ function NavLink({ to, label }) {
     return (
         <Link
             to={to}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover"
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
         >
             {label}
         </Link>
@@ -66,12 +66,9 @@ function App() {
     return (
         <Router>
             <div className="h-screen flex flex-col">
-                {' '}
-                {/* Ensure the app fills the screen */}
                 <NavBar />
-                <div className="flex-1 overflow-hidden">
-                    {' '}
-                    {/* Allow content to fill remaining space */}
+                <div className="flex-1 overflow-hidden px-4 py-6">
+                    {/* Added padding to the main content */}
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route
@@ -213,15 +210,15 @@ function AuthForm({
 
     return (
         <form
-            className="max-w-sm mx-auto p-6 border rounded-md shadow-md space-y-4"
+            className="max-w-md mx-auto p-6 bg-white border border-gray-200 rounded-lg shadow-md space-y-4"
             onSubmit={handleSubmit}
         >
-            <h2 className="text-2xl font-bold">{title}</h2>
+            <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
             {serverError && (
-                <p className="text-red-500 text-sm">{serverError}</p>
+                <p className="text-sm text-red-600">{serverError}</p>
             )}
             <input
-                className="w-full p-2 border rounded-md shadow-sm"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -229,10 +226,10 @@ function AuthForm({
                 onChange={handleInputChange}
             />
             {errors.username && (
-                <p className="text-red-500 text-sm">{errors.username}</p>
+                <p className="text-sm text-red-600">{errors.username}</p>
             )}
             <input
-                className="w-full p-2 border rounded-md shadow-sm"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -240,12 +237,12 @@ function AuthForm({
                 onChange={handleInputChange}
             />
             {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
+                <p className="text-sm text-red-600">{errors.password}</p>
             )}
             {includePasswordConfirmation && (
                 <>
                     <input
-                        className="w-full p-2 border rounded-md shadow-sm"
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                         type="password"
                         name="confirmPassword"
                         placeholder="Confirm Password"
@@ -253,7 +250,7 @@ function AuthForm({
                         onChange={handleInputChange}
                     />
                     {errors.confirmPassword && (
-                        <p className="text-red-500 text-sm">
+                        <p className="text-sm text-red-600">
                             {errors.confirmPassword}
                         </p>
                     )}
@@ -261,7 +258,7 @@ function AuthForm({
             )}
             <div id={widgetId} className="mb-4"></div>
             <button
-                className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
             >
                 {title}
@@ -311,18 +308,22 @@ function Profile() {
 function Admin() {
     return (
         <div className="text-center">
-            <h1 className="text-3xl font-bold">Admin Panel</h1>
-            <p className="text-lg mt-2">Manage system services and logs.</p>
-            <div className="mt-4 flex justify-center gap-4">
+            <h1 className="text-2xl font-semibold text-gray-800">
+                Admin Panel
+            </h1>
+            <p className="text-sm text-gray-600 mt-2">
+                Manage system services and logs.
+            </p>
+            <div className="mt-6 flex justify-center gap-4">
                 <Link
                     to="/admin/systemctl"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                     Services
                 </Link>
                 <Link
                     to="/admin/journalctl"
-                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                     Logs
                 </Link>
@@ -595,25 +596,25 @@ function LogTable({ logs }) {
         <div className="h-full overflow-auto">
             {' '}
             {/* Ensure the table fills the container */}
-            <table className="table-auto w-full border-collapse">
+            <table className="table-auto w-full border-collapse border border-gray-200">
                 <thead>
-                    <tr className="bg-gray-200">
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                    <tr className="bg-gray-100">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             Timestamp
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             Hostname
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             Service
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             PID
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             Priority
                         </th>
-                        <th className="border border-gray-300 px-4 py-2 text-left">
+                        <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                             Message
                         </th>
                     </tr>
@@ -623,18 +624,18 @@ function LogTable({ logs }) {
                         <tr
                             key={index}
                             className={
-                                index % 2 === 0 ? 'bg-white' : 'bg-gray-100'
+                                index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                             }
                         >
-                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 {new Date(
                                     parseInt(log.timestamp, 10)
                                 ).toLocaleString()}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 {log.host || 'N/A'}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 {log.service ? (
                                     <Link
                                         to={`/admin/journalctl/${log.service}`}
@@ -646,13 +647,13 @@ function LogTable({ logs }) {
                                     'N/A'
                                 )}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 {log.pid || 'N/A'}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 {log.level || 'N/A'}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2 text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 <div
                                     className={`relative overflow-hidden ${
                                         expandedRows.has(index)
