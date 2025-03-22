@@ -151,7 +151,7 @@ app.get(
     authenticateToken,
     authenticateAdmin,
     (req, res) => {
-        exec('journalctl -n 100', (error, stdout, stderr) => {
+        exec('journalctl -n 100 -q', (error, stdout, stderr) => {
             if (error) {
                 return sendErrorResponse(res, 500, 'Failed to retrieve logs.');
             }
