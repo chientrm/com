@@ -8,7 +8,11 @@ const PORT = 4000;
 const db = drizzle();
 
 // Serve static files from the "dist" directory
-app.use(express.static(path.join(path.dirname(new URL(import.meta.url).pathname), 'dist')));
+app.use(
+    express.static(
+        path.join(path.dirname(new URL(import.meta.url).pathname), 'dist')
+    )
+);
 
 app.use(express.json()); // Middleware to parse JSON request bodies
 
