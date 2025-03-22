@@ -205,7 +205,6 @@ function AuthForm({
         const data = await response.json();
         if (response.ok) {
             localStorage.setItem('authToken', data.token);
-            alert(data.message);
             window.location.href = '/';
         } else {
             alert(data.message);
@@ -279,6 +278,11 @@ function Profile() {
         }
     }, []);
 
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        window.location.href = '/';
+    };
+
     if (!user) {
         return (
             <div className="text-center">
@@ -291,6 +295,12 @@ function Profile() {
         <div className="text-center">
             <h1 className="text-3xl font-bold">Welcome, {user.username}!</h1>
             <p className="text-lg mt-2">This is your profile page.</p>
+            <button
+                className="mt-4 px-4 py-2 bg-secondary text-secondary-foreground rounded-md shadow-sm hover:bg-secondary-hover"
+                onClick={handleLogout}
+            >
+                Logout
+            </button>
         </div>
     );
 }
