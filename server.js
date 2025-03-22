@@ -9,7 +9,7 @@ const app = express();
 const PORT = 4000;
 
 const db = drizzle('file:local.db');
-const SALT_ROUNDS = 12; // Increase salt rounds for better security
+const SALT_ROUNDS = 12;
 
 app.use(
     express.static(
@@ -17,9 +17,8 @@ app.use(
     )
 );
 
-app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(express.json());
 
-// Login route
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -36,7 +35,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Register route
 app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
 
