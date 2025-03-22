@@ -210,6 +210,7 @@ function AuthForm({
             window.location.href = '/';
         } else {
             setServerError(data.message); // Display server error message
+            window.turnstile.reset(`#${widgetId}`); // Reset CAPTCHA widget
         }
     };
 

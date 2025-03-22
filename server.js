@@ -104,7 +104,9 @@ app.post('/api/login', async (req, res) => {
         );
     }
 
-    if (!(await handleCaptchaVerification(captchaToken, res))) return;
+    if (!(await handleCaptchaVerification(captchaToken, res))) {
+        return sendErrorResponse(res, 400, 'CAPTCHA verification failed');
+    }
 
     const user = await findUserByUsername(username);
 
