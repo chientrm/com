@@ -143,6 +143,7 @@ function AuthForm({
     });
     const [captchaToken, setCaptchaToken] = useState(null);
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState(''); // State for server error message
 
     useEffect(() => {
         window.turnstile.render(`#${widgetId}`, {
@@ -194,8 +195,9 @@ function AuthForm({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setServerError(''); // Clear previous server error
         if (!validateInputs()) return;
-        if (!captchaToken) return alert('Please complete the CAPTCHA');
+        if (!captchaToken) return setServerError('Please complete the CAPTCHA');
 
         const response = await fetch(apiEndpoint, {
             method: 'POST',
@@ -207,7 +209,7 @@ function AuthForm({
             localStorage.setItem('authToken', data.token);
             window.location.href = '/';
         } else {
-            alert(data.message);
+            setServerError(data.message); // Display server error message
         }
     };
 
@@ -217,6 +219,9 @@ function AuthForm({
             onSubmit={handleSubmit}
         >
             <h2 className="text-2xl font-bold">{title}</h2>
+            {serverError && (
+                <p className="text-red-500 text-sm">{serverError}</p>
+            )}
             <input
                 className="w-full p-2 border rounded-md shadow-sm"
                 type="text"
