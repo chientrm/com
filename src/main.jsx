@@ -328,7 +328,6 @@ function Admin() {
 function JournalctlLogs() {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [isRawMode, setIsRawMode] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchLogs = async () => {
@@ -341,7 +340,7 @@ function JournalctlLogs() {
 
         if (response.ok) {
             const data = await response.json();
-            setLogs(data.logs.split('\n').filter((line) => line));
+            setLogs(data.logs); // Ensure logs are treated as an array
         } else {
             setError('Failed to fetch logs.');
         }
@@ -356,24 +355,16 @@ function JournalctlLogs() {
         <div className="flex flex-col min-h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Logs</h2>
-                <div className="flex items-center gap-2">
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                        onClick={() => setIsRawMode(!isRawMode)}
-                    >
-                        {isRawMode ? 'Table View' : 'Raw View'}
-                    </button>
-                    <button
-                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                            isLoading ? 'animate-spin' : ''
-                        }`}
-                        onClick={fetchLogs}
-                        title="Refresh Logs"
-                        disabled={isLoading}
-                    >
-                        <ArrowPathIcon className="h-5 w-5" />
-                    </button>
-                </div>
+                <button
+                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                        isLoading ? 'animate-spin' : ''
+                    }`}
+                    onClick={fetchLogs}
+                    title="Refresh Logs"
+                    disabled={isLoading}
+                >
+                    <ArrowPathIcon className="h-5 w-5" />
+                </button>
             </div>
             {isLoading ? (
                 <p className="text-center text-blue-500">Loading...</p>
@@ -381,15 +372,7 @@ function JournalctlLogs() {
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
-                    <div className="h-full overflow-y-auto">
-                        {isRawMode ? (
-                            <pre className="p-4 text-sm whitespace-pre-wrap">
-                                {logs.join('\n')}
-                            </pre>
-                        ) : (
-                            <LogTable logs={logs} />
-                        )}
-                    </div>
+                    <LogTable logs={logs} />
                 </div>
             )}
         </div>
@@ -399,7 +382,6 @@ function JournalctlLogs() {
 function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
-    const [mode, setMode] = useState('table');
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchServices = async () => {
@@ -427,19 +409,6 @@ function SystemctlServices() {
         setIsLoading(false);
     };
 
-    // Define parseServices function
-    const parseServices = (rawServices) => {
-        return rawServices.map((line) => {
-            const parts = line.split(/\s+/);
-            const unit = parts[0];
-            const load = parts[1];
-            const active = parts[2];
-            const sub = parts[3];
-            const description = parts.slice(4).join(' ');
-            return { unit, load, active, sub, description };
-        });
-    };
-
     useEffect(() => {
         fetchServices();
     }, []);
@@ -448,28 +417,16 @@ function SystemctlServices() {
         <div className="flex flex-col min-h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Services</h2>
-                <div className="flex items-center gap-2">
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                        onClick={() =>
-                            setMode(mode === 'table' ? 'raw' : 'table')
-                        }
-                    >
-                        {mode === 'table'
-                            ? 'Switch to Raw View'
-                            : 'Switch to Table View'}
-                    </button>
-                    <button
-                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                            isLoading ? 'animate-spin' : ''
-                        }`}
-                        onClick={fetchServices}
-                        title="Refresh Services"
-                        disabled={isLoading}
-                    >
-                        <ArrowPathIcon className="h-5 w-5" />
-                    </button>
-                </div>
+                <button
+                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                        isLoading ? 'animate-spin' : ''
+                    }`}
+                    onClick={fetchServices}
+                    title="Refresh Services"
+                    disabled={isLoading}
+                >
+                    <ArrowPathIcon className="h-5 w-5" />
+                </button>
             </div>
             {isLoading ? (
                 <p className="text-center text-blue-500">Loading...</p>
@@ -477,68 +434,69 @@ function SystemctlServices() {
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
-                    {mode === 'raw' ? (
-                        <pre className="p-4 text-sm whitespace-pre-wrap">
-                            {services.join('\n')}
-                        </pre>
-                    ) : (
-                        <table className="table-auto w-full border-collapse">
-                            <thead>
-                                <tr className="bg-gray-200">
-                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/6">
-                                        Unit
-                                    </th>
-                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
-                                        Load
-                                    </th>
-                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
-                                        Active
-                                    </th>
-                                    <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
-                                        Sub
-                                    </th>
-                                    <th className="border border-gray-300 px-2 py-2 text-left w-7/12">
-                                        Description
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {parseServices(services).map(
-                                    (service, index) => (
-                                        <tr
-                                            key={index}
-                                            className={
-                                                index % 2 === 0
-                                                    ? 'bg-white'
-                                                    : 'bg-gray-100'
-                                            }
-                                        >
-                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
-                                                <Link
-                                                    to={`/admin/journalctl/${service.unit}`}
-                                                    className="text-blue-500 hover:underline"
-                                                >
-                                                    {service.unit}
-                                                </Link>
-                                            </td>
-                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
-                                                {service.load}
-                                            </td>
-                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
-                                                {service.active}
-                                            </td>
-                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
-                                                {service.sub}
-                                            </td>
-                                            <td className="border border-gray-300 px-2 py-2 text-sm truncate">
-                                                {service.description}
-                                            </td>
-                                        </tr>
-                                    )
-                                )}
-                            </tbody>
-                        </table>
-                    )}
+                    <table className="table-auto w-full border-collapse">
+                        <thead>
+                            <tr className="bg-gray-200">
+                                <th className="border border-gray-300 px-2 py-2 text-left w-1/6">
+                                    Unit
+                                </th>
+                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                    Load
+                                </th>
+                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                    Active
+                                </th>
+                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                    Sub
+                                </th>
+                                <th className="border border-gray-300 px-2 py-2 text-left w-7/12">
+                                    Description
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {services.map((service, index) => {
+                                const parts = service.split(/\s+/);
+                                const unit = parts[0];
+                                const load = parts[1];
+                                const active = parts[2];
+                                const sub = parts[3];
+                                const description = parts.slice(4).join(' ');
+
+                                return (
+                                    <tr
+                                        key={index}
+                                        className={
+                                            index % 2 === 0
+                                                ? 'bg-white'
+                                                : 'bg-gray-100'
+                                        }
+                                    >
+                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                            <Link
+                                                to={`/admin/journalctl/${unit}`}
+                                                className="text-blue-500 hover:underline"
+                                            >
+                                                {unit}
+                                            </Link>
+                                        </td>
+                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                            {load}
+                                        </td>
+                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                            {active}
+                                        </td>
+                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                            {sub}
+                                        </td>
+                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                            {description}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </div>
@@ -549,7 +507,6 @@ function ServiceLogs() {
     const { serviceName } = useParams();
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [isRawMode, setIsRawMode] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchLogs = async () => {
@@ -562,7 +519,7 @@ function ServiceLogs() {
 
         if (response.ok) {
             const data = await response.json();
-            setLogs(data.logs.split('\n').filter((line) => line));
+            setLogs(data.logs); // Ensure logs are treated as an array
         } else {
             setError('Failed to fetch logs.');
         }
@@ -579,24 +536,16 @@ function ServiceLogs() {
                 <h2 className="text-2xl font-bold">
                     Logs for Service: {serviceName}
                 </h2>
-                <div className="flex items-center gap-2">
-                    <button
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
-                        onClick={() => setIsRawMode(!isRawMode)}
-                    >
-                        {isRawMode ? 'Table View' : 'Raw View'}
-                    </button>
-                    <button
-                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                            isLoading ? 'animate-spin' : ''
-                        }`}
-                        onClick={fetchLogs}
-                        title="Refresh Logs"
-                        disabled={isLoading}
-                    >
-                        <ArrowPathIcon className="h-5 w-5" />
-                    </button>
-                </div>
+                <button
+                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                        isLoading ? 'animate-spin' : ''
+                    }`}
+                    onClick={fetchLogs}
+                    title="Refresh Logs"
+                    disabled={isLoading}
+                >
+                    <ArrowPathIcon className="h-5 w-5" />
+                </button>
             </div>
             <div className="mb-4">
                 <Link
@@ -612,43 +561,15 @@ function ServiceLogs() {
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
-                    <div className="h-full overflow-y-auto">
-                        {isRawMode ? (
-                            <pre className="p-4 text-sm whitespace-pre-wrap">
-                                {logs.join('\n')}
-                            </pre>
-                        ) : (
-                            <LogTable logs={logs} isServiceRoute={true} />
-                        )}
-                    </div>
+                    <LogTable logs={logs} />
                 </div>
             )}
         </div>
     );
 }
 
-function LogTable({ logs, isServiceRoute = false }) {
+function LogTable({ logs }) {
     const [expandedRows, setExpandedRows] = useState(new Set());
-
-    const parseLogs = (logRows) =>
-        logRows
-            .map((log) => {
-                const match = log.match(
-                    /^(\w+\s+\d+\s+\d+:\d+:\d+)\s+([\w-]+)\s+([\w-]+)\[(\d+)\]:\s+(\w+)\s+(.*)$/
-                );
-                if (match) {
-                    return {
-                        timestamp: match[1],
-                        host: match[2],
-                        service: match[3],
-                        pid: match[4],
-                        level: match[5],
-                        message: match[6],
-                    };
-                }
-                return null;
-            })
-            .filter(Boolean);
 
     const toggleRowExpansion = (index) => {
         const newExpandedRows = new Set(expandedRows);
@@ -660,8 +581,6 @@ function LogTable({ logs, isServiceRoute = false }) {
         setExpandedRows(newExpandedRows);
     };
 
-    const parsedLogs = parseLogs(logs);
-
     return (
         <table className="table-auto w-full border-collapse">
             <thead>
@@ -670,7 +589,7 @@ function LogTable({ logs, isServiceRoute = false }) {
                         Timestamp
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left">
-                        Host
+                        Hostname
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left">
                         Service
@@ -679,7 +598,7 @@ function LogTable({ logs, isServiceRoute = false }) {
                         PID
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left">
-                        Level
+                        Priority
                     </th>
                     <th className="border border-gray-300 px-4 py-2 text-left">
                         Message
@@ -687,25 +606,27 @@ function LogTable({ logs, isServiceRoute = false }) {
                 </tr>
             </thead>
             <tbody>
-                {parsedLogs.map((log, index) => (
+                {logs.map((log, index) => (
                     <tr
                         key={index}
                         className={index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}
                     >
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.timestamp}
+                            {new Date(
+                                parseInt(log.timestamp, 10)
+                            ).toLocaleString()}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.host}
+                            {log.host || 'N/A'}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.service}
+                            {log.service || 'N/A'}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.pid}
+                            {log.pid || 'N/A'}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm truncate">
-                            {log.level}
+                            {log.level || 'N/A'}
                         </td>
                         <td className="border border-gray-300 px-4 py-2 text-sm">
                             <div
@@ -715,8 +636,9 @@ function LogTable({ logs, isServiceRoute = false }) {
                                         : 'line-clamp-1'
                                 }`}
                             >
-                                {log.message}
+                                {log.message || 'N/A'}
                                 {!expandedRows.has(index) &&
+                                    log.message &&
                                     log.message.length > 100 && (
                                         <span className="absolute bottom-0 right-0 bg-white px-1 text-blue-500 cursor-pointer hover:underline">
                                             <button
@@ -729,7 +651,7 @@ function LogTable({ logs, isServiceRoute = false }) {
                                         </span>
                                     )}
                             </div>
-                            {expandedRows.has(index) && (
+                            {expandedRows.has(index) && log.message && (
                                 <button
                                     className="text-blue-500 hover:underline mt-1"
                                     onClick={() => toggleRowExpansion(index)}

@@ -67,6 +67,15 @@ async function generateToken(username, role = null) {
         .sign(new TextEncoder().encode(JWT_SECRET));
 }
 
+// Utility function to strip ANSI escape codes
+function stripAnsiCodes(input) {
+    return input.replace(
+        // Regex to match ANSI escape codes
+        /\u001b\[[0-9;]*m/g,
+        ''
+    );
+}
+
 // Middleware
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -151,12 +160,35 @@ app.get(
     authenticateToken,
     authenticateAdmin,
     (req, res) => {
-        exec('journalctl -n 100 -q', (error, stdout, stderr) => {
-            if (error) {
-                return sendErrorResponse(res, 500, 'Failed to retrieve logs.');
+        exec(
+            'journalctl -n 100 -o json --no-pager',
+            (error, stdout, stderr) => {
+                if (error) {
+                    return sendErrorResponse(
+                        res,
+                        500,
+                        'Failed to retrieve logs.'
+                    );
+                }
+                const logs = stdout
+                    .split('\n')
+                    .filter((line) => line)
+                    .map((line) => JSON.parse(line))
+                    .map((entry) => ({
+                        timestamp: entry.__REALTIME_TIMESTAMP,
+                        host: entry._HOSTNAME,
+                        service: entry._SYSTEMD_UNIT,
+                        pid: entry._PID,
+                        level: entry.PRIORITY,
+                        message: Array.isArray(entry.MESSAGE)
+                            ? stripAnsiCodes(
+                                  Buffer.from(entry.MESSAGE).toString('utf-8')
+                              )
+                            : stripAnsiCodes(entry.MESSAGE || ''),
+                    }));
+                res.json({ logs });
             }
-            res.json({ logs: stdout });
-        });
+        );
     }
 );
 
@@ -188,7 +220,7 @@ app.get(
     (req, res) => {
         const { serviceName } = req.params;
         exec(
-            `journalctl -u ${serviceName} -n 100 --no-pager`,
+            `journalctl -u ${serviceName} -n 100 -o json --no-pager`,
             (error, stdout, stderr) => {
                 if (error) {
                     return sendErrorResponse(
@@ -197,7 +229,23 @@ app.get(
                         `Failed to retrieve logs for service: ${serviceName}`
                     );
                 }
-                res.json({ logs: stdout });
+                const logs = stdout
+                    .split('\n')
+                    .filter((line) => line)
+                    .map((line) => JSON.parse(line))
+                    .map((entry) => ({
+                        timestamp: entry.__REALTIME_TIMESTAMP,
+                        host: entry._HOSTNAME,
+                        service: entry._SYSTEMD_UNIT,
+                        pid: entry._PID,
+                        level: entry.PRIORITY,
+                        message: Array.isArray(entry.MESSAGE)
+                            ? stripAnsiCodes(
+                                  Buffer.from(entry.MESSAGE).toString('utf-8')
+                              )
+                            : stripAnsiCodes(entry.MESSAGE || ''),
+                    }));
+                res.json({ logs });
             }
         );
     }
