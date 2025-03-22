@@ -113,14 +113,26 @@ function RegisterForm() {
             title="Register"
             apiEndpoint="/api/register"
             widgetId="turnstile-widget-register"
+            includePasswordConfirmation={true}
         />
     );
 }
 
-function AuthForm({ title, apiEndpoint, widgetId }) {
+function AuthForm({
+    title,
+    apiEndpoint,
+    widgetId,
+    includePasswordConfirmation = false,
+}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [captchaToken, setCaptchaToken] = useState(null);
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+        confirmPassword: '',
+    });
 
     useEffect(() => {
         const handleTurnstileCallback = (token) => {
@@ -133,8 +145,48 @@ function AuthForm({ title, apiEndpoint, widgetId }) {
         });
     }, [widgetId]);
 
+    const validateInputs = () => {
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const newErrors = {
+            username: '',
+            password: '',
+            confirmPassword: '',
+        };
+
+        if (
+            !username ||
+            username.length < 3 ||
+            username.length > 20 ||
+            !usernameRegex.test(username)
+        ) {
+            newErrors.username =
+                'Username must be 3-20 characters and contain only letters, numbers, or underscores.';
+        }
+
+        if (!password || !passwordRegex.test(password)) {
+            newErrors.password =
+                'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.';
+        }
+
+        if (includePasswordConfirmation && password !== confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match.';
+        }
+
+        setErrors(newErrors);
+        return (
+            !newErrors.username &&
+            !newErrors.password &&
+            !newErrors.confirmPassword
+        );
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!validateInputs()) {
+            return;
+        }
         if (!captchaToken) {
             alert('Please complete the CAPTCHA');
             return;
@@ -155,19 +207,41 @@ function AuthForm({ title, apiEndpoint, widgetId }) {
         >
             <h2 className="text-2xl font-bold mb-4">{title}</h2>
             <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
+                className="w-full mb-1 p-2 border rounded-md shadow-sm"
                 type="text"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
             />
+            {errors.username && (
+                <p className="text-red-500 text-sm mb-3">{errors.username}</p>
+            )}
             <input
-                className="w-full mb-3 p-2 border rounded-md shadow-sm"
+                className="w-full mb-1 p-2 border rounded-md shadow-sm"
                 type="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
+            {errors.password && (
+                <p className="text-red-500 text-sm mb-3">{errors.password}</p>
+            )}
+            {includePasswordConfirmation && (
+                <>
+                    <input
+                        className="w-full mb-1 p-2 border rounded-md shadow-sm"
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    {errors.confirmPassword && (
+                        <p className="text-red-500 text-sm mb-3">
+                            {errors.confirmPassword}
+                        </p>
+                    )}
+                </>
+            )}
             <div id={widgetId} className="mb-3"></div>
             <button
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"

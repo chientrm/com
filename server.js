@@ -31,10 +31,32 @@ async function verifyCaptcha(token) {
     return data.success;
 }
 
+function validateUsername(username) {
+    const usernameRegex = /^[a-zA-Z0-9_]+$/; // Only alphanumeric and underscores
+    return (
+        typeof username === 'string' &&
+        username.length >= 3 &&
+        username.length <= 20 &&
+        usernameRegex.test(username)
+    );
+}
+
+function validatePassword(password) {
+    const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return typeof password === 'string' && passwordRegex.test(password);
+}
+
 app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
     const { username, password, captchaToken } = req.body;
+
+    if (!validateUsername(username) || !validatePassword(password)) {
+        return res
+            .status(400)
+            .json({ message: 'Invalid username or password format' });
+    }
 
     if (!(await verifyCaptcha(captchaToken))) {
         return res.status(400).json({ message: 'CAPTCHA verification failed' });
@@ -55,6 +77,12 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/register', async (req, res) => {
     const { username, password, captchaToken } = req.body;
+
+    if (!validateUsername(username) || !validatePassword(password)) {
+        return res
+            .status(400)
+            .json({ message: 'Invalid username or password format' });
+    }
 
     if (!(await verifyCaptcha(captchaToken))) {
         return res.status(400).json({ message: 'CAPTCHA verification failed' });
