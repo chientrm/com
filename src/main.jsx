@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import { decodeJwt } from 'jose';
 import './style.css';
+import { ArrowPathIcon } from '@heroicons/react/24/outline'; // Import the icon
 
 function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -363,11 +364,14 @@ function JournalctlLogs() {
                         {isRawMode ? 'Table View' : 'Raw View'}
                     </button>
                     <button
-                        className="text-blue-500 hover:text-blue-700"
+                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                            isLoading ? 'animate-spin' : ''
+                        }`}
                         onClick={fetchLogs}
                         title="Refresh Logs"
+                        disabled={isLoading}
                     >
-                        🔄
+                        <ArrowPathIcon className="h-5 w-5" />
                     </button>
                 </div>
             </div>
@@ -396,7 +400,7 @@ function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
     const [mode, setMode] = useState('table');
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchServices = async () => {
         setIsLoading(true);
@@ -456,11 +460,14 @@ function SystemctlServices() {
                             : 'Switch to Table View'}
                     </button>
                     <button
-                        className="text-blue-500 hover:text-blue-700"
+                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                            isLoading ? 'animate-spin' : ''
+                        }`}
                         onClick={fetchServices}
                         title="Refresh Services"
+                        disabled={isLoading}
                     >
-                        🔄
+                        <ArrowPathIcon className="h-5 w-5" />
                     </button>
                 </div>
             </div>
@@ -580,11 +587,14 @@ function ServiceLogs() {
                         {isRawMode ? 'Table View' : 'Raw View'}
                     </button>
                     <button
-                        className="text-blue-500 hover:text-blue-700"
+                        className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
+                            isLoading ? 'animate-spin' : ''
+                        }`}
                         onClick={fetchLogs}
                         title="Refresh Logs"
+                        disabled={isLoading}
                     >
-                        🔄
+                        <ArrowPathIcon className="h-5 w-5" />
                     </button>
                 </div>
             </div>
