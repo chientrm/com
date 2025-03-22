@@ -71,7 +71,8 @@ async function generateToken(username, role = null) {
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.sendStatus(401);
+    if (!token)
+        return res.status(401).json({ message: 'Unauthorized access.' });
 
     try {
         const { payload } = await jwtVerify(
@@ -81,13 +82,13 @@ async function authenticateToken(req, res, next) {
         req.user = { username: payload.username, role: payload.role };
         next();
     } catch {
-        return res.sendStatus(403);
+        return res.status(403).json({ message: 'Access forbidden.' });
     }
 }
 
 async function authenticateAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
-        return res.sendStatus(403);
+        return res.status(403).json({ message: 'Admin privileges required.' });
     }
     next();
 }
@@ -102,21 +103,21 @@ app.post('/api/login', async (req, res) => {
         return sendErrorResponse(
             res,
             400,
-            'Username and password are required'
+            'Both username and password are required.'
         );
     }
 
     if (!(await verifyCaptcha(captchaToken))) {
-        return sendErrorResponse(res, 400, 'CAPTCHA verification failed');
+        return sendErrorResponse(res, 400, 'CAPTCHA verification failed.');
     }
 
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
         const token = await generateToken(username, user.role || 'user');
-        res.json({ message: 'Login successful', username, token });
+        res.json({ message: 'Login successful.', username, token });
     } else {
-        sendErrorResponse(res, 401, 'Invalid username or password');
+        sendErrorResponse(res, 401, 'Invalid username or password.');
     }
 });
 
@@ -127,21 +128,23 @@ app.post('/api/register', async (req, res) => {
         return sendErrorResponse(
             res,
             400,
-            'Invalid username or password format'
+            'Invalid username or password format.'
         );
     }
 
-    if (!(await verifyCaptcha(captchaToken))) return;
+    if (!(await verifyCaptcha(captchaToken))) {
+        return sendErrorResponse(res, 400, 'CAPTCHA verification failed.');
+    }
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
     await db.insert(usersTable).values({ username, passwordHash, role: null });
 
     const token = await generateToken(username, null);
-    res.json({ message: 'Registration successful', username, token });
+    res.json({ message: 'Registration successful.', username, token });
 });
 
 app.get('/api/check-auth', authenticateToken, (req, res) => {
-    res.sendStatus(200);
+    res.status(200).json({ message: 'Authentication verified.' });
 });
 
 app.get(
@@ -153,7 +156,10 @@ app.get(
             if (error) {
                 return res
                     .status(500)
-                    .json({ message: 'Failed to fetch logs', error: stderr });
+                    .json({
+                        message: 'Failed to retrieve logs.',
+                        error: stderr,
+                    });
             }
             res.json({ logs: stdout });
         });
@@ -170,7 +176,7 @@ app.get(
             (error, stdout, stderr) => {
                 if (error) {
                     return res.status(500).json({
-                        message: 'Failed to fetch services',
+                        message: 'Failed to retrieve services.',
                         error: stderr,
                     });
                 }

@@ -23,7 +23,7 @@ function NavBar() {
     const links = isLoggedIn
         ? [
               { to: '/profile', label: 'Profile' },
-              ...(isAdmin ? [{ to: '/admin', label: 'Admin' }] : []),
+              ...(isAdmin ? [{ to: '/admin', label: 'Admin Dashboard' }] : []),
           ]
         : [
               { to: '/login', label: 'Login' },
@@ -176,7 +176,8 @@ function AuthForm({
         e.preventDefault();
         setServerError('');
         if (!validateInputs()) return;
-        if (!captchaToken) return setServerError('Please complete the CAPTCHA');
+        if (!captchaToken)
+            return setServerError('Please complete the CAPTCHA.');
 
         const response = await fetch(apiEndpoint, {
             method: 'POST',
@@ -294,19 +295,19 @@ function Admin() {
     return (
         <div className="text-center">
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-lg mt-2">Welcome to the admin panel.</p>
+            <p className="text-lg mt-2">Manage system services and logs.</p>
             <div className="mt-4">
                 <Link
                     to="/admin/systemctl"
-                    className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 >
                     View Services
                 </Link>
                 <Link
                     to="/admin/journalctl"
-                    className="px-4 py-2 bg-primary text-primary-foreground rounded-md shadow-sm hover:bg-primary-hover ml-4"
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 ml-4"
                 >
-                    View System Logs
+                    View Logs
                 </Link>
             </div>
         </div>
