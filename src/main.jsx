@@ -198,12 +198,12 @@ function AuthForm({
 
     return (
         <form
-            className="max-w-sm mx-auto p-4 border rounded-md shadow-md"
+            className="max-w-sm mx-auto p-6 border rounded-md shadow-md space-y-4"
             onSubmit={handleSubmit}
         >
-            <h2 className="text-2xl font-bold mb-4">{title}</h2>
+            <h2 className="text-2xl font-bold">{title}</h2>
             <input
-                className="w-full mb-1 p-2 border rounded-md shadow-sm"
+                className="w-full p-2 border rounded-md shadow-sm"
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -211,10 +211,10 @@ function AuthForm({
                 onChange={handleInputChange}
             />
             {errors.username && (
-                <p className="text-red-500 text-sm mb-3">{errors.username}</p>
+                <p className="text-red-500 text-sm">{errors.username}</p>
             )}
             <input
-                className="w-full mb-1 p-2 border rounded-md shadow-sm"
+                className="w-full p-2 border rounded-md shadow-sm"
                 type="password"
                 name="password"
                 placeholder="Password"
@@ -222,12 +222,12 @@ function AuthForm({
                 onChange={handleInputChange}
             />
             {errors.password && (
-                <p className="text-red-500 text-sm mb-3">{errors.password}</p>
+                <p className="text-red-500 text-sm">{errors.password}</p>
             )}
             {includePasswordConfirmation && (
                 <>
                     <input
-                        className="w-full mb-1 p-2 border rounded-md shadow-sm"
+                        className="w-full p-2 border rounded-md shadow-sm"
                         type="password"
                         name="confirmPassword"
                         placeholder="Confirm Password"
@@ -235,13 +235,13 @@ function AuthForm({
                         onChange={handleInputChange}
                     />
                     {errors.confirmPassword && (
-                        <p className="text-red-500 text-sm mb-3">
+                        <p className="text-red-500 text-sm">
                             {errors.confirmPassword}
                         </p>
                     )}
                 </>
             )}
-            <div id={widgetId} className="mb-3"></div>
+            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
                 type="submit"
