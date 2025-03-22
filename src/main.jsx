@@ -425,8 +425,6 @@ function SystemctlServices() {
 
     return (
         <div className="flex flex-col h-full">
-            {' '}
-            {/* Ensure the container fills the screen */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">System Services</h2>
                 <button
@@ -446,22 +444,22 @@ function SystemctlServices() {
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
-                    <table className="table-auto w-full border-collapse">
+                    <table className="table-auto w-full border-collapse border border-gray-200">
                         <thead>
-                            <tr className="bg-gray-200">
-                                <th className="border border-gray-300 px-2 py-2 text-left w-1/6">
+                            <tr className="bg-gray-100">
+                                <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                                     Unit
                                 </th>
-                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                                     Load
                                 </th>
-                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                                     Active
                                 </th>
-                                <th className="border border-gray-300 px-2 py-2 text-left w-1/12">
+                                <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                                     Sub
                                 </th>
-                                <th className="border border-gray-300 px-2 py-2 text-left w-7/12">
+                                <th className="border border-gray-200 px-4 py-2 text-left text-sm font-medium text-gray-700">
                                     Description
                                 </th>
                             </tr>
@@ -481,10 +479,10 @@ function SystemctlServices() {
                                         className={
                                             index % 2 === 0
                                                 ? 'bg-white'
-                                                : 'bg-gray-100'
+                                                : 'bg-gray-50'
                                         }
                                     >
-                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                        <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                             <Link
                                                 to={`/admin/journalctl/${unit}`}
                                                 className="text-blue-500 hover:underline"
@@ -492,16 +490,16 @@ function SystemctlServices() {
                                                 {unit}
                                             </Link>
                                         </td>
-                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                        <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                             {load}
                                         </td>
-                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                        <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                             {active}
                                         </td>
-                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                        <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                             {sub}
                                         </td>
-                                        <td className="border border-gray-300 px-2 py-2 text-sm truncate">
+                                        <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700 truncate">
                                             {description}
                                         </td>
                                     </tr>
