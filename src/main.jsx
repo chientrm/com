@@ -38,7 +38,8 @@ function NavBar() {
           ];
 
     return (
-        <nav className="flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+        <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
+            {/* Added 'sticky top-0 z-10' to make the header sticky */}
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
             </div>
@@ -571,7 +572,8 @@ function ServiceLogs() {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex-1 border border-gray-300 rounded-md overflow-hidden">
+                <div className="flex-1 border border-gray-300 rounded-md overflow-auto">
+                    {/* Reuse the LogTable component */}
                     <LogTable logs={logs} />
                 </div>
             )}
@@ -594,8 +596,7 @@ function LogTable({ logs }) {
 
     return (
         <div className="h-full overflow-auto">
-            {' '}
-            {/* Ensure the table fills the container */}
+            {/* Ensure the table fills the container and allows scrolling */}
             <table className="table-auto w-full border-collapse border border-gray-200">
                 <thead>
                     <tr className="bg-gray-100">
