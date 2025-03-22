@@ -77,7 +77,7 @@ function Home() {
                 <Counter />
             </div>
             <p className="mt-4 text-muted-foreground">
-                Click on the Vite logo to learn more
+                Click on the Vite logo to
             </p>
         </div>
     );
@@ -154,6 +154,13 @@ function LoginForm() {
             >
                 Login
             </button>
+            <button
+                className="w-full mt-3 px-4 py-2 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600"
+                type="button"
+                onClick={() => (window.location.href = '/auth/google')}
+            >
+                Continue with Google
+            </button>
         </form>
     );
 }
@@ -215,6 +222,13 @@ function RegisterForm() {
                 type="submit"
             >
                 Register
+            </button>
+            <button
+                className="w-full mt-3 px-4 py-2 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600"
+                type="button"
+                onClick={() => (window.location.href = '/auth/google')}
+            >
+                Continue with Google
             </button>
         </form>
     );
