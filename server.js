@@ -95,7 +95,10 @@ function translatePriority(priority) {
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return sendErrorResponse(res, 401, 'Unauthorized access.');
+    if (!token) {
+        console.error('No token provided in Authorization header.');
+        return sendErrorResponse(res, 401, 'Unauthorized access.');
+    }
 
     try {
         const { payload } = await jwtVerify(
@@ -104,13 +107,14 @@ async function authenticateToken(req, res, next) {
         );
         req.user = { username: payload.username, role: payload.role };
         next();
-    } catch {
+    } catch (err) {
         sendErrorResponse(res, 403, 'Access forbidden.');
     }
 }
 
 async function authenticateAdmin(req, res, next) {
     if (req.user.role !== 'admin') {
+        console.error('User is not an admin:', req.user); // Debugging log
         return sendErrorResponse(res, 403, 'Admin privileges required.');
     }
     next();
@@ -170,26 +174,27 @@ app.get('/api/check-auth', authenticateToken, (req, res) => {
     res.status(200).json({ message: 'Authentication verified.' });
 });
 
+function isValidJson(line) {
+    return line.trim().startsWith('{') && line.trim().endsWith('}');
+}
+
 app.get(
     '/api/admin/journalctl',
     authenticateToken,
     authenticateAdmin,
     (req, res) => {
-        exec(
-            'journalctl -n 100 -o json --no-pager',
-            (error, stdout, stderr) => {
-                if (error) {
-                    return sendErrorResponse(
-                        res,
-                        500,
-                        'Failed to retrieve logs.'
-                    );
-                }
-                const logs = stdout
-                    .split('\n')
-                    .filter((line) => line)
-                    .map((line) => JSON.parse(line))
-                    .map((entry) => ({
+        exec('journalctl -n 100 -o json --no-pager', (error, stdout) => {
+            if (error) {
+                console.error('Failed to retrieve logs:', error);
+                return sendErrorResponse(res, 500, 'Failed to retrieve logs.');
+            }
+
+            const logs = stdout
+                .split('\n')
+                .filter((line) => isValidJson(line))
+                .map((line) => {
+                    const entry = JSON.parse(line);
+                    return {
                         timestamp: entry.__REALTIME_TIMESTAMP,
                         host: entry._HOSTNAME,
                         service: entry._SYSTEMD_UNIT,
@@ -200,10 +205,11 @@ app.get(
                                   Buffer.from(entry.MESSAGE).toString('utf-8')
                               )
                             : stripAnsiCodes(entry.MESSAGE || ''),
-                    }));
-                res.json({ logs });
-            }
-        );
+                    };
+                });
+
+            res.json({ logs });
+        });
     }
 );
 
@@ -248,32 +254,43 @@ app.get(
     authenticateAdmin,
     (req, res) => {
         const { serviceName } = req.params;
+
         exec(
             `journalctl -u ${serviceName} -n 100 -o json --no-pager`,
-            (error, stdout, stderr) => {
+            (error, stdout) => {
                 if (error) {
+                    console.error(
+                        `Failed to retrieve logs for service ${serviceName}:`,
+                        error
+                    );
                     return sendErrorResponse(
                         res,
                         500,
                         `Failed to retrieve logs for service: ${serviceName}`
                     );
                 }
+
                 const logs = stdout
                     .split('\n')
-                    .filter((line) => line)
-                    .map((line) => JSON.parse(line))
-                    .map((entry) => ({
-                        timestamp: entry.__REALTIME_TIMESTAMP,
-                        host: entry._HOSTNAME,
-                        service: entry._SYSTEMD_UNIT,
-                        pid: entry._PID,
-                        level: translatePriority(entry.PRIORITY),
-                        message: Array.isArray(entry.MESSAGE)
-                            ? stripAnsiCodes(
-                                  Buffer.from(entry.MESSAGE).toString('utf-8')
-                              )
-                            : stripAnsiCodes(entry.MESSAGE || ''),
-                    }));
+                    .filter((line) => isValidJson(line))
+                    .map((line) => {
+                        const entry = JSON.parse(line);
+                        return {
+                            timestamp: entry.__REALTIME_TIMESTAMP,
+                            host: entry._HOSTNAME,
+                            service: entry._SYSTEMD_UNIT,
+                            pid: entry._PID,
+                            level: translatePriority(entry.PRIORITY),
+                            message: Array.isArray(entry.MESSAGE)
+                                ? stripAnsiCodes(
+                                      Buffer.from(entry.MESSAGE).toString(
+                                          'utf-8'
+                                      )
+                                  )
+                                : stripAnsiCodes(entry.MESSAGE || ''),
+                        };
+                    });
+
                 res.json({ logs });
             }
         );

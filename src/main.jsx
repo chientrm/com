@@ -14,11 +14,14 @@ import './style.css';
 // Utility functions
 function fetchWithAuth(url, options = {}) {
     const token = localStorage.getItem('authToken');
+    if (!token) {
+        console.error('No auth token found in localStorage.');
+    }
     return fetch(url, {
         ...options,
         headers: {
             ...options.headers,
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Ensure the token is included
         },
     });
 }
@@ -197,44 +200,55 @@ function LogTable({ logs }) {
     );
 }
 
-function LogsPage({ title, fetchLogs }) {
+function LogsPage({ title, fetchLogsUrl }) {
     const [logs, setLogs] = useState([]);
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-
-    const loadLogs = async () => {
-        setIsLoading(true);
-        try {
-            const data = await fetchLogs();
-            setLogs(data.logs);
-        } catch (err) {
-            setError('Failed to fetch logs.');
-        }
-        setIsLoading(false);
-    };
+    const [isPolling, setIsPolling] = useState(true);
 
     useEffect(() => {
-        loadLogs();
-    }, []);
+        let intervalId;
+
+        const fetchLogs = async () => {
+            try {
+                const response = await fetchWithAuth(fetchLogsUrl);
+                if (response.ok) {
+                    const newLogs = await response.json();
+                    setLogs((prevLogs) =>
+                        [...newLogs.logs, ...prevLogs].slice(0, 100)
+                    ); // Keep only the latest 100 logs
+                } else {
+                    setError('Failed to fetch logs.');
+                    setIsPolling(false);
+                }
+            } catch (err) {
+                console.error('Error fetching logs:', err);
+                setError('Failed to fetch logs.');
+                setIsPolling(false);
+            }
+        };
+
+        if (isPolling) {
+            fetchLogs(); // Fetch logs immediately
+            intervalId = setInterval(fetchLogs, 5000); // Poll every 5 seconds
+        }
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [fetchLogsUrl, isPolling]);
 
     return (
         <div className="flex flex-col h-full">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold">{title}</h2>
                 <button
-                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                        isLoading ? 'animate-spin' : ''
-                    }`}
-                    onClick={loadLogs}
-                    title="Refresh Logs"
-                    disabled={isLoading}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    onClick={() => setIsPolling(!isPolling)}
                 >
-                    <ArrowPathIcon className="h-5 w-5" />
+                    {isPolling ? 'Pause' : 'Resume'}
                 </button>
             </div>
-            {isLoading ? (
-                <p className="text-center text-blue-500">Loading...</p>
-            ) : error ? (
+            {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-auto border border-gray-300 rounded-md">
@@ -247,12 +261,7 @@ function LogsPage({ title, fetchLogs }) {
 
 function JournalctlLogs() {
     return (
-        <LogsPage
-            title="System Logs"
-            fetchLogs={() =>
-                fetchWithAuth('/api/admin/journalctl').then((res) => res.json())
-            }
-        />
+        <LogsPage title="System Logs" fetchLogsUrl="/api/admin/journalctl" />
     );
 }
 
@@ -261,11 +270,7 @@ function ServiceLogs() {
     return (
         <LogsPage
             title={`Logs for Service: ${serviceName}`}
-            fetchLogs={() =>
-                fetchWithAuth(`/api/admin/journalctl/${serviceName}`).then(
-                    (res) => res.json()
-                )
-            }
+            fetchLogsUrl={`/api/admin/journalctl/${serviceName}`}
         />
     );
 }
