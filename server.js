@@ -76,6 +76,21 @@ function stripAnsiCodes(input) {
     );
 }
 
+// Utility function to map priority numbers to level text
+function translatePriority(priority) {
+    const levels = {
+        0: 'EMERGENCY',
+        1: 'ALERT',
+        2: 'CRITICAL',
+        3: 'ERROR',
+        4: 'WARNING',
+        5: 'NOTICE',
+        6: 'INFO',
+        7: 'DEBUG',
+    };
+    return levels[priority] || 'UNKNOWN';
+}
+
 // Middleware
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -179,7 +194,7 @@ app.get(
                         host: entry._HOSTNAME,
                         service: entry._SYSTEMD_UNIT,
                         pid: entry._PID,
-                        level: entry.PRIORITY,
+                        level: translatePriority(entry.PRIORITY),
                         message: Array.isArray(entry.MESSAGE)
                             ? stripAnsiCodes(
                                   Buffer.from(entry.MESSAGE).toString('utf-8')
@@ -238,7 +253,7 @@ app.get(
                         host: entry._HOSTNAME,
                         service: entry._SYSTEMD_UNIT,
                         pid: entry._PID,
-                        level: entry.PRIORITY,
+                        level: translatePriority(entry.PRIORITY),
                         message: Array.isArray(entry.MESSAGE)
                             ? stripAnsiCodes(
                                   Buffer.from(entry.MESSAGE).toString('utf-8')
