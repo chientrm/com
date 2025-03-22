@@ -166,15 +166,13 @@ app.get(
     authenticateAdmin,
     (req, res) => {
         exec(
-            'systemctl list-units --type=service --no-pager',
+            'systemctl list-units --type=service --no-pager --no-legend',
             (error, stdout, stderr) => {
                 if (error) {
-                    return res
-                        .status(500)
-                        .json({
-                            message: 'Failed to fetch services',
-                            error: stderr,
-                        });
+                    return res.status(500).json({
+                        message: 'Failed to fetch services',
+                        error: stderr,
+                    });
                 }
                 res.json({ services: stdout });
             }

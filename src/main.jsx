@@ -497,6 +497,7 @@ function JournalctlLogs() {
 function SystemctlServices() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
+    const [isRawMode, setIsRawMode] = useState(false); // Toggle between raw and table modes
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -512,7 +513,8 @@ function SystemctlServices() {
                 const data = await response.json();
                 const serviceRows = data.services
                     .split('\n')
-                    .filter((line) => line.trim());
+                    .map((line) => line.trim()) // Trim spaces on both sides
+                    .filter((line) => line); // Remove empty lines
                 setServices(serviceRows);
             } else {
                 const errorMessage =
@@ -526,16 +528,90 @@ function SystemctlServices() {
         fetchServices();
     }, []);
 
+    const parseServices = (rawServices) => {
+        return rawServices.map((line) => {
+            const parts = line.split(/\s+/); // Split by one or more spaces
+            const unit = parts[0];
+            const load = parts[1];
+            const active = parts[2];
+            const sub = parts[3];
+            const description = parts.slice(4).join(' '); // Join the remaining parts as the description
+            return { unit, load, active, sub, description };
+        });
+    };
+
     return (
         <div className="flex flex-col min-h-screen">
-            <h2 className="text-2xl font-bold mb-4">System Services</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">System Services</h2>
+                <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600"
+                    onClick={() => setIsRawMode(!isRawMode)}
+                >
+                    {isRawMode ? 'Switch to Table View' : 'Switch to Raw View'}
+                </button>
+            </div>
             {error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
                 <div className="flex-1 overflow-y-auto border border-gray-300 rounded-md">
-                    <pre className="p-4 text-sm whitespace-pre-wrap">
-                        {services.join('\n')}
-                    </pre>
+                    {isRawMode ? (
+                        <pre className="p-4 text-sm whitespace-pre-wrap">
+                            {services.join('\n')}
+                        </pre>
+                    ) : (
+                        <table className="table-auto w-full border-collapse">
+                            <thead>
+                                <tr className="bg-gray-200">
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Unit
+                                    </th>
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Load
+                                    </th>
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Active
+                                    </th>
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Sub
+                                    </th>
+                                    <th className="border border-gray-300 px-4 py-2 text-left">
+                                        Description
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {parseServices(services).map(
+                                    (service, index) => (
+                                        <tr
+                                            key={index}
+                                            className={
+                                                index % 2 === 0
+                                                    ? 'bg-white'
+                                                    : 'bg-gray-100'
+                                            }
+                                        >
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                                {service.unit}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                                {service.load}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                                {service.active}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                                {service.sub}
+                                            </td>
+                                            <td className="border border-gray-300 px-4 py-2 text-sm truncate">
+                                                {service.description}
+                                            </td>
+                                        </tr>
+                                    )
+                                )}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             )}
         </div>
