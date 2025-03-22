@@ -154,12 +154,10 @@ app.get(
     (req, res) => {
         exec('journalctl -n 100', (error, stdout, stderr) => {
             if (error) {
-                return res
-                    .status(500)
-                    .json({
-                        message: 'Failed to retrieve logs.',
-                        error: stderr,
-                    });
+                return res.status(500).json({
+                    message: 'Failed to retrieve logs.',
+                    error: stderr,
+                });
             }
             res.json({ logs: stdout });
         });
@@ -181,6 +179,27 @@ app.get(
                     });
                 }
                 res.json({ services: stdout });
+            }
+        );
+    }
+);
+
+app.get(
+    '/api/admin/journalctl/:serviceName',
+    authenticateToken,
+    authenticateAdmin,
+    (req, res) => {
+        const { serviceName } = req.params;
+        exec(
+            `journalctl -u ${serviceName} -n 100 --no-pager`,
+            (error, stdout, stderr) => {
+                if (error) {
+                    return res.status(500).json({
+                        message: `Failed to retrieve logs for service: ${serviceName}`,
+                        error: stderr,
+                    });
+                }
+                res.json({ logs: stdout });
             }
         );
     }
