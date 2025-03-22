@@ -493,29 +493,27 @@ function Weather() {
         }
 
         navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
                 const { latitude, longitude } = position.coords;
-                fetch(`/api/weather?lat=${latitude}&lng=${longitude}`)
-                    .then((response) => {
-                        if (!response.ok) {
-                            console.error(
-                                `Error fetching weather data: ${response.status} ${response.statusText}`
-                            );
-                            throw new Error(
-                                `HTTP error! status: ${response.status}`
-                            );
-                        }
-                        return response.json();
-                    })
-                    .then((data) => {
-                        console.log(data); // Debugging log
-                        setForecast(data);
-                        setLoading(false);
-                    })
-                    .catch((err) => {
-                        setError('Failed to fetch weather data.');
-                        setLoading(false);
-                    });
+                try {
+                    const response = await fetch(
+                        `/api/weather?lat=${latitude}&lng=${longitude}`
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            `Error fetching weather data: ${response.status} ${response.statusText}`
+                        );
+                    }
+                    const data = await response.json();
+                    if (!data || !data.daily || data.daily.length === 0) {
+                        throw new Error('No weather data available.');
+                    }
+                    setForecast(data);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
             },
             (err) => {
                 setError('Failed to retrieve your location.');
@@ -560,22 +558,77 @@ function Weather() {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
-                <div className="mb-6">
-                    <Bar
-                        data={chartData}
-                        options={{
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
+                <div>
+                    <div className="mb-6">
+                        <Bar
+                            data={chartData}
+                            options={{
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: '7-Day Weather Forecast',
+                                    },
                                 },
-                                title: {
-                                    display: true,
-                                    text: '7-Day Weather Forecast',
-                                },
-                            },
-                        }}
-                    />
+                            }}
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {forecast.daily.map((day, index) => (
+                            <div
+                                key={index}
+                                className="p-4 border rounded-lg shadow-md bg-white"
+                            >
+                                <h2 className="text-lg font-bold">
+                                    {new Date(day.dt * 1000).toLocaleDateString(
+                                        'en-US',
+                                        {
+                                            weekday: 'long',
+                                            month: 'short',
+                                            day: 'numeric',
+                                        }
+                                    )}
+                                </h2>
+                                <p className="text-sm text-gray-600">
+                                    {day.summary}
+                                </p>
+                                <p>
+                                    <strong>Day Temp:</strong> {day.temp.day}°C
+                                </p>
+                                <p>
+                                    <strong>Night Temp:</strong>{' '}
+                                    {day.temp.night}°C
+                                </p>
+                                <p>
+                                    <strong>Humidity:</strong> {day.humidity}%
+                                </p>
+                                <p>
+                                    <strong>Wind:</strong> {day.wind_speed} m/s
+                                    at {day.wind_deg}°
+                                </p>
+                                <p>
+                                    <strong>Sunrise:</strong>{' '}
+                                    {new Date(
+                                        day.sunrise * 1000
+                                    ).toLocaleTimeString('en-US')}
+                                </p>
+                                <p>
+                                    <strong>Sunset:</strong>{' '}
+                                    {new Date(
+                                        day.sunset * 1000
+                                    ).toLocaleTimeString('en-US')}
+                                </p>
+                                {day.rain && (
+                                    <p>
+                                        <strong>Rain:</strong> {day.rain} mm
+                                    </p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ) : (
                 <p>No weather data available.</p>

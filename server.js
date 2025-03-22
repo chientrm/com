@@ -309,18 +309,19 @@ app.get('/api/weather', async (req, res) => {
 
     const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude=minutely,hourly,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`;
     const response = await fetch(url);
+
     if (!response.ok) {
-        console.error(
+        throw new Error(
             `Error fetching weather data: ${response.status} ${response.statusText}`
         );
-        if (response.status === 401) {
-            return res.status(401).json({ message: 'Invalid API key.' });
-        }
-        return res
-            .status(response.status)
-            .json({ message: 'Failed to fetch weather data.' });
     }
+
     const data = await response.json();
+
+    if (!data || !data.daily || data.daily.length === 0) {
+        throw new Error('No weather data available.');
+    }
+
     res.json(data);
 });
 
