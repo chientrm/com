@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose'; // Replace jsonwebtoken with jose
 import fetch from 'node-fetch';
 import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
@@ -67,20 +67,28 @@ async function findUserByUsername(username) {
         .get();
 }
 
-function generateToken(username) {
-    return jwt.sign({ username }, JWT_SECRET, { expiresIn: '30d' });
+async function generateToken(username) {
+    return await new SignJWT({ username })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setExpirationTime('30d')
+        .sign(new TextEncoder().encode(JWT_SECRET));
 }
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) return res.sendStatus(401);
 
-    jwt.verify(token, JWT_SECRET, (err, payload) => {
-        if (err) return res.sendStatus(403);
+    try {
+        const { payload } = await jwtVerify(
+            token,
+            new TextEncoder().encode(JWT_SECRET)
+        );
         req.user = { username: payload.username }; // Extract username from payload
         next();
-    });
+    } catch (err) {
+        return res.sendStatus(403);
+    }
 }
 
 app.use(express.json());
@@ -101,7 +109,7 @@ app.post('/api/login', async (req, res) => {
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        const token = generateToken(username);
+        const token = await generateToken(username);
         res.json({ message: 'Login successful', username, token });
     } else {
         sendErrorResponse(res, 401, 'Invalid username or password');
@@ -125,7 +133,7 @@ app.post('/api/register', async (req, res) => {
 
     await db.insert(usersTable).values({ username, passwordHash });
 
-    const token = generateToken(username);
+    const token = await generateToken(username);
     res.json({ message: 'Registration successful', username, token });
 });
 

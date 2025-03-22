@@ -4,6 +4,7 @@ import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import javascriptLogo from './javascript.svg';
 import './style.css';
 import viteLogo from '/vite.svg';
+import { decodeJwt } from 'jose'; // Use jose for decoding
 
 function NavBar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -268,9 +269,28 @@ function AuthForm({
 }
 
 function Profile() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            const decoded = decodeJwt(token); // Decode using jose
+            setUser(decoded);
+        }
+    }, []);
+
+    if (!user) {
+        return (
+            <div className="text-center">
+                <h1 className="text-3xl font-bold">You are not logged in.</h1>
+            </div>
+        );
+    }
+
     return (
         <div className="text-center">
-            <h1 className="text-3xl font-bold">Welcome to your profile!</h1>
+            <h1 className="text-3xl font-bold">Welcome, {user.username}!</h1>
+            <p className="text-lg mt-2">This is your profile page.</p>
         </div>
     );
 }
