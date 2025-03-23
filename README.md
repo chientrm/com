@@ -40,6 +40,12 @@ This application is a web-based system designed to provide user authentication, 
 
 -   Admin users can view and search for active system services using `systemctl`.
 
+### 5. Photo Gallery
+
+-   Users can upload photos to the gallery.
+-   Users can preview uploaded photos.
+-   Users can delete photos from the gallery.
+
 ---
 
 ## Functional Requirements
@@ -63,6 +69,12 @@ This application is a web-based system designed to provide user authentication, 
 
 -   **View Services**: Admin users can view a list of active services.
 -   **Search Services**: Admin users can search for services by name.
+
+### Photo Gallery
+
+-   **Upload Photo**: Users can upload photos in JPEG, PNG, or GIF format.
+-   **View Photos**: Users can view all uploaded photos.
+-   **Delete Photo**: Users can delete photos from the gallery.
 
 ---
 
@@ -96,6 +108,8 @@ This application is a web-based system designed to provide user authentication, 
 -   `/api/admin/journalctl`: Retrieve system logs.
 -   `/api/admin/systemctl`: Retrieve active services.
 -   `/api/admin/journalctl/:serviceName`: Retrieve logs for a specific service.
+-   `/api/gallery`: Retrieve all photos (GET) or upload a photo (POST).
+-   `/api/gallery/:photoName`: Delete a specific photo (DELETE).
 
 ### 3. External Services
 
@@ -155,6 +169,12 @@ This application is a web-based system designed to provide user authentication, 
 
 5. Access the application:
    Open your browser and navigate to `http://localhost:<PORT>`.
+
+6. Ensure the `uploads` directory exists in the project root:
+
+    ```bash
+    mkdir uploads
+    ```
 
 ---
 

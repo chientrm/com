@@ -74,10 +74,12 @@ function NavBar() {
         ? [
               { to: '/profile', label: 'My Profile' },
               ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
+              { to: '/gallery', label: 'Gallery' },
           ]
         : [
               { to: '/login', label: 'Sign In' },
               { to: '/register', label: 'Sign Up' },
+              { to: '/gallery', label: 'Gallery' },
           ];
 
     return (
@@ -440,6 +442,114 @@ function RegisterForm() {
     );
 }
 
+function Gallery() {
+    const [photos, setPhotos] = useState([]);
+    const [error, setError] = useState('');
+    const fileInputRef = useRef(null);
+    const { isAdmin } = useAuth();
+
+    const fetchPhotos = async () => {
+        try {
+            const response = await fetch('/api/gallery');
+            if (response.ok) {
+                const data = await response.json();
+                setPhotos(data.photos);
+            } else {
+                setError('Failed to fetch photos.');
+            }
+        } catch (err) {
+            console.error('Error fetching photos:', err);
+            setError('Failed to fetch photos.');
+        }
+    };
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        const file = fileInputRef.current.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        try {
+            const response = await fetchWithAuth('/api/gallery', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                fetchPhotos();
+            } else {
+                setError('Failed to upload photo.');
+            }
+        } catch (err) {
+            console.error('Error uploading photo:', err);
+            setError('Failed to upload photo.');
+        }
+    };
+
+    const handleDelete = async (photoName) => {
+        try {
+            const response = await fetchWithAuth(`/api/gallery/${photoName}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                fetchPhotos();
+            } else {
+                setError('Failed to delete photo.');
+            }
+        } catch (err) {
+            console.error('Error deleting photo:', err);
+            setError('Failed to delete photo.');
+        }
+    };
+
+    useEffect(() => {
+        fetchPhotos();
+    }, []);
+
+    return (
+        <div className="max-w-4xl mx-auto p-6">
+            <h2 className="text-2xl font-bold mb-4">Gallery</h2>
+            {error && <p className="text-red-500">{error}</p>}
+            {isAdmin && (
+                <form onSubmit={handleUpload} className="mb-4">
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        className="mb-2"
+                        accept="image/*"
+                    />
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                    >
+                        Upload Photo
+                    </button>
+                </form>
+            )}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {photos.map((photo) => (
+                    <div key={photo} className="relative">
+                        <img
+                            src={`/uploads/${photo}`}
+                            alt={photo}
+                            className="w-full h-auto rounded-md"
+                        />
+                        {isAdmin && (
+                            <button
+                                onClick={() => handleDelete(photo)}
+                                className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
+                            >
+                                Delete
+                            </button>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 function App() {
     return (
         <Router>
@@ -464,6 +574,7 @@ function App() {
                             path="/admin/journalctl/:serviceName"
                             element={<ServiceLogs />}
                         />
+                        <Route path="/gallery" element={<Gallery />} />
                     </Routes>
                 </div>
             </div>
