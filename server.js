@@ -79,16 +79,12 @@ async function authenticateToken(req, res, next) {
         return sendErrorResponse(res, 401, 'Unauthorized access.');
     }
 
-    try {
-        const { payload } = await jwtVerify(
-            token,
-            new TextEncoder().encode(JWT_SECRET)
-        );
-        req.user = { username: payload.username, role: payload.role };
-        next();
-    } catch (err) {
-        return sendErrorResponse(res, 403, 'Access forbidden.');
-    }
+    const { payload } = await jwtVerify(
+        token,
+        new TextEncoder().encode(JWT_SECRET)
+    );
+    req.user = { username: payload.username, role: payload.role };
+    next();
 }
 
 async function authenticateAdmin(req, res, next) {
@@ -113,7 +109,7 @@ app.use(express.json());
 
 const upload = multer({
     dest: 'uploads/',
-    limits: { fileSize: 5 * 1024 * 1024 },
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5 MB per file
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (allowedTypes.includes(file.mimetype)) {
@@ -293,43 +289,36 @@ app.get(
     }
 );
 
+// Modify the upload route to handle multiple files
 app.post(
     '/api/gallery',
     authenticateToken,
-    upload.single('photo'),
+    upload.array('photos', 10), // Ensure the field name matches 'photos' and allow up to 10 files
     (req, res) => {
-        if (!req.file) {
-            return sendErrorResponse(res, 400, 'No file uploaded.');
+        if (!req.files || req.files.length === 0) {
+            return sendErrorResponse(res, 400, 'No files uploaded.');
         }
 
         const { username } = req.user;
         const uploadedAt = Math.floor(Date.now() / 1000); // Unix timestamp
 
-        const photoPath = path.join('uploads', req.file.filename);
+        const photoRecords = req.files.map((file) => ({
+            filename: file.filename,
+            uploadedBy: username,
+            uploadedAt,
+        }));
 
-        // Check if the file exists before adding to the database
-        fs.access(photoPath, fs.constants.F_OK, (err) => {
-            if (err) {
-                console.error('File upload failed:', err);
-                return sendErrorResponse(res, 500, 'File upload failed.');
-            }
-
-            db.insert(galleryTable)
-                .values({
-                    filename: req.file.filename,
-                    uploadedBy: username,
-                    uploadedAt,
-                })
-                .then(() => {
-                    res.status(200).json({
-                        message: 'Photo uploaded successfully.',
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error saving photo to database:', error);
-                    sendErrorResponse(res, 500, 'Failed to upload photo.');
+        db.insert(galleryTable)
+            .values(photoRecords)
+            .then(() => {
+                res.status(200).json({
+                    message: 'Photos uploaded successfully.',
                 });
-        });
+            })
+            .catch((error) => {
+                console.error('Error saving photos to database:', error);
+                sendErrorResponse(res, 500, 'Failed to upload photos.');
+            });
     }
 );
 

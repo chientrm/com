@@ -51,6 +51,7 @@ function useAuth() {
 // Components
 function NavBar() {
     const { isLoggedIn, isAdmin } = useAuth();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const links = isLoggedIn
         ? [
@@ -65,15 +66,78 @@ function NavBar() {
           ];
 
     return (
-        <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
-            <div className="flex gap-6">
-                <NavLink to="/" label="Home" />
+        <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                    <div className="flex items-center">
+                        <NavLink to="/" label="Home" />
+                    </div>
+                    <div className="hidden md:flex gap-6">
+                        {links.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                label={link.label}
+                            />
+                        ))}
+                    </div>
+                    <div className="flex md:hidden">
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-300"
+                        >
+                            <span className="sr-only">Open main menu</span>
+                            {isMenuOpen ? (
+                                <svg
+                                    className="h-6 w-6"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            ) : (
+                                <svg
+                                    className="h-6 w-6"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M4 6h16M4 12h16m-7 6h7"
+                                    />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div className="flex gap-6">
-                {links.map((link) => (
-                    <NavLink key={link.to} to={link.to} label={link.label} />
-                ))}
-            </div>
+            {isMenuOpen && (
+                <div className="md:hidden">
+                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        {links.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                label={link.label}
+                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }
@@ -221,19 +285,13 @@ function LogsPage({ title, fetchLogsUrl }) {
         let intervalId;
 
         const fetchLogs = async () => {
-            try {
-                const response = await fetchWithAuth(fetchLogsUrl);
-                if (response.ok) {
-                    const newLogs = await response.json();
-                    setLogs((prevLogs) =>
-                        [...newLogs.logs, ...prevLogs].slice(0, 100)
-                    ); // Keep only the latest 100 logs
-                } else {
-                    setError('Failed to fetch logs.');
-                    setIsPolling(false);
-                }
-            } catch (err) {
-                console.error('Error fetching logs:', err);
+            const response = await fetchWithAuth(fetchLogsUrl);
+            if (response.ok) {
+                const newLogs = await response.json();
+                setLogs((prevLogs) =>
+                    [...newLogs.logs, ...prevLogs].slice(0, 100)
+                ); // Keep only the latest 100 logs
+            } else {
                 setError('Failed to fetch logs.');
                 setIsPolling(false);
             }
@@ -474,42 +532,36 @@ function Gallery() {
     const { isAdmin } = useAuth();
 
     const fetchPhotos = async () => {
-        try {
-            const response = await fetch('/api/gallery');
-            if (response.ok) {
-                const data = await response.json();
-                console.log(data.photos);
-                setPhotos(data.photos);
-            } else {
-                setError('Failed to fetch photos.');
-            }
-        } catch (err) {
-            console.error('Error fetching photos:', err);
+        const response = await fetch('/api/gallery');
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.photos);
+            setPhotos(data.photos);
+        } else {
             setError('Failed to fetch photos.');
         }
     };
 
     const handleUpload = async (e) => {
         e.preventDefault();
-        const file = fileInputRef.current.files[0];
-        if (!file) return;
+        const files = fileInputRef.current.files;
+        if (!files || files.length === 0) {
+            setError('No files selected for upload.');
+            return;
+        }
 
         const formData = new FormData();
-        formData.append('photo', file);
+        Array.from(files).forEach((file) => formData.append('photos', file));
 
-        try {
-            const response = await fetchWithAuth('/api/gallery', {
-                method: 'POST',
-                body: formData,
-            });
-            if (response.ok) {
-                fetchPhotos();
-            } else {
-                setError('Failed to upload photo.');
-            }
-        } catch (err) {
-            console.error('Error uploading photo:', err);
-            setError('Failed to upload photo.');
+        const response = await fetchWithAuth('/api/gallery', {
+            method: 'POST',
+            body: formData,
+        });
+        if (response.ok) {
+            fetchPhotos();
+        } else {
+            const errorData = await response.json();
+            setError(errorData.message || 'Failed to upload photos.');
         }
     };
 
@@ -528,18 +580,13 @@ function Gallery() {
 
         console.log(`Attempting to delete photo with ID: ${photoId}`);
 
-        try {
-            const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                console.log(`Photo with ID: ${photoId} deleted successfully.`);
-                fetchPhotos();
-            } else {
-                setError('Failed to delete photo.');
-            }
-        } catch (err) {
-            console.error('Error deleting photo:', err);
+        const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            console.log(`Photo with ID: ${photoId} deleted successfully.`);
+            fetchPhotos();
+        } else {
             setError('Failed to delete photo.');
         }
     };
@@ -559,12 +606,13 @@ function Gallery() {
                         ref={fileInputRef}
                         className="mb-2"
                         accept="image/*"
+                        multiple // Allow multiple file selection
                     />
                     <button
                         type="submit"
                         className="px-4 py-2 bg-blue-600 text-white rounded-md"
                     >
-                        Upload Photo
+                        Upload Photos
                     </button>
                 </form>
             )}
