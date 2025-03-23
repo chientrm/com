@@ -519,6 +519,13 @@ function Gallery() {
             return;
         }
 
+        const confirmDelete = window.confirm(
+            'Are you sure you want to delete this photo?'
+        );
+        if (!confirmDelete) {
+            return;
+        }
+
         console.log(`Attempting to delete photo with ID: ${photoId}`);
 
         try {
