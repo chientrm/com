@@ -1,4 +1,13 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import {
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip,
+} from 'chart.js';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -10,16 +19,6 @@ import {
     useParams,
 } from 'react-router-dom';
 import './style.css';
-import { Bar } from 'react-chartjs-2';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
 
 ChartJS.register(
     CategoryScale,
@@ -48,6 +47,7 @@ function fetchWithAuth(url, options = {}) {
 function useAuth() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [captchaVerified, setCaptchaVerified] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -55,13 +55,15 @@ function useAuth() {
             const decoded = decodeJwt(token);
             setIsLoggedIn(true);
             setIsAdmin(decoded.role === 'admin');
+            setCaptchaVerified(decoded.captchaVerified || false);
         } else {
             setIsLoggedIn(false);
             setIsAdmin(false);
+            setCaptchaVerified(false);
         }
     }, []);
 
-    return { isLoggedIn, isAdmin };
+    return { isLoggedIn, isAdmin, captchaVerified };
 }
 
 // Components
@@ -82,8 +84,6 @@ function NavBar() {
         <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
-                {/* Remove the Weather link */}
-                {/* <NavLink to="/weather" label="Weather" /> */}
             </div>
             <div className="flex gap-6">
                 {links.map((link) => (
@@ -304,37 +304,35 @@ function ServiceLogs() {
 }
 
 function LoginForm() {
+    const { captchaVerified } = useAuth();
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [captchaToken, setCaptchaToken] = useState(null);
-    const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState('');
     const widgetId = 'turnstile-widget-login';
     const widgetRef = useRef(null);
 
     useEffect(() => {
-        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: (token) => setCaptchaToken(token),
-        });
+        if (!captchaVerified) {
+            widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+                sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+                callback: (token) => setCaptchaToken(token),
+            });
 
-        return () => {
-            if (widgetRef.current) {
-                window.turnstile.remove(`#${widgetId}`);
-                widgetRef.current = null;
-            }
-        };
-    }, []);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+            return () => {
+                if (widgetRef.current) {
+                    window.turnstile.remove(`#${widgetId}`);
+                    widgetRef.current = null;
+                }
+            };
+        }
+    }, [captchaVerified]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
-        if (!captchaToken)
+        if (!captchaVerified && !captchaToken) {
             return setServerError('Please complete the CAPTCHA.');
+        }
 
         const response = await fetch('/api/login', {
             method: 'POST',
@@ -365,7 +363,9 @@ function LoginForm() {
                 name="username"
                 placeholder="Username"
                 value={formData.username}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                }
             />
             <input
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
@@ -373,9 +373,11 @@ function LoginForm() {
                 name="password"
                 placeholder="Password"
                 value={formData.password}
-                onChange={handleInputChange}
+                onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                }
             />
-            <div id={widgetId} className="mb-4"></div>
+            {!captchaVerified && <div id={widgetId} className="mb-4"></div>}
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
