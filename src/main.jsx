@@ -1,13 +1,4 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import {
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    Title,
-    Tooltip,
-} from 'chart.js';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -19,15 +10,6 @@ import {
     useParams,
 } from 'react-router-dom';
 import './style.css';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-);
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
