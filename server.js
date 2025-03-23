@@ -20,7 +20,6 @@ const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
 
 // Utility functions
-
 function validateUsername(username) {
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
     return (
@@ -54,16 +53,10 @@ async function generateToken(username, role = null) {
         .sign(new TextEncoder().encode(JWT_SECRET));
 }
 
-// Utility function to strip ANSI escape codes
 function stripAnsiCodes(input) {
-    return input.replace(
-        // Regex to match ANSI escape codes
-        /\u001b\[[0-9;]*m/g,
-        ''
-    );
+    return input.replace(/\u001b\[[0-9;]*m/g, '');
 }
 
-// Utility function to map priority numbers to level text
 function translatePriority(priority) {
     const levels = {
         0: 'EMERGENCY',
@@ -78,7 +71,6 @@ function translatePriority(priority) {
     return levels[priority] || 'UNKNOWN';
 }
 
-// Middleware to enforce JWT authentication
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
@@ -95,15 +87,12 @@ async function authenticateToken(req, res, next) {
         req.user = { username: payload.username, role: payload.role };
         next();
     } catch (err) {
-        console.error('Invalid token for authentication:', err);
         return sendErrorResponse(res, 403, 'Access forbidden.');
     }
 }
 
-// Middleware to enforce admin privileges
 async function authenticateAdmin(req, res, next) {
     if (!req.user || req.user.role !== 'admin') {
-        console.error('Access denied: User is not an admin:', req.user); // Debugging log
         return sendErrorResponse(
             res,
             403,
@@ -116,10 +105,9 @@ async function authenticateAdmin(req, res, next) {
 // Routes
 app.use(express.json());
 
-// Configure multer for file uploads
 const upload = multer({
     dest: 'uploads/',
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (allowedTypes.includes(file.mimetype)) {
@@ -134,7 +122,6 @@ const upload = multer({
     },
 });
 
-// Ensure uploads directory exists
 if (!fs.existsSync('uploads')) {
     fs.mkdirSync('uploads');
 }
@@ -193,7 +180,6 @@ app.get(
     (req, res) => {
         exec('journalctl -n 100 -o json --no-pager', (error, stdout) => {
             if (error) {
-                console.error('Failed to retrieve logs:', error);
                 res.status(500).json({ message: 'Failed to retrieve logs.' });
                 return;
             }
@@ -231,7 +217,7 @@ app.get(
 
         exec(
             'systemctl list-units --type=service --no-pager --no-legend',
-            (error, stdout, stderr) => {
+            (error, stdout) => {
                 if (error) {
                     return sendErrorResponse(
                         res,
@@ -268,10 +254,6 @@ app.get(
             `journalctl -u ${serviceName} -n 100 -o json --no-pager`,
             (error, stdout) => {
                 if (error) {
-                    console.error(
-                        `Failed to retrieve logs for service ${serviceName}:`,
-                        error
-                    );
                     res.status(500).json({
                         message: `Failed to retrieve logs for service: ${serviceName}`,
                     });
@@ -305,7 +287,6 @@ app.get(
     }
 );
 
-// API endpoint to upload a photo (admin only)
 app.post(
     '/api/gallery',
     authenticateToken,
@@ -319,18 +300,15 @@ app.post(
     }
 );
 
-// API endpoint to retrieve all photos (accessible to everyone)
 app.get('/api/gallery', (req, res) => {
     fs.readdir('uploads', (err, files) => {
         if (err) {
-            console.error('Error reading uploads directory:', err);
             return sendErrorResponse(res, 500, 'Failed to retrieve photos.');
         }
         res.json({ photos: files });
     });
 });
 
-// API endpoint to delete a photo (admin only)
 app.delete(
     '/api/gallery/:photoName',
     authenticateToken,
@@ -339,7 +317,6 @@ app.delete(
         const photoPath = path.join('uploads', req.params.photoName);
         fs.unlink(photoPath, (err) => {
             if (err) {
-                console.error('Error deleting photo:', err);
                 return sendErrorResponse(res, 500, 'Failed to delete photo.');
             }
             res.status(200).json({ message: 'Photo deleted successfully.' });
@@ -347,7 +324,6 @@ app.delete(
     }
 );
 
-// Serve static files from the uploads directory
 app.use('/uploads', express.static('uploads'));
 
 ViteExpress.listen(app, PORT, () => {
