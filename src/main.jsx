@@ -487,6 +487,7 @@ function RegisterForm() {
 function Gallery() {
     const [photos, setPhotos] = useState([]);
     const [error, setError] = useState('');
+    const [selectedPhoto, setSelectedPhoto] = useState(null); // State for selected photo
     const fileInputRef = useRef(null);
     const { isAdmin } = useAuth();
 
@@ -569,25 +570,44 @@ function Gallery() {
                     </button>
                 </form>
             )}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {photos.map((photo) => (
-                    <div key={photo} className="relative">
+            {selectedPhoto ? (
+                <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="relative">
                         <img
-                            src={`/uploads/${photo}`}
-                            alt={photo}
-                            className="w-full h-auto rounded-md"
+                            src={`/uploads/${selectedPhoto}`}
+                            alt={selectedPhoto}
+                            className="max-w-full max-h-screen rounded-md"
                         />
-                        {isAdmin && (
-                            <button
-                                onClick={() => handleDelete(photo)}
-                                className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
-                            >
-                                Delete
-                            </button>
-                        )}
+                        <button
+                            onClick={() => setSelectedPhoto(null)} // Close full view
+                            className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-md"
+                        >
+                            Close
+                        </button>
                     </div>
-                ))}
-            </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {photos.map((photo) => (
+                        <div key={photo} className="relative">
+                            <img
+                                src={`/uploads/${photo}`}
+                                alt={photo}
+                                className="w-full h-auto rounded-md cursor-pointer"
+                                onClick={() => setSelectedPhoto(photo)} // Open full view
+                            />
+                            {isAdmin && (
+                                <button
+                                    onClick={() => handleDelete(photo)}
+                                    className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
+                                >
+                                    Delete
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
