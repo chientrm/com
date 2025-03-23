@@ -16,7 +16,6 @@ const PORT = process.env.PORT;
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
-const OPENWEATHER_API_KEY = process.env.OPENWEATHER_API_KEY;
 
 // Utility functions
 async function verifyCaptcha(token) {
@@ -297,29 +296,6 @@ app.get(
         );
     }
 );
-
-app.get('/api/weather', async (req, res) => {
-    // Fixed coordinates for Ho Chi Minh City
-    const lat = 10.7769;
-    const lng = 106.7009;
-
-    const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&exclude=minutely,hourly,alerts&units=metric&appid=${OPENWEATHER_API_KEY}`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-        throw new Error(
-            `Error fetching weather data: ${response.status} ${response.statusText}`
-        );
-    }
-
-    const data = await response.json();
-
-    if (!data || !data.daily || data.daily.length === 0) {
-        throw new Error('No weather data available.');
-    }
-
-    res.json(data);
-});
 
 ViteExpress.listen(app, PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

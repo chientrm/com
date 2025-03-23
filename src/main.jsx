@@ -82,7 +82,8 @@ function NavBar() {
         <nav className="sticky top-0 z-10 flex justify-between items-center mb-6 px-4 py-3 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex gap-6">
                 <NavLink to="/" label="Home" />
-                <NavLink to="/weather" label="Weather" />
+                {/* Remove the Weather link */}
+                {/* <NavLink to="/weather" label="Weather" /> */}
             </div>
             <div className="flex gap-6">
                 {links.map((link) => (
@@ -480,121 +481,6 @@ function RegisterForm() {
     );
 }
 
-function Weather() {
-    const [forecast, setForecast] = useState(null);
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchWeather = async () => {
-            try {
-                const response = await fetch(`/api/weather`);
-                if (!response.ok) {
-                    throw new Error(
-                        `Error fetching weather data: ${response.status} ${response.statusText}`
-                    );
-                }
-                const data = await response.json();
-                if (!data || !data.daily || data.daily.length === 0) {
-                    throw new Error('No weather data available.');
-                }
-                setForecast(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchWeather();
-    }, []);
-
-    const chartData = forecast
-        ? {
-              labels: forecast.daily.map((day) =>
-                  new Date(day.dt * 1000).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      month: 'short',
-                      day: 'numeric',
-                  })
-              ),
-              datasets: [
-                  {
-                      label: 'Day Temperature (°C)',
-                      data: forecast.daily.map((day) => day.temp.day),
-                      backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                      borderColor: 'rgba(75, 192, 192, 1)',
-                      borderWidth: 1,
-                  },
-                  {
-                      label: 'Night Temperature (°C)',
-                      data: forecast.daily.map((day) => day.temp.night),
-                      backgroundColor: 'rgba(153, 102, 255, 0.6)',
-                      borderColor: 'rgba(153, 102, 255, 1)',
-                      borderWidth: 1,
-                  },
-                  {
-                      label: 'Humidity (%)',
-                      data: forecast.daily.map((day) => day.humidity),
-                      backgroundColor: 'rgba(255, 206, 86, 0.6)',
-                      borderColor: 'rgba(255, 206, 86, 1)',
-                      borderWidth: 1,
-                  },
-                  {
-                      label: 'Wind Speed (m/s)',
-                      data: forecast.daily.map((day) => day.wind_speed),
-                      backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      borderWidth: 1,
-                  },
-                  {
-                      label: 'UV Index',
-                      data: forecast.daily.map((day) => day.uvi),
-                      backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                      borderColor: 'rgba(255, 99, 132, 1)',
-                      borderWidth: 1,
-                  },
-              ],
-          }
-        : null;
-
-    return (
-        <div className="h-full overflow-auto text-center">
-            <h1 className="text-3xl font-bold mb-4">Weather Forecast</h1>
-            {loading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <p className="text-red-500">{error}</p>
-            ) : forecast && forecast.daily && forecast.daily.length > 0 ? (
-                <div>
-                    <h2 className="text-xl font-semibold mb-4">
-                        Location: Ho Chi Minh City
-                    </h2>
-                    <div className="mb-6">
-                        <Bar
-                            data={chartData}
-                            options={{
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        position: 'top',
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: '7-Day Weather Forecast',
-                                    },
-                                },
-                            }}
-                        />
-                    </div>
-                </div>
-            ) : (
-                <p>No weather data available.</p>
-            )}
-        </div>
-    );
-}
-
 function App() {
     return (
         <Router>
@@ -619,7 +505,8 @@ function App() {
                             path="/admin/journalctl/:serviceName"
                             element={<ServiceLogs />}
                         />
-                        <Route path="/weather" element={<Weather />} />
+                        {/* Remove the Weather route */}
+                        {/* <Route path="/weather" element={<Weather />} /> */}
                     </Routes>
                 </div>
             </div>
