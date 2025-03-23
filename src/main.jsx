@@ -512,9 +512,9 @@ function Gallery() {
         }
     };
 
-    const handleDelete = async (photoName) => {
+    const handleDelete = async (photoId) => {
         try {
-            const response = await fetchWithAuth(`/api/gallery/${photoName}`, {
+            const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
@@ -556,8 +556,8 @@ function Gallery() {
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
                     <div className="relative">
                         <img
-                            src={`/uploads/${selectedPhoto}`}
-                            alt={selectedPhoto}
+                            src={selectedPhoto.url}
+                            alt={selectedPhoto.filename}
                             className="max-w-full max-h-screen rounded-md"
                         />
                         <button
@@ -571,16 +571,16 @@ function Gallery() {
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {photos.map((photo) => (
-                        <div key={photo} className="relative">
+                        <div key={photo.id} className="relative">
                             <img
-                                src={`/uploads/${photo}`}
-                                alt={photo}
+                                src={photo.url}
+                                alt={photo.filename}
                                 className="w-full h-auto rounded-md cursor-pointer"
                                 onClick={() => setSelectedPhoto(photo)} // Open full view
                             />
                             {isAdmin && (
                                 <button
-                                    onClick={() => handleDelete(photo)}
+                                    onClick={() => handleDelete(photo.id)}
                                     className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
                                 >
                                     Delete

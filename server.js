@@ -6,7 +6,7 @@ import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import { SignJWT, jwtVerify } from 'jose';
 import ViteExpress from 'vite-express';
-import { usersTable } from './schema.js';
+import { usersTable, galleryTable } from './schema.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -290,37 +290,103 @@ app.get(
 app.post(
     '/api/gallery',
     authenticateToken,
-    authenticateAdmin,
     upload.single('photo'),
     (req, res) => {
         if (!req.file) {
             return sendErrorResponse(res, 400, 'No file uploaded.');
         }
-        res.status(200).json({ message: 'Photo uploaded successfully.' });
+
+        const { username } = req.user;
+        const uploadedAt = Math.floor(Date.now() / 1000); // Unix timestamp
+
+        db.insert(galleryTable)
+            .values({
+                filename: req.file.filename,
+                uploadedBy: username,
+                uploadedAt,
+            })
+            .then(() => {
+                res.status(200).json({
+                    message: 'Photo uploaded successfully.',
+                });
+            })
+            .catch((error) => {
+                console.error('Error saving photo to database:', error);
+                sendErrorResponse(res, 500, 'Failed to upload photo.');
+            });
     }
 );
 
 app.get('/api/gallery', (req, res) => {
-    fs.readdir('uploads', (err, files) => {
-        if (err) {
-            return sendErrorResponse(res, 500, 'Failed to retrieve photos.');
-        }
-        res.json({ photos: files });
-    });
+    db.select()
+        .from(galleryTable)
+        .all()
+        .then((photos) => {
+            const photosWithUrls = photos.map((photo) => ({
+                ...photo,
+                url: `${req.protocol}://${req.get('host')}/uploads/${
+                    photo.filename
+                }`,
+            }));
+            res.json({ photos: photosWithUrls });
+        })
+        .catch((error) => {
+            console.error('Error retrieving photos from database:', error);
+            sendErrorResponse(res, 500, 'Failed to retrieve photos.');
+        });
 });
 
 app.delete(
-    '/api/gallery/:photoName',
+    '/api/gallery/:photoId',
     authenticateToken,
     authenticateAdmin,
     (req, res) => {
-        const photoPath = path.join('uploads', req.params.photoName);
-        fs.unlink(photoPath, (err) => {
-            if (err) {
-                return sendErrorResponse(res, 500, 'Failed to delete photo.');
-            }
-            res.status(200).json({ message: 'Photo deleted successfully.' });
-        });
+        const { photoId } = req.params;
+
+        db.select()
+            .from(galleryTable)
+            .where(eq(galleryTable.id, photoId))
+            .get()
+            .then((photo) => {
+                if (!photo) {
+                    return sendErrorResponse(res, 404, 'Photo not found.');
+                }
+
+                const photoPath = path.join('uploads', photo.filename);
+                fs.unlink(photoPath, (err) => {
+                    if (err) {
+                        console.error('Error deleting photo file:', err);
+                        return sendErrorResponse(
+                            res,
+                            500,
+                            'Failed to delete photo.'
+                        );
+                    }
+
+                    db.delete(galleryTable)
+                        .where(eq(galleryTable.id, photoId))
+                        .then(() => {
+                            res.status(200).json({
+                                message: 'Photo deleted successfully.',
+                            });
+                        })
+                        .catch((error) => {
+                            console.error(
+                                'Error deleting photo from database:',
+                                error
+                            );
+                            sendErrorResponse(
+                                res,
+                                500,
+                                'Failed to delete photo.'
+                            );
+                        });
+                });
+            })
+            .catch((error) => {
+                console.error('Error retrieving photo from database:', error);
+                sendErrorResponse(res, 500, 'Failed to delete photo.');
+            });
     }
 );
 
