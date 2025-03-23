@@ -551,7 +551,7 @@ function Gallery() {
         }
 
         const formData = new FormData();
-        Array.from(files).forEach((file) => formData.append('photos', file));
+        Array.from(files).forEach((file) => formData.append('photos', file)); // Ensure the field name is 'photos'
 
         const response = await fetchWithAuth('/api/gallery', {
             method: 'POST',
