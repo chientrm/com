@@ -293,7 +293,7 @@ app.get(
 app.post(
     '/api/gallery',
     authenticateToken,
-    upload.array('photos', 10), // Ensure the field name matches 'photos' and allow up to 10 files
+    upload.array('photos', 200), // Increase the file limit to 200
     (req, res) => {
         if (!req.files || req.files.length === 0) {
             return sendErrorResponse(res, 400, 'No files uploaded.');
