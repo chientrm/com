@@ -5,7 +5,6 @@ import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import { SignJWT, jwtVerify } from 'jose';
-import fetch from 'node-fetch';
 import ViteExpress from 'vite-express';
 import { usersTable } from './schema.js';
 
@@ -18,21 +17,6 @@ const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
 
 // Utility functions
-async function verifyCaptcha(token) {
-    const response = await fetch(
-        'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                secret: process.env.TURNSTILE_SECRET,
-                response: token,
-            }),
-        }
-    );
-    const data = await response.json();
-    return data.success;
-}
 
 function validateUsername(username) {
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
@@ -60,8 +44,8 @@ async function findUserByUsername(username) {
         .get();
 }
 
-async function generateToken(username, role = null, captchaVerified = false) {
-    return new SignJWT({ username, role, captchaVerified })
+async function generateToken(username, role = null) {
+    return new SignJWT({ username, role })
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime('30d')
         .sign(new TextEncoder().encode(JWT_SECRET));
@@ -143,7 +127,7 @@ app.post('/api/login', async (req, res) => {
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        const token = await generateToken(username, user.role || 'user', true);
+        const token = await generateToken(username, user.role || 'user');
         res.json({ message: 'Login successful.', username, token });
     } else {
         sendErrorResponse(res, 401, 'Invalid username or password.');
@@ -164,7 +148,7 @@ app.post('/api/register', async (req, res) => {
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
     await db.insert(usersTable).values({ username, passwordHash, role: null });
 
-    const token = await generateToken(username, null, true);
+    const token = await generateToken(username, null);
     res.json({ message: 'Registration successful.', username, token });
 });
 

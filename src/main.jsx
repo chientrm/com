@@ -31,16 +31,10 @@ ChartJS.register(
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
-    const captchaToken = localStorage.getItem('captchaToken');
     const authToken = localStorage.getItem('authToken');
-
-    if (!captchaToken) {
-        console.error('No CAPTCHA token found in localStorage.');
-    }
 
     const headers = {
         ...options.headers,
-        'X-Captcha-Token': captchaToken, // Ensure CAPTCHA token is included
     };
 
     if (authToken) {
@@ -311,37 +305,16 @@ function ServiceLogs() {
 
 function LoginForm() {
     const [formData, setFormData] = useState({ username: '', password: '' });
-    const [captchaToken, setCaptchaToken] = useState(null);
     const [serverError, setServerError] = useState('');
-    const widgetId = 'turnstile-widget-login';
-    const widgetRef = useRef(null);
-
-    useEffect(() => {
-        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: (token) => setCaptchaToken(token), // Ensure CAPTCHA token is set
-        });
-
-        return () => {
-            if (widgetRef.current) {
-                window.turnstile.remove(`#${widgetId}`);
-                widgetRef.current = null;
-            }
-        };
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
-        if (!captchaToken) {
-            return setServerError('Please complete the CAPTCHA.');
-        }
 
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Captcha-Token': captchaToken, // Include CAPTCHA token in the header
             },
             body: JSON.stringify(formData),
         });
@@ -383,7 +356,6 @@ function LoginForm() {
                     setFormData({ ...formData, password: e.target.value })
                 }
             />
-            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
@@ -400,24 +372,7 @@ function RegisterForm() {
         password: '',
         confirmPassword: '',
     });
-    const [captchaToken, setCaptchaToken] = useState(null);
     const [serverError, setServerError] = useState('');
-    const widgetId = 'turnstile-widget-register';
-    const widgetRef = useRef(null);
-
-    useEffect(() => {
-        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: (token) => setCaptchaToken(token), // Ensure CAPTCHA token is set
-        });
-
-        return () => {
-            if (widgetRef.current) {
-                window.turnstile.remove(`#${widgetId}`);
-                widgetRef.current = null;
-            }
-        };
-    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -427,14 +382,11 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
-        if (!captchaToken) {
-            return setServerError('Please complete the CAPTCHA.');
-        }
 
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...formData, captchaToken }), // Include CAPTCHA token in the request body
+            body: JSON.stringify(formData),
         });
         const data = await response.json();
         if (response.ok) {
@@ -478,7 +430,6 @@ function RegisterForm() {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
             />
-            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
