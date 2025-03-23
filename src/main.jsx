@@ -527,7 +527,7 @@ function RegisterForm() {
 function Gallery() {
     const [photos, setPhotos] = useState([]);
     const [error, setError] = useState('');
-    const [selectedPhoto, setSelectedPhoto] = useState(null); // State for selected photo
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
     const fileInputRef = useRef(null);
     const { isAdmin } = useAuth();
 
@@ -535,7 +535,6 @@ function Gallery() {
         const response = await fetch('/api/gallery');
         if (response.ok) {
             const data = await response.json();
-            console.log(data.photos);
             setPhotos(data.photos);
         } else {
             setError('Failed to fetch photos.');
@@ -551,7 +550,7 @@ function Gallery() {
         }
 
         const formData = new FormData();
-        Array.from(files).forEach((file) => formData.append('photos', file)); // Ensure the field name is 'photos'
+        Array.from(files).forEach((file) => formData.append('photos', file));
 
         const response = await fetchWithAuth('/api/gallery', {
             method: 'POST',
@@ -578,13 +577,10 @@ function Gallery() {
             return;
         }
 
-        console.log(`Attempting to delete photo with ID: ${photoId}`);
-
         const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
             method: 'DELETE',
         });
         if (response.ok) {
-            console.log(`Photo with ID: ${photoId} deleted successfully.`);
             fetchPhotos();
         } else {
             setError('Failed to delete photo.');
@@ -596,7 +592,7 @@ function Gallery() {
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
             {isAdmin && (
@@ -606,7 +602,7 @@ function Gallery() {
                         ref={fileInputRef}
                         className="mb-2"
                         accept="image/*"
-                        multiple // Allow multiple file selection
+                        multiple
                     />
                     <button
                         type="submit"
@@ -616,7 +612,31 @@ function Gallery() {
                     </button>
                 </form>
             )}
-            {selectedPhoto ? (
+            <div className="flex-1 overflow-auto">
+                {' '}
+                {/* Make the images list scrollable */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {photos.map((photo) => (
+                        <div key={photo.id} className="relative">
+                            <img
+                                src={photo.url}
+                                alt={photo.filename}
+                                className="w-full h-auto rounded-md cursor-pointer"
+                                onClick={() => setSelectedPhoto(photo)}
+                            />
+                            {isAdmin && (
+                                <button
+                                    onClick={() => handleDelete(photo.id)}
+                                    className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
+                                >
+                                    Delete
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {selectedPhoto && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
                     <div className="relative">
                         <img
@@ -625,33 +645,12 @@ function Gallery() {
                             className="max-w-full max-h-screen rounded-md"
                         />
                         <button
-                            onClick={() => setSelectedPhoto(null)} // Close full view
+                            onClick={() => setSelectedPhoto(null)}
                             className="absolute top-4 right-4 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                         >
                             Close
                         </button>
                     </div>
-                </div>
-            ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {photos.map((photo) => (
-                        <div key={photo.id} className="relative">
-                            <img
-                                src={photo.url}
-                                alt={photo.filename}
-                                className="w-full h-auto rounded-md cursor-pointer"
-                                onClick={() => setSelectedPhoto(photo)} // Open full view
-                            />
-                            {isAdmin && (
-                                <button
-                                    onClick={() => handleDelete(photo.id)} // Ensure photo.id is passed
-                                    className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
-                                >
-                                    Delete
-                                </button>
-                            )}
-                        </div>
-                    ))}
                 </div>
             )}
         </div>
