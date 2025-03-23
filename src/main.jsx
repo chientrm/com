@@ -631,7 +631,7 @@ function Gallery() {
                             {isAdmin && (
                                 <button
                                     onClick={() => handleDelete(photo.id)}
-                                    className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
+                                    className="absolute top-2 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 hover:text-gray-900"
                                 >
                                     Delete
                                 </button>
