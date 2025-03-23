@@ -319,7 +319,7 @@ function LoginForm() {
     useEffect(() => {
         widgetRef.current = window.turnstile.render(`#${widgetId}`, {
             sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: (token) => setCaptchaToken(token),
+            callback: (token) => setCaptchaToken(token), // Ensure CAPTCHA token is set
         });
 
         return () => {
@@ -337,11 +337,12 @@ function LoginForm() {
             return setServerError('Please complete the CAPTCHA.');
         }
 
-        localStorage.setItem('captchaToken', captchaToken);
-
         const response = await fetch('/api/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Captcha-Token': captchaToken, // Include CAPTCHA token in the header
+            },
             body: JSON.stringify(formData),
         });
         const data = await response.json();
@@ -511,8 +512,6 @@ function App() {
                             path="/admin/journalctl/:serviceName"
                             element={<ServiceLogs />}
                         />
-                        {/* Remove the Weather route */}
-                        {/* <Route path="/weather" element={<Weather />} /> */}
                     </Routes>
                 </div>
             </div>
