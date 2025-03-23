@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import { SignJWT, jwtVerify } from 'jose';
@@ -323,12 +323,18 @@ app.post(
 );
 
 app.get('/api/gallery', (req, res) => {
+    const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 photos per page
+    const offset = (page - 1) * limit;
+
     db.select()
         .from(galleryTable)
+        .limit(limit)
+        .offset(offset)
         .all()
         .then((photos) => {
             const photosWithUrls = photos.map((photo) => ({
-                id: photo.id, // Ensure the photo ID is included
+                id: photo.id,
                 filename: photo.filename,
                 uploadedBy: photo.uploadedBy,
                 uploadedAt: photo.uploadedAt,
@@ -336,7 +342,29 @@ app.get('/api/gallery', (req, res) => {
                     photo.filename
                 }`,
             }));
-            res.json({ photos: photosWithUrls });
+
+            // Fix the count query
+            db.select({ count: count(galleryTable.id) })
+                .from(galleryTable)
+                .get()
+                .then((result) => {
+                    const totalCount = result.count;
+
+                    res.json({
+                        photos: photosWithUrls,
+                        total: totalCount,
+                        page,
+                        limit,
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error counting photos in database:', error);
+                    sendErrorResponse(
+                        res,
+                        500,
+                        'Failed to retrieve photo count.'
+                    );
+                });
         })
         .catch((error) => {
             console.error('Error retrieving photos from database:', error);
