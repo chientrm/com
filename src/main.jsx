@@ -31,23 +31,31 @@ ChartJS.register(
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        console.error('No auth token found in localStorage.');
+    const captchaToken = localStorage.getItem('captchaToken');
+    const authToken = localStorage.getItem('authToken');
+
+    if (!captchaToken) {
+        console.error('No CAPTCHA token found in localStorage.');
     }
+
+    const headers = {
+        ...options.headers,
+        'X-Captcha-Token': captchaToken, // Ensure CAPTCHA token is included
+    };
+
+    if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+
     return fetch(url, {
         ...options,
-        headers: {
-            ...options.headers,
-            Authorization: `Bearer ${token}`, // Ensure the token is included
-        },
+        headers,
     });
 }
 
 function useAuth() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [captchaVerified, setCaptchaVerified] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('authToken');
@@ -55,15 +63,13 @@ function useAuth() {
             const decoded = decodeJwt(token);
             setIsLoggedIn(true);
             setIsAdmin(decoded.role === 'admin');
-            setCaptchaVerified(decoded.captchaVerified || false);
         } else {
             setIsLoggedIn(false);
             setIsAdmin(false);
-            setCaptchaVerified(false);
         }
     }, []);
 
-    return { isLoggedIn, isAdmin, captchaVerified };
+    return { isLoggedIn, isAdmin };
 }
 
 // Components
@@ -304,7 +310,6 @@ function ServiceLogs() {
 }
 
 function LoginForm() {
-    const { captchaVerified } = useAuth();
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [captchaToken, setCaptchaToken] = useState(null);
     const [serverError, setServerError] = useState('');
@@ -312,32 +317,32 @@ function LoginForm() {
     const widgetRef = useRef(null);
 
     useEffect(() => {
-        if (!captchaVerified) {
-            widgetRef.current = window.turnstile.render(`#${widgetId}`, {
-                sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-                callback: (token) => setCaptchaToken(token),
-            });
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: (token) => setCaptchaToken(token),
+        });
 
-            return () => {
-                if (widgetRef.current) {
-                    window.turnstile.remove(`#${widgetId}`);
-                    widgetRef.current = null;
-                }
-            };
-        }
-    }, [captchaVerified]);
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
-        if (!captchaVerified && !captchaToken) {
+        if (!captchaToken) {
             return setServerError('Please complete the CAPTCHA.');
         }
+
+        localStorage.setItem('captchaToken', captchaToken);
 
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...formData, captchaToken }),
+            body: JSON.stringify(formData),
         });
         const data = await response.json();
         if (response.ok) {
@@ -377,7 +382,7 @@ function LoginForm() {
                     setFormData({ ...formData, password: e.target.value })
                 }
             />
-            {!captchaVerified && <div id={widgetId} className="mb-4"></div>}
+            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
@@ -395,7 +400,6 @@ function RegisterForm() {
         confirmPassword: '',
     });
     const [captchaToken, setCaptchaToken] = useState(null);
-    const [errors, setErrors] = useState({});
     const [serverError, setServerError] = useState('');
     const widgetId = 'turnstile-widget-register';
     const widgetRef = useRef(null);
@@ -483,43 +487,78 @@ function RegisterForm() {
     );
 }
 
+function CaptchaGate({ children }) {
+    const [captchaVerified, setCaptchaVerified] = useState(false);
+    const widgetId = 'turnstile-widget-global';
+    const widgetRef = useRef(null);
+
+    useEffect(() => {
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: () => setCaptchaVerified(true),
+        });
+
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
+
+    if (!captchaVerified) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div id={widgetId}></div>
+            </div>
+        );
+    }
+
+    return <>{children}</>;
+}
+
 function App() {
     return (
-        <Router>
-            <div className="h-screen flex flex-col">
-                <NavBar />
-                <div className="flex-1 overflow-hidden px-4 py-6">
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/login" element={<LoginForm />} />
-                        <Route path="/register" element={<RegisterForm />} />
-                        <Route path="/profile" element={<Profile />} />
-                        <Route path="/admin" element={<Admin />} />
-                        <Route
-                            path="/admin/journalctl"
-                            element={<JournalctlLogs />}
-                        />
-                        <Route
-                            path="/admin/systemctl"
-                            element={<SystemctlServices />}
-                        />
-                        <Route
-                            path="/admin/journalctl/:serviceName"
-                            element={<ServiceLogs />}
-                        />
-                        {/* Remove the Weather route */}
-                        {/* <Route path="/weather" element={<Weather />} /> */}
-                    </Routes>
+        <CaptchaGate>
+            <Router>
+                <div className="h-screen flex flex-col">
+                    <NavBar />
+                    <div className="flex-1 overflow-hidden px-4 py-6">
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/login" element={<LoginForm />} />
+                            <Route
+                                path="/register"
+                                element={<RegisterForm />}
+                            />
+                            <Route path="/profile" element={<Profile />} />
+                            <Route path="/admin" element={<Admin />} />
+                            <Route
+                                path="/admin/journalctl"
+                                element={<JournalctlLogs />}
+                            />
+                            <Route
+                                path="/admin/systemctl"
+                                element={<SystemctlServices />}
+                            />
+                            <Route
+                                path="/admin/journalctl/:serviceName"
+                                element={<ServiceLogs />}
+                            />
+                            {/* Remove the Weather route */}
+                            {/* <Route path="/weather" element={<Weather />} /> */}
+                        </Routes>
+                    </div>
                 </div>
-            </div>
-        </Router>
+            </Router>
+        </CaptchaGate>
     );
 }
 
 function Home() {
     return (
         <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Hello Vite!</h1>
+            <h1 className="text-3xl font-bold mb-4">Welcome to the App!</h1>
         </div>
     );
 }

@@ -91,12 +91,33 @@ function translatePriority(priority) {
     return levels[priority] || 'UNKNOWN';
 }
 
-// Middleware
+// Middleware to enforce CAPTCHA verification
+async function enforceCaptchaVerification(req, res, next) {
+    // Skip CAPTCHA verification for static assets
+    if (!req.path.startsWith('/api')) {
+        return next();
+    }
+
+    const captchaToken = req.headers['x-captcha-token']; // Ensure header is correctly named
+
+    if (!captchaToken) {
+        return sendErrorResponse(res, 403, 'CAPTCHA verification required.');
+    }
+
+    const captchaValid = await verifyCaptcha(captchaToken);
+    if (!captchaValid) {
+        return sendErrorResponse(res, 403, 'CAPTCHA verification failed.');
+    }
+
+    next();
+}
+
+// Middleware to enforce JWT authentication
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
+
     if (!token) {
-        console.error('No token provided in Authorization header.');
         return sendErrorResponse(res, 401, 'Unauthorized access.');
     }
 
@@ -108,23 +129,27 @@ async function authenticateToken(req, res, next) {
         req.user = { username: payload.username, role: payload.role };
         next();
     } catch (err) {
-        sendErrorResponse(res, 403, 'Access forbidden.');
+        console.error('Invalid token for authentication:', err);
+        return sendErrorResponse(res, 403, 'Access forbidden.');
     }
 }
 
+// Middleware to enforce admin privileges
 async function authenticateAdmin(req, res, next) {
-    if (req.user.role !== 'admin') {
-        console.error('User is not an admin:', req.user); // Debugging log
+    if (!req.user || req.user.role !== 'admin') {
         return sendErrorResponse(res, 403, 'Admin privileges required.');
     }
     next();
 }
 
+// Apply CAPTCHA verification globally
+app.use(enforceCaptchaVerification);
+
 // Routes
 app.use(express.json());
 
 app.post('/api/login', async (req, res) => {
-    const { username, password, captchaToken } = req.body;
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return sendErrorResponse(
@@ -137,16 +162,6 @@ app.post('/api/login', async (req, res) => {
     const user = await findUserByUsername(username);
 
     if (user && bcrypt.compareSync(password, user.passwordHash)) {
-        if (!user.captchaVerified) {
-            if (!(await verifyCaptcha(captchaToken))) {
-                return sendErrorResponse(
-                    res,
-                    400,
-                    'CAPTCHA verification failed.'
-                );
-            }
-        }
-
         const token = await generateToken(username, user.role || 'user', true);
         res.json({ message: 'Login successful.', username, token });
     } else {
@@ -155,7 +170,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/api/register', async (req, res) => {
-    const { username, password, captchaToken } = req.body;
+    const { username, password } = req.body;
 
     if (!validateUsername(username) || !validatePassword(password)) {
         return sendErrorResponse(
@@ -163,10 +178,6 @@ app.post('/api/register', async (req, res) => {
             400,
             'Invalid username or password format.'
         );
-    }
-
-    if (!(await verifyCaptcha(captchaToken))) {
-        return sendErrorResponse(res, 400, 'CAPTCHA verification failed.');
     }
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
