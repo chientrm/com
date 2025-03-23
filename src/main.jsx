@@ -478,6 +478,7 @@ function Gallery() {
             const response = await fetch('/api/gallery');
             if (response.ok) {
                 const data = await response.json();
+                console.log(data.photos);
                 setPhotos(data.photos);
             } else {
                 setError('Failed to fetch photos.');
@@ -513,11 +514,19 @@ function Gallery() {
     };
 
     const handleDelete = async (photoId) => {
+        if (!photoId) {
+            console.error('Photo ID is null or undefined.');
+            return;
+        }
+
+        console.log(`Attempting to delete photo with ID: ${photoId}`);
+
         try {
             const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
                 method: 'DELETE',
             });
             if (response.ok) {
+                console.log(`Photo with ID: ${photoId} deleted successfully.`);
                 fetchPhotos();
             } else {
                 setError('Failed to delete photo.');
@@ -580,7 +589,7 @@ function Gallery() {
                             />
                             {isAdmin && (
                                 <button
-                                    onClick={() => handleDelete(photo.id)}
+                                    onClick={() => handleDelete(photo.id)} // Ensure photo.id is passed
                                     className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md"
                                 >
                                     Delete

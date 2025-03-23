@@ -299,21 +299,31 @@ app.post(
         const { username } = req.user;
         const uploadedAt = Math.floor(Date.now() / 1000); // Unix timestamp
 
-        db.insert(galleryTable)
-            .values({
-                filename: req.file.filename,
-                uploadedBy: username,
-                uploadedAt,
-            })
-            .then(() => {
-                res.status(200).json({
-                    message: 'Photo uploaded successfully.',
+        const photoPath = path.join('uploads', req.file.filename);
+
+        // Check if the file exists before adding to the database
+        fs.access(photoPath, fs.constants.F_OK, (err) => {
+            if (err) {
+                console.error('File upload failed:', err);
+                return sendErrorResponse(res, 500, 'File upload failed.');
+            }
+
+            db.insert(galleryTable)
+                .values({
+                    filename: req.file.filename,
+                    uploadedBy: username,
+                    uploadedAt,
+                })
+                .then(() => {
+                    res.status(200).json({
+                        message: 'Photo uploaded successfully.',
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error saving photo to database:', error);
+                    sendErrorResponse(res, 500, 'Failed to upload photo.');
                 });
-            })
-            .catch((error) => {
-                console.error('Error saving photo to database:', error);
-                sendErrorResponse(res, 500, 'Failed to upload photo.');
-            });
+        });
     }
 );
 
@@ -323,7 +333,10 @@ app.get('/api/gallery', (req, res) => {
         .all()
         .then((photos) => {
             const photosWithUrls = photos.map((photo) => ({
-                ...photo,
+                id: photo.id, // Ensure the photo ID is included
+                filename: photo.filename,
+                uploadedBy: photo.uploadedBy,
+                uploadedAt: photo.uploadedAt,
                 url: `${req.protocol}://${req.get('host')}/uploads/${
                     photo.filename
                 }`,
@@ -343,24 +356,41 @@ app.delete(
     (req, res) => {
         const { photoId } = req.params;
 
+        if (!photoId) {
+            console.error('Photo ID is missing in the request.');
+            return sendErrorResponse(res, 400, 'Photo ID is required.');
+        }
+
+        console.log(`Received request to delete photo with ID: ${photoId}`);
+
         db.select()
             .from(galleryTable)
             .where(eq(galleryTable.id, photoId))
             .get()
             .then((photo) => {
                 if (!photo) {
-                    return sendErrorResponse(res, 404, 'Photo not found.');
+                    return sendErrorResponse(
+                        res,
+                        404,
+                        'Photo not found in database.'
+                    );
                 }
 
                 const photoPath = path.join('uploads', photo.filename);
                 fs.unlink(photoPath, (err) => {
                     if (err) {
-                        console.error('Error deleting photo file:', err);
-                        return sendErrorResponse(
-                            res,
-                            500,
-                            'Failed to delete photo.'
-                        );
+                        if (err.code === 'ENOENT') {
+                            console.warn(
+                                `File not found: ${photoPath}. Proceeding with database cleanup.`
+                            );
+                        } else {
+                            console.error('Error deleting photo file:', err);
+                            return sendErrorResponse(
+                                res,
+                                500,
+                                'Failed to delete photo file.'
+                            );
+                        }
                     }
 
                     db.delete(galleryTable)
@@ -378,7 +408,7 @@ app.delete(
                             sendErrorResponse(
                                 res,
                                 500,
-                                'Failed to delete photo.'
+                                'Failed to delete photo from database.'
                             );
                         });
                 });

@@ -15,6 +15,13 @@
       "when": 1742729393214,
       "tag": "0001_purple_starhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1742730532691,
+      "tag": "0002_uneven_ravenous",
+      "breakpoints": true
     }
   ]
 }
