@@ -137,7 +137,12 @@ async function authenticateToken(req, res, next) {
 // Middleware to enforce admin privileges
 async function authenticateAdmin(req, res, next) {
     if (!req.user || req.user.role !== 'admin') {
-        return sendErrorResponse(res, 403, 'Admin privileges required.');
+        console.error('Access denied: User is not an admin:', req.user); // Debugging log
+        return sendErrorResponse(
+            res,
+            403,
+            'Access denied: Admin privileges required.'
+        );
     }
     next();
 }

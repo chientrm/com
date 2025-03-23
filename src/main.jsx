@@ -44,7 +44,7 @@ function fetchWithAuth(url, options = {}) {
     };
 
     if (authToken) {
-        headers.Authorization = `Bearer ${authToken}`;
+        headers.Authorization = `Bearer ${authToken}`; // Ensure Authorization header is included
     }
 
     return fetch(url, {
@@ -487,71 +487,36 @@ function RegisterForm() {
     );
 }
 
-function CaptchaGate({ children }) {
-    const [captchaVerified, setCaptchaVerified] = useState(false);
-    const widgetId = 'turnstile-widget-global';
-    const widgetRef = useRef(null);
-
-    useEffect(() => {
-        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: () => setCaptchaVerified(true),
-        });
-
-        return () => {
-            if (widgetRef.current) {
-                window.turnstile.remove(`#${widgetId}`);
-                widgetRef.current = null;
-            }
-        };
-    }, []);
-
-    if (!captchaVerified) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <div id={widgetId}></div>
-            </div>
-        );
-    }
-
-    return <>{children}</>;
-}
-
 function App() {
     return (
-        <CaptchaGate>
-            <Router>
-                <div className="h-screen flex flex-col">
-                    <NavBar />
-                    <div className="flex-1 overflow-hidden px-4 py-6">
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/login" element={<LoginForm />} />
-                            <Route
-                                path="/register"
-                                element={<RegisterForm />}
-                            />
-                            <Route path="/profile" element={<Profile />} />
-                            <Route path="/admin" element={<Admin />} />
-                            <Route
-                                path="/admin/journalctl"
-                                element={<JournalctlLogs />}
-                            />
-                            <Route
-                                path="/admin/systemctl"
-                                element={<SystemctlServices />}
-                            />
-                            <Route
-                                path="/admin/journalctl/:serviceName"
-                                element={<ServiceLogs />}
-                            />
-                            {/* Remove the Weather route */}
-                            {/* <Route path="/weather" element={<Weather />} /> */}
-                        </Routes>
-                    </div>
+        <Router>
+            <div className="h-screen flex flex-col">
+                <NavBar />
+                <div className="flex-1 overflow-hidden px-4 py-6">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/register" element={<RegisterForm />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/admin" element={<Admin />} />
+                        <Route
+                            path="/admin/journalctl"
+                            element={<JournalctlLogs />}
+                        />
+                        <Route
+                            path="/admin/systemctl"
+                            element={<SystemctlServices />}
+                        />
+                        <Route
+                            path="/admin/journalctl/:serviceName"
+                            element={<ServiceLogs />}
+                        />
+                        {/* Remove the Weather route */}
+                        {/* <Route path="/weather" element={<Weather />} /> */}
+                    </Routes>
                 </div>
-            </Router>
-        </CaptchaGate>
+            </div>
+        </Router>
     );
 }
 
