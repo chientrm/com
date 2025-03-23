@@ -408,7 +408,7 @@ function RegisterForm() {
     useEffect(() => {
         widgetRef.current = window.turnstile.render(`#${widgetId}`, {
             sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
-            callback: (token) => setCaptchaToken(token),
+            callback: (token) => setCaptchaToken(token), // Ensure CAPTCHA token is set
         });
 
         return () => {
@@ -427,13 +427,14 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
-        if (!captchaToken)
+        if (!captchaToken) {
             return setServerError('Please complete the CAPTCHA.');
+        }
 
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...formData, captchaToken }),
+            body: JSON.stringify({ ...formData, captchaToken }), // Include CAPTCHA token in the request body
         });
         const data = await response.json();
         if (response.ok) {

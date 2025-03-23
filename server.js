@@ -91,27 +91,6 @@ function translatePriority(priority) {
     return levels[priority] || 'UNKNOWN';
 }
 
-// Middleware to enforce CAPTCHA verification
-async function enforceCaptchaVerification(req, res, next) {
-    // Skip CAPTCHA verification for static assets
-    if (!req.path.startsWith('/api')) {
-        return next();
-    }
-
-    const captchaToken = req.headers['x-captcha-token']; // Ensure header is correctly named
-
-    if (!captchaToken) {
-        return sendErrorResponse(res, 403, 'CAPTCHA verification required.');
-    }
-
-    const captchaValid = await verifyCaptcha(captchaToken);
-    if (!captchaValid) {
-        return sendErrorResponse(res, 403, 'CAPTCHA verification failed.');
-    }
-
-    next();
-}
-
 // Middleware to enforce JWT authentication
 async function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
@@ -146,9 +125,6 @@ async function authenticateAdmin(req, res, next) {
     }
     next();
 }
-
-// Apply CAPTCHA verification globally
-app.use(enforceCaptchaVerification);
 
 // Routes
 app.use(express.json());
