@@ -307,18 +307,38 @@ function ServiceLogs() {
 
 function LoginForm() {
     const [formData, setFormData] = useState({ username: '', password: '' });
+    const [captchaToken, setCaptchaToken] = useState(null);
     const [serverError, setServerError] = useState('');
+    const widgetId = 'turnstile-widget-login';
+    const widgetRef = useRef(null);
+
+    useEffect(() => {
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: (token) => setCaptchaToken(token), // Set CAPTCHA token
+        });
+
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
+        if (!captchaToken) {
+            return setServerError('Please complete the CAPTCHA.');
+        }
 
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData, captchaToken }), // Include CAPTCHA token
         });
         const data = await response.json();
         if (response.ok) {
@@ -358,6 +378,7 @@ function LoginForm() {
                     setFormData({ ...formData, password: e.target.value })
                 }
             />
+            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
@@ -374,7 +395,24 @@ function RegisterForm() {
         password: '',
         confirmPassword: '',
     });
+    const [captchaToken, setCaptchaToken] = useState(null);
     const [serverError, setServerError] = useState('');
+    const widgetId = 'turnstile-widget-register';
+    const widgetRef = useRef(null);
+
+    useEffect(() => {
+        widgetRef.current = window.turnstile.render(`#${widgetId}`, {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY,
+            callback: (token) => setCaptchaToken(token), // Set CAPTCHA token
+        });
+
+        return () => {
+            if (widgetRef.current) {
+                window.turnstile.remove(`#${widgetId}`);
+                widgetRef.current = null;
+            }
+        };
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -384,11 +422,14 @@ function RegisterForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setServerError('');
+        if (!captchaToken) {
+            return setServerError('Please complete the CAPTCHA.');
+        }
 
         const response = await fetch('/api/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData, captchaToken }), // Include CAPTCHA token
         });
         const data = await response.json();
         if (response.ok) {
@@ -432,6 +473,7 @@ function RegisterForm() {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
             />
+            <div id={widgetId} className="mb-4"></div>
             <button
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 type="submit"
