@@ -1,0 +1,1 @@
+ALTER TABLE `gallery_table` ADD `classified` integer;

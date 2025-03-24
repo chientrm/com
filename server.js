@@ -314,7 +314,60 @@ app.get(
     }
 );
 
-// Modify the upload route to handle multiple files and associate them with the logged-in user
+// Classification queue
+const classificationQueue = [];
+let isProcessingQueue = false;
+
+async function processClassificationQueue() {
+    if (isProcessingQueue) return;
+    isProcessingQueue = true;
+
+    while (classificationQueue.length > 0) {
+        const photoId = classificationQueue.shift();
+
+        const photo = await db
+            .select()
+            .from(galleryTable)
+            .where(eq(galleryTable.id, photoId))
+            .get();
+
+        if (!photo) {
+            console.warn(`Photo not found in database: ID ${photoId}`);
+            continue;
+        }
+
+        const imagePath = path.join('uploads', photo.filename);
+
+        if (!fs.existsSync(imagePath)) {
+            console.warn(`File not found: ${imagePath}`);
+            continue;
+        }
+
+        const imageBuffer = fs.readFileSync(imagePath);
+        const decodedImage = tf.node.decodeImage(imageBuffer);
+
+        const predictions = await mobilenetModel.classify(decodedImage);
+
+        const classRecords = predictions.map((prediction) => ({
+            imageId: photo.id,
+            className: prediction.className,
+            probability: prediction.probability,
+        }));
+
+        await db.insert(imageClassesTable).values(classRecords);
+
+        // Mark the photo as classified
+        await db
+            .update(galleryTable)
+            .set({ classified: 1 })
+            .where(eq(galleryTable.id, photo.id));
+
+        console.log(`Classified image: ID ${photoId}`);
+    }
+
+    isProcessingQueue = false;
+}
+
 app.post(
     '/api/gallery',
     authenticateToken,
@@ -331,28 +384,23 @@ app.post(
             filename: file.filename,
             uploadedBy: username,
             uploadedAt,
+            classified: null, // Mark as unclassified
         }));
 
-        await db.insert(galleryTable).values(photoRecords);
+        const insertedPhotos = await db
+            .insert(galleryTable)
+            .values(photoRecords)
+            .returning();
 
-        for (const file of req.files) {
-            const imagePath = path.join('uploads', file.filename);
-            const imageBuffer = fs.readFileSync(imagePath);
-            const decodedImage = tf.node.decodeImage(imageBuffer);
+        insertedPhotos.forEach((photo) => {
+            classificationQueue.push(photo.id); // Queue photo ID
+        });
 
-            const predictions = await mobilenetModel.classify(decodedImage);
-
-            const classRecords = predictions.map((prediction) => ({
-                imageId: file.filename, // Use filename as a temporary identifier
-                className: prediction.className,
-                probability: prediction.probability,
-            }));
-
-            await db.insert(imageClassesTable).values(classRecords);
-        }
+        processClassificationQueue();
 
         res.status(200).json({
-            message: 'Photos uploaded and classified successfully.',
+            message:
+                'Photos uploaded successfully and added to the classification queue.',
         });
     }
 );
