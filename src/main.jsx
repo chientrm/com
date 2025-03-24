@@ -716,40 +716,44 @@ function Gallery() {
                     ))}
                 </div>
             </div>
-            <div className="mt-4 flex justify-between items-center">
-                <button
-                    disabled={page === 1}
-                    onClick={() => setPage(1)}
-                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
-                >
-                    <ChevronDoubleLeftIcon className="w-5 h-5" />
-                </button>
-                <button
-                    disabled={page === 1}
-                    onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
-                >
-                    <ChevronLeftIcon className="w-5 h-5" />
-                </button>
-                <span>
+            <div className="mt-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage(1)}
+                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                    >
+                        <ChevronDoubleLeftIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                    >
+                        <ChevronLeftIcon className="w-4 h-4" />
+                    </button>
+                </div>
+                <span className="text-sm text-gray-700">
                     Page {page} of {totalPages}
                 </span>
-                <button
-                    disabled={page === totalPages}
-                    onClick={() =>
-                        setPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
-                >
-                    <ChevronRightIcon className="w-5 h-5" />
-                </button>
-                <button
-                    disabled={page === totalPages}
-                    onClick={() => setPage(totalPages)}
-                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
-                >
-                    <ChevronDoubleRightIcon className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        disabled={page === totalPages}
+                        onClick={() =>
+                            setPage((prev) => Math.min(prev + 1, totalPages))
+                        }
+                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                    >
+                        <ChevronRightIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        disabled={page === totalPages}
+                        onClick={() => setPage(totalPages)}
+                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                    >
+                        <ChevronDoubleRightIcon className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
             {selectedPhoto && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
