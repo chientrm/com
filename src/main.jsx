@@ -126,16 +126,18 @@ function NavBar() {
             </div>
             {isMenuOpen && (
                 <div className="md:hidden">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                    <ul className="px-4 py-2 space-y-2">
                         {links.map((link) => (
-                            <NavLink
-                                key={link.to}
-                                to={link.to}
-                                label={link.label}
-                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100"
-                            />
+                            <li key={link.to}>
+                                <Link
+                                    to={link.to}
+                                    className="block text-gray-700 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-base font-medium"
+                                >
+                                    {link.label}
+                                </Link>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
                 </div>
             )}
         </nav>
