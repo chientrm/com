@@ -1,17 +1,17 @@
+import * as mobilenet from '@tensorflow-models/mobilenet';
+import * as tf from '@tensorflow/tfjs-node';
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
 import { count, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
+import fs from 'fs';
 import { SignJWT, jwtVerify } from 'jose';
-import ViteExpress from 'vite-express';
-import { usersTable, galleryTable } from './schema.js';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
-import * as tf from '@tensorflow/tfjs-node';
-import * as mobilenet from '@tensorflow-models/mobilenet';
+import ViteExpress from 'vite-express';
+import { galleryTable, usersTable } from './schema.js';
 
 dotenv.config();
 
