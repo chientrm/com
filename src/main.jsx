@@ -9,6 +9,7 @@ import {
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import lamb from './lamb.jpeg';
 import {
     Link,
     Route,
@@ -825,9 +826,16 @@ function Home() {
             </h1>
             <Link
                 to={isLoggedIn ? '/gallery' : '/login'}
-                className="inline-block mt-6 px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="inline-block mt-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-                {isLoggedIn ? 'Go to Gallery' : 'Login to Access Gallery'}
+                <img
+                    src={lamb}
+                    alt="Gallery"
+                    className="w-64 h-64 object-cover rounded-md hover:opacity-90"
+                />
+                <span className="block mt-2 text-lg font-medium text-gray-700">
+                    {isLoggedIn ? 'Go to Gallery' : 'Login to Access Gallery'}
+                </span>
             </Link>
         </div>
     );
