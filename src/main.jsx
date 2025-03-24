@@ -5,6 +5,8 @@ import {
     ChevronLeftIcon,
     ChevronRightIcon,
     ChevronDoubleRightIcon,
+    ListBulletIcon as ViewListIcon, // Correct export name for list icon
+    Squares2X2Icon as ViewGridIcon, // Correct export name for grid icon
 } from '@heroicons/react/24/outline';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
@@ -541,6 +543,7 @@ function Gallery() {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(9); // Default limit
     const [isUploading, setIsUploading] = useState(false); // New state for upload animation
+    const [viewMode, setViewMode] = useState('tile'); // New state for view mode
     const fileInputRef = useRef(null);
 
     const fetchPhotos = async (label = '') => {
@@ -669,7 +672,7 @@ function Gallery() {
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
-            <div className="mb-4 flex gap-2">
+            <div className="mb-4 flex gap-2 items-center">
                 <input
                     type="text"
                     placeholder="Search by label..."
@@ -685,6 +688,23 @@ function Gallery() {
                         Clear
                     </button>
                 )}
+                <button
+                    onClick={() =>
+                        setViewMode((prev) =>
+                            prev === 'tile' ? 'list' : 'tile'
+                        )
+                    }
+                    className="p-2 bg-secondary text-secondary-foreground rounded-full shadow-sm hover:bg-secondary-hover"
+                    title={`Switch to ${
+                        viewMode === 'tile' ? 'List' : 'Tile'
+                    } Mode`}
+                >
+                    {viewMode === 'tile' ? (
+                        <ViewListIcon className="w-5 h-5" />
+                    ) : (
+                        <ViewGridIcon className="w-5 h-5" />
+                    )}
+                </button>
             </div>
             <form onSubmit={handleUpload} className="mb-4">
                 <input
@@ -708,28 +728,64 @@ function Gallery() {
                 </div>
             )}
             <div className="flex-1 overflow-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                    {paginatedPhotos.map((photo) => (
-                        <div
-                            key={photo.id}
-                            className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
-                        >
-                            <img
-                                src={photo.url}
-                                alt={photo.filename}
-                                className="absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-500"
-                                onLoad={handleImageLoad}
-                                onClick={() => handlePhotoClick(photo)}
-                            />
-                            <button
-                                onClick={() => handleDelete(photo.id)}
-                                className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                {viewMode === 'tile' ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                        {paginatedPhotos.map((photo) => (
+                            <div
+                                key={photo.id}
+                                className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
                             >
-                                <TrashIcon className="w-5 h-5" />
-                            </button>
-                        </div>
-                    ))}
-                </div>
+                                <img
+                                    src={photo.url}
+                                    alt={photo.filename}
+                                    className="absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-500"
+                                    onLoad={handleImageLoad}
+                                    onClick={() => handlePhotoClick(photo)}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <table className="table-auto w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th className="border border-gray-300 px-4 py-2 text-left">
+                                    Filename
+                                </th>
+                                <th className="border border-gray-300 px-4 py-2 text-left">
+                                    Uploaded At
+                                </th>
+                                <th className="border border-gray-300 px-4 py-2 text-left">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {paginatedPhotos.map((photo) => (
+                                <tr key={photo.id}>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {photo.filename}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        {new Date(
+                                            photo.uploadedAt * 1000
+                                        ).toLocaleString()}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                        <button
+                                            onClick={() =>
+                                                handlePhotoClick(photo)
+                                            }
+                                            className="px-2 py-1 bg-blue-600 text-white rounded-md"
+                                        >
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
             <div className="mt-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
