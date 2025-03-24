@@ -473,6 +473,36 @@ app.get('/api/gallery/by-class', authenticateToken, async (req, res) => {
     res.status(200).json({ images: imagesWithUrls });
 });
 
+app.get(
+    '/api/gallery/classes/:photoId',
+    authenticateToken,
+    async (req, res) => {
+        const { photoId } = req.params;
+
+        if (!photoId) {
+            return sendErrorResponse(res, 400, 'Photo ID is required.');
+        }
+
+        const photo = await db
+            .select()
+            .from(galleryTable)
+            .where(eq(galleryTable.id, photoId))
+            .get();
+
+        if (!photo) {
+            return sendErrorResponse(res, 404, 'Photo not found in database.');
+        }
+
+        const classes = await db
+            .select()
+            .from(imageClassesTable)
+            .where(eq(imageClassesTable.imageId, photoId))
+            .all();
+
+        res.status(200).json({ classes });
+    }
+);
+
 app.use('/uploads', express.static('uploads'));
 
 ViteExpress.listen(app, PORT, () => {
