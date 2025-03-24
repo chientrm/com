@@ -533,48 +533,33 @@ function Gallery() {
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [photoClasses, setPhotoClasses] = useState([]);
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const [limit, setLimit] = useState(9); // Default limit
     const fileInputRef = useRef(null);
 
-    const calculateLimit = () => {
-        const width = window.innerWidth;
-        if (width >= 1024) return 9; // 3 images per row on large screens
-        if (width >= 768) return 9; // 3 images per row on medium screens
-        return 6; // 2 images per row on small screens
-    };
-
-    const fetchPhotos = async (page, limit, label = '') => {
-        const response = await fetchWithAuth(
-            `/api/gallery?page=${page}&limit=${limit}&label=${label}`
-        );
+    const fetchPhotos = async (label = '') => {
+        const response = await fetchWithAuth(`/api/gallery?label=${label}`);
         if (response.ok) {
             const data = await response.json();
             setPhotos(data.photos);
-            setTotalPages(Math.ceil(data.total / limit));
         } else {
             setError('Failed to fetch photos.');
         }
     };
 
-    const fetchPhotoClasses = async (photoId) => {
-        const response = await fetchWithAuth(`/api/gallery/classes/${photoId}`);
+    const handlePhotoClick = async (photo) => {
+        setSelectedPhoto(photo);
+        setPhotoClasses([]); // Clear class names to prevent text glitching
+
+        const response = await fetchWithAuth(
+            `/api/gallery/classes/${photo.id}`
+        );
         if (response.ok) {
             const data = await response.json();
             setPhotoClasses(
                 data.classes.map((cls) => cls.className).join(', ')
             );
         } else {
-            setPhotoClasses([]);
             setError('Failed to fetch photo classes.');
-        }
-    };
-
-    const handleResize = () => {
-        const newLimit = calculateLimit();
-        if (newLimit !== limit) {
-            setLimit(newLimit);
-            setPage(1); // Reset to the first page when limit changes
         }
     };
 
@@ -594,71 +579,70 @@ function Gallery() {
             body: formData,
         });
         if (response.ok) {
-            fetchPhotos(page, limit, searchLabel); // Refresh photos after upload
+            fetchPhotos(searchLabel); // Refresh photos after upload
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to upload photos.');
         }
     };
 
-    const handleDelete = async (photoId) => {
-        if (!photoId) {
-            console.error('Photo ID is null or undefined.');
-            return;
-        }
-
-        const confirmDelete = window.confirm(
-            'Are you sure you want to delete this photo?'
-        );
-        if (!confirmDelete) {
-            return;
-        }
-
-        const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
-            method: 'DELETE',
-        });
-        if (response.ok) {
-            fetchPhotos(page, limit, searchLabel); // Refresh photos after deletion
-        } else {
-            const errorData = await response.json();
-            setError(errorData.message || 'Failed to delete photo.');
-        }
-    };
-
-    const handlePhotoClick = (photo) => {
-        setSelectedPhoto(photo);
-        setPhotoClasses([]); // Clear class names to prevent text glitching
-        fetchPhotoClasses(photo.id);
-    };
-
     const handleSearchChange = (e) => {
         const label = e.target.value;
         setSearchLabel(label);
-        fetchPhotos(1, limit, label.trim()); // Trigger search on input change
+        fetchPhotos(label.trim());
+        setPage(1); // Reset to the first page on search
     };
 
-    useEffect(() => {
-        fetchPhotos(page, limit, searchLabel);
-    }, [page, limit, searchLabel]);
+    const paginatedPhotos = photos.slice((page - 1) * limit, page * limit);
 
     useEffect(() => {
+        fetchPhotos(searchLabel);
+    }, [searchLabel]);
+
+    useEffect(() => {
+        const calculateLimit = () => {
+            const width = window.innerWidth;
+            if (width >= 1024) return 9; // 3 images per row on large screens
+            if (width >= 768) return 9; // 3 images per row on medium screens
+            return 6; // 2 images per row on small screens
+        };
+
+        const handleResize = () => {
+            const newLimit = calculateLimit();
+            if (newLimit !== limit) {
+                setLimit(newLimit);
+                setPage(1); // Reset to the first page when limit changes
+            }
+        };
+
         handleResize(); // Set initial limit
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [limit]);
 
     return (
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
-            <div className="mb-4">
+            <div className="mb-4 flex gap-2">
                 <input
                     type="text"
                     placeholder="Search by label..."
                     value={searchLabel}
                     onChange={handleSearchChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 />
+                {searchLabel && (
+                    <button
+                        onClick={() => {
+                            setSearchLabel('');
+                            fetchPhotos();
+                        }}
+                        className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    >
+                        Clear
+                    </button>
+                )}
             </div>
             <form onSubmit={handleUpload} className="mb-4">
                 <input
@@ -677,7 +661,7 @@ function Gallery() {
             </form>
             <div className="flex-1 overflow-auto">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                    {photos.map((photo) => (
+                    {paginatedPhotos.map((photo) => (
                         <div
                             key={photo.id}
                             className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
@@ -707,12 +691,14 @@ function Gallery() {
                     Previous
                 </button>
                 <span>
-                    Page {page} of {totalPages}
+                    Page {page} of {Math.ceil(photos.length / limit)}
                 </span>
                 <button
-                    disabled={page === totalPages}
+                    disabled={page === Math.ceil(photos.length / limit)}
                     onClick={() =>
-                        setPage((prev) => Math.min(prev + 1, totalPages))
+                        setPage((prev) =>
+                            Math.min(prev + 1, Math.ceil(photos.length / limit))
+                        )
                     }
                     className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
                 >

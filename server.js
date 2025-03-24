@@ -363,8 +363,7 @@ app.post(
 
 app.get('/api/gallery', authenticateToken, async (req, res) => {
     const { username } = req.user;
-    const { page = 1, limit = 10, label } = req.query;
-    const offset = (page - 1) * limit;
+    const { label } = req.query;
 
     let photosQuery = db
         .select({
@@ -386,7 +385,7 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
             .groupBy(galleryTable.id); // Group by galleryTable.id to remove duplicates
     }
 
-    const photos = await photosQuery.limit(limit).offset(offset).all();
+    const photos = await photosQuery.all(); // Fetch all photos without pagination
 
     const photosWithUrls = photos.map((photo) => ({
         id: photo.id,
@@ -396,30 +395,7 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
         url: `${req.protocol}://${req.get('host')}/uploads/${photo.filename}`,
     }));
 
-    const totalCountQuery = db
-        .select({ count: count(galleryTable.id).as('total') })
-        .from(galleryTable)
-        .where(eq(galleryTable.uploadedBy, username)); // Ensure total count is filtered by the logged-in user's photos
-
-    if (label) {
-        totalCountQuery
-            .innerJoin(
-                imageClassesTable,
-                eq(galleryTable.id, imageClassesTable.imageId)
-            )
-            .where(like(imageClassesTable.className, `%${label}%`))
-            .groupBy(galleryTable.id); // Group by galleryTable.id for consistent total count
-    }
-
-    const totalCountResult = await totalCountQuery.get();
-    const totalCount = totalCountResult ? totalCountResult.total : 0;
-
-    res.json({
-        photos: photosWithUrls,
-        total: totalCount,
-        page: parseInt(page, 10),
-        limit: parseInt(limit, 10),
-    });
+    res.json({ photos: photosWithUrls });
 });
 
 app.delete('/api/gallery/:photoId', authenticateToken, async (req, res) => {
