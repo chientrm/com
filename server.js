@@ -23,10 +23,34 @@ const JWT_SECRET = process.env.TURNSTILE_SECRET;
 
 let mobilenetModel;
 
-// Load the MobileNet model once when the server starts
+// Initialization function to queue unclassified photos
+async function initializeUnclassifiedPhotos() {
+    console.log('Initializing unclassified photos...');
+    const unclassifiedPhotos = await db
+        .select()
+        .from(galleryTable)
+        .where(eq(galleryTable.classifiedAt, null)) // Check for unclassified photos
+        .all();
+
+    unclassifiedPhotos.forEach((photo) => {
+        classificationQueue.push(photo.id); // Queue photo ID
+    });
+
+    if (unclassifiedPhotos.length > 0) {
+        console.log(
+            `Queued ${unclassifiedPhotos.length} unclassified photos for processing.`
+        );
+        processClassificationQueue();
+    } else {
+        console.log('No unclassified photos found.');
+    }
+}
+
+// Load the MobileNet model and initialize unclassified photos
 (async () => {
     mobilenetModel = await mobilenet.load();
     console.log('MobileNet model loaded.');
+    await initializeUnclassifiedPhotos();
 })();
 
 // Utility functions
@@ -356,10 +380,10 @@ async function processClassificationQueue() {
 
         await db.insert(imageClassesTable).values(classRecords);
 
-        // Mark the photo as classified
+        // Mark the photo as classified by setting classifiedAt to the current timestamp
         await db
             .update(galleryTable)
-            .set({ classified: 1 })
+            .set({ classifiedAt: Math.floor(Date.now() / 1000) })
             .where(eq(galleryTable.id, photo.id));
 
         console.log(`Classified image: ID ${photoId}`);
@@ -373,7 +397,7 @@ app.post(
     authenticateToken,
     upload.array('photos', 200), // Increase the file limit to 200
     async (req, res) => {
-        if (!req.files || req.files.length === 0) {
+        if (!req.files || !req.files.length) {
             return sendErrorResponse(res, 400, 'No files uploaded.');
         }
 
@@ -384,7 +408,7 @@ app.post(
             filename: file.filename,
             uploadedBy: username,
             uploadedAt,
-            classified: null, // Mark as unclassified
+            classifiedAt: null, // Mark as unclassified
         }));
 
         const insertedPhotos = await db

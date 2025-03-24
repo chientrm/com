@@ -19,7 +19,7 @@ export const galleryTable = sqliteTable(
         filename: text('filename').notNull(),
         uploadedBy: text('uploaded_by').notNull(),
         uploadedAt: integer('uploaded_at').notNull(),
-        classified: integer('classified'),
+        classifiedAt: integer('classified_at'), // Replaced classified with classifiedAt
     },
     (table) => [index('uploadedByIndex').on(table.uploadedBy)]
 );
