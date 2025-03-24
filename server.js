@@ -340,12 +340,8 @@ app.get(
 
 // Classification queue
 const classificationQueue = [];
-let isProcessingQueue = false;
 
 async function processClassificationQueue() {
-    if (isProcessingQueue) return;
-    isProcessingQueue = true;
-
     while (classificationQueue.length > 0) {
         const photoId = classificationQueue.shift();
 
@@ -388,8 +384,6 @@ async function processClassificationQueue() {
 
         console.log(`Classified image: ID ${photoId}`);
     }
-
-    isProcessingQueue = false;
 }
 
 app.post(
