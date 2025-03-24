@@ -529,6 +529,7 @@ function RegisterForm() {
 function Gallery() {
     const [photos, setPhotos] = useState([]);
     const [error, setError] = useState('');
+    const [searchLabel, setSearchLabel] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [photoClasses, setPhotoClasses] = useState([]);
     const [page, setPage] = useState(1);
@@ -543,9 +544,9 @@ function Gallery() {
         return 6; // 2 images per row on small screens
     };
 
-    const fetchPhotos = async (page, limit) => {
+    const fetchPhotos = async (page, limit, label = '') => {
         const response = await fetchWithAuth(
-            `/api/gallery?page=${page}&limit=${limit}`
+            `/api/gallery?page=${page}&limit=${limit}&label=${label}`
         );
         if (response.ok) {
             const data = await response.json();
@@ -593,7 +594,7 @@ function Gallery() {
             body: formData,
         });
         if (response.ok) {
-            fetchPhotos(page, limit);
+            fetchPhotos(page, limit, searchLabel); // Refresh photos after upload
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to upload photos.');
@@ -617,7 +618,7 @@ function Gallery() {
             method: 'DELETE',
         });
         if (response.ok) {
-            fetchPhotos(page, limit); // Refresh photos after deletion
+            fetchPhotos(page, limit, searchLabel); // Refresh photos after deletion
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to delete photo.');
@@ -630,9 +631,14 @@ function Gallery() {
         fetchPhotoClasses(photo.id);
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        fetchPhotos(1, limit, searchLabel.trim());
+    };
+
     useEffect(() => {
-        fetchPhotos(page, limit);
-    }, [page, limit]);
+        fetchPhotos(page, limit, searchLabel);
+    }, [page, limit, searchLabel]);
 
     useEffect(() => {
         handleResize(); // Set initial limit
@@ -644,6 +650,21 @@ function Gallery() {
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
+            <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+                <input
+                    type="text"
+                    placeholder="Search by label..."
+                    value={searchLabel}
+                    onChange={(e) => setSearchLabel(e.target.value)}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                />
+                <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
+                    Search
+                </button>
+            </form>
             <form onSubmit={handleUpload} className="mb-4">
                 <input
                     type="file"

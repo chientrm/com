@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
-import { count, eq, isNull } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import fs from 'fs';
@@ -363,17 +363,30 @@ app.post(
 
 app.get('/api/gallery', authenticateToken, async (req, res) => {
     const { username } = req.user;
-    const page = parseInt(req.query.page, 10) || 1; // Default to page 1
-    const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 photos per page
+    const { page = 1, limit = 10, label } = req.query;
     const offset = (page - 1) * limit;
 
-    const photos = await db
-        .select()
-        .from(galleryTable)
-        .where(eq(galleryTable.uploadedBy, username))
-        .limit(limit)
-        .offset(offset)
-        .all();
+    let photosQuery = db
+        .select({
+            id: galleryTable.id,
+            filename: galleryTable.filename,
+            uploadedBy: galleryTable.uploadedBy,
+            uploadedAt: galleryTable.uploadedAt,
+        })
+        .from(galleryTable);
+
+    if (label) {
+        photosQuery = photosQuery
+            .innerJoin(
+                imageClassesTable,
+                eq(galleryTable.id, imageClassesTable.imageId)
+            )
+            .where(eq(imageClassesTable.className, label));
+    } else {
+        photosQuery = photosQuery.where(eq(galleryTable.uploadedBy, username));
+    }
+
+    const photos = await photosQuery.limit(limit).offset(offset).all();
 
     const photosWithUrls = photos.map((photo) => ({
         id: photo.id,
@@ -383,19 +396,28 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
         url: `${req.protocol}://${req.get('host')}/uploads/${photo.filename}`,
     }));
 
-    const result = await db
+    const totalCountQuery = db
         .select({ count: count(galleryTable.id) })
-        .from(galleryTable)
-        .where(eq(galleryTable.uploadedBy, username))
-        .get();
+        .from(galleryTable);
 
-    const totalCount = result.count;
+    if (label) {
+        totalCountQuery
+            .innerJoin(
+                imageClassesTable,
+                eq(galleryTable.id, imageClassesTable.imageId)
+            )
+            .where(eq(imageClassesTable.className, label));
+    } else {
+        totalCountQuery.where(eq(galleryTable.uploadedBy, username));
+    }
+
+    const totalCount = (await totalCountQuery.get()).count;
 
     res.json({
         photos: photosWithUrls,
         total: totalCount,
-        page,
-        limit,
+        page: parseInt(page, 10),
+        limit: parseInt(limit, 10),
     });
 });
 
@@ -439,38 +461,6 @@ app.delete('/api/gallery/:photoId', authenticateToken, async (req, res) => {
             message: 'Photo deleted successfully.',
         });
     });
-});
-
-app.get('/api/gallery/by-class', authenticateToken, async (req, res) => {
-    const { className } = req.query;
-
-    if (!className) {
-        return sendErrorResponse(res, 400, 'Class name is required.');
-    }
-
-    const classRecords = await db
-        .select()
-        .from(imageClassesTable)
-        .where(eq(imageClassesTable.className, className))
-        .all();
-
-    const imageIds = classRecords.map((record) => record.imageId);
-
-    const images = await db
-        .select()
-        .from(galleryTable)
-        .where(galleryTable.id.in(imageIds))
-        .all();
-
-    const imagesWithUrls = images.map((image) => ({
-        id: image.id,
-        filename: image.filename,
-        uploadedBy: image.uploadedBy,
-        uploadedAt: image.uploadedAt,
-        url: `${req.protocol}://${req.get('host')}/uploads/${image.filename}`,
-    }));
-
-    res.status(200).json({ images: imagesWithUrls });
 });
 
 app.get(
