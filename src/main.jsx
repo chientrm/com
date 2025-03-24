@@ -64,12 +64,11 @@ function NavBar() {
         ? [
               { to: '/profile', label: 'My Profile' },
               ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
-              { to: '/gallery', label: 'Gallery' }, // Only show Gallery for logged-in users
           ]
         : [
               { to: '/login', label: 'Sign In' },
               { to: '/register', label: 'Sign Up' },
-          ]; // Remove Gallery for not logged-in users
+          ]; // Removed Gallery for all users
 
     return (
         <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
@@ -822,6 +821,12 @@ function Home() {
             <h1 className="text-3xl font-bold mb-4">
                 Welcome to Chientrm Super App!
             </h1>
+            <Link
+                to="/gallery"
+                className="inline-block mt-6 px-6 py-3 text-lg font-medium text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+                Go to Gallery
+            </Link>
         </div>
     );
 }
