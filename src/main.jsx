@@ -532,11 +532,18 @@ function Gallery() {
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [limit, setLimit] = useState(9); // Default limit
     const fileInputRef = useRef(null);
     const { isAdmin } = useAuth();
-    const limit = 10; // Number of photos per page
 
-    const fetchPhotos = async (page) => {
+    const calculateLimit = () => {
+        const width = window.innerWidth;
+        if (width >= 1024) return 12; // 4 images per row
+        if (width >= 768) return 9; // 3 images per row
+        return 6; // 2 images per row
+    };
+
+    const fetchPhotos = async (page, limit) => {
         const response = await fetch(
             `/api/gallery?page=${page}&limit=${limit}`
         );
@@ -546,6 +553,14 @@ function Gallery() {
             setTotalPages(Math.ceil(data.total / limit));
         } else {
             setError('Failed to fetch photos.');
+        }
+    };
+
+    const handleResize = () => {
+        const newLimit = calculateLimit();
+        if (newLimit !== limit) {
+            setLimit(newLimit);
+            setPage(1); // Reset to the first page when limit changes
         }
     };
 
@@ -565,7 +580,7 @@ function Gallery() {
             body: formData,
         });
         if (response.ok) {
-            fetchPhotos(page);
+            fetchPhotos(page, limit);
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to upload photos.');
@@ -589,15 +604,22 @@ function Gallery() {
             method: 'DELETE',
         });
         if (response.ok) {
-            fetchPhotos(page);
+            fetchPhotos(page, limit); // Refresh photos after deletion
         } else {
-            setError('Failed to delete photo.');
+            const errorData = await response.json();
+            setError(errorData.message || 'Failed to delete photo.');
         }
     };
 
     useEffect(() => {
-        fetchPhotos(page);
-    }, [page]);
+        fetchPhotos(page, limit);
+    }, [page, limit]);
+
+    useEffect(() => {
+        handleResize(); // Set initial limit
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     return (
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
@@ -621,7 +643,7 @@ function Gallery() {
                 </form>
             )}
             <div className="flex-1 overflow-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {photos.map((photo) => (
                         <div key={photo.id} className="relative">
                             <img
