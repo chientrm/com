@@ -1,4 +1,11 @@
-import { ArrowPathIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+    ArrowPathIcon,
+    TrashIcon,
+    ChevronDoubleLeftIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    ChevronDoubleRightIcon,
+} from '@heroicons/react/24/outline';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -713,16 +720,16 @@ function Gallery() {
                 <button
                     disabled={page === 1}
                     onClick={() => setPage(1)}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
                 >
-                    First Page
+                    <ChevronDoubleLeftIcon className="w-5 h-5" />
                 </button>
                 <button
                     disabled={page === 1}
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
                 >
-                    Previous
+                    <ChevronLeftIcon className="w-5 h-5" />
                 </button>
                 <span>
                     Page {page} of {totalPages}
@@ -732,16 +739,16 @@ function Gallery() {
                     onClick={() =>
                         setPage((prev) => Math.min(prev + 1, totalPages))
                     }
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
                 >
-                    Next
+                    <ChevronRightIcon className="w-5 h-5" />
                 </button>
                 <button
                     disabled={page === totalPages}
                     onClick={() => setPage(totalPages)}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                    className="p-2 bg-gray-300 text-gray-700 rounded-full disabled:opacity-50 hover:bg-gray-400"
                 >
-                    Last Page
+                    <ChevronDoubleRightIcon className="w-5 h-5" />
                 </button>
             </div>
             {selectedPhoto && (
