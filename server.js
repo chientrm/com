@@ -373,7 +373,8 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
             uploadedBy: galleryTable.uploadedBy,
             uploadedAt: galleryTable.uploadedAt,
         })
-        .from(galleryTable);
+        .from(galleryTable)
+        .where(eq(galleryTable.uploadedBy, username)); // Ensure only the logged-in user's photos are fetched
 
     if (label) {
         photosQuery = photosQuery
@@ -383,8 +384,6 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
             )
             .where(like(imageClassesTable.className, `%${label}%`))
             .groupBy(galleryTable.id); // Group by galleryTable.id to remove duplicates
-    } else {
-        photosQuery = photosQuery.where(eq(galleryTable.uploadedBy, username));
     }
 
     const photos = await photosQuery.limit(limit).offset(offset).all();
@@ -398,8 +397,9 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
     }));
 
     const totalCountQuery = db
-        .select({ count: count(galleryTable.id).as('total') }) // Ensure the count is aliased as 'total'
-        .from(galleryTable);
+        .select({ count: count(galleryTable.id).as('total') })
+        .from(galleryTable)
+        .where(eq(galleryTable.uploadedBy, username)); // Ensure total count is filtered by the logged-in user's photos
 
     if (label) {
         totalCountQuery
@@ -409,12 +409,10 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
             )
             .where(like(imageClassesTable.className, `%${label}%`))
             .groupBy(galleryTable.id); // Group by galleryTable.id for consistent total count
-    } else {
-        totalCountQuery.where(eq(galleryTable.uploadedBy, username));
     }
 
     const totalCountResult = await totalCountQuery.get();
-    const totalCount = totalCountResult ? totalCountResult.total : 0; // Safely access the 'total' property
+    const totalCount = totalCountResult ? totalCountResult.total : 0;
 
     res.json({
         photos: photosWithUrls,
