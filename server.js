@@ -110,29 +110,21 @@ app.use(express.json());
 
 const upload = multer({
     storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-            cb(null, 'uploads/');
-        },
+        destination: 'uploads/',
         filename: (req, file, cb) => {
             const uniqueSuffix = `${Date.now()}-${Math.round(
                 Math.random() * 1e9
             )}`;
-            const originalName = file.originalname.replace(/\s+/g, '_');
-            cb(null, `${uniqueSuffix}-${originalName}`);
+            cb(
+                null,
+                `${uniqueSuffix}-${file.originalname.replace(/\s+/g, '_')}`
+            );
         },
     }),
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5 MB per file
+    limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        if (allowedTypes.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            cb(
-                new Error(
-                    'Invalid file type. Only JPEG, PNG, and GIF are allowed.'
-                )
-            );
-        }
+        cb(null, allowedTypes.includes(file.mimetype));
     },
 });
 
@@ -340,20 +332,20 @@ startClassificationWorker();
 app.post(
     '/api/gallery',
     authenticateToken,
-    upload.array('photos', 200), // Increase the file limit to 200
+    upload.array('photos', 200),
     async (req, res) => {
         if (!req.files || !req.files.length) {
             return sendErrorResponse(res, 400, 'No files uploaded.');
         }
 
         const { username } = req.user;
-        const uploadedAt = Math.floor(Date.now() / 1000); // Unix timestamp
+        const uploadedAt = Math.floor(Date.now() / 1000);
 
         const photoRecords = req.files.map((file) => ({
             filename: file.filename,
             uploadedBy: username,
             uploadedAt,
-            classifiedAt: null, // Mark as unclassified
+            classifiedAt: null,
         }));
 
         const insertedPhotos = await db
@@ -361,9 +353,9 @@ app.post(
             .values(photoRecords)
             .returning();
 
-        // Send photo IDs to the worker for classification
-        const photoIds = insertedPhotos.map((photo) => photo.id);
-        classificationWorker.postMessage({ photoIds });
+        classificationWorker.postMessage({
+            photoIds: insertedPhotos.map((photo) => photo.id),
+        });
 
         res.status(200).json({
             message:

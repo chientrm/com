@@ -10,12 +10,10 @@ import { galleryTable, imageClassesTable } from './schema.js';
 const db = drizzle('file:local.db');
 let mobilenetModel;
 
-// Load the MobileNet model and process unclassified photos on worker start
 (async () => {
     mobilenetModel = await mobilenet.load();
     console.log('MobileNet model loaded in worker.');
 
-    // Fetch unclassified photos from the database
     const unclassifiedPhotos = await db
         .select()
         .from(galleryTable)
@@ -23,13 +21,10 @@ let mobilenetModel;
         .all();
 
     if (unclassifiedPhotos.length > 0) {
-        const photoIds = unclassifiedPhotos.map((photo) => photo.id);
         console.log(
-            `Worker initialized with ${photoIds.length} unclassified photos.`
+            `Worker initialized with ${unclassifiedPhotos.length} unclassified photos.`
         );
-
-        // Process the unclassified photos immediately
-        await processPhotos(photoIds);
+        await processPhotos(unclassifiedPhotos.map((photo) => photo.id));
     } else {
         console.log('No unclassified photos found on worker start.');
     }
@@ -44,12 +39,11 @@ async function processPhotos(photoIds) {
             .get();
 
         if (!photo) {
-            console.warn(`Photo not found in database: ID ${photoId}`);
+            console.warn(`Photo not found: ID ${photoId}`);
             continue;
         }
 
         const imagePath = path.join('uploads', photo.filename);
-
         if (!fs.existsSync(imagePath)) {
             console.warn(`File not found: ${imagePath}`);
             continue;
@@ -57,7 +51,6 @@ async function processPhotos(photoIds) {
 
         const imageBuffer = fs.readFileSync(imagePath);
         const decodedImage = tf.node.decodeImage(imageBuffer);
-
         const predictions = await mobilenetModel.classify(decodedImage);
 
         const classRecords = predictions.map((prediction) => ({
@@ -67,8 +60,6 @@ async function processPhotos(photoIds) {
         }));
 
         await db.insert(imageClassesTable).values(classRecords);
-
-        // Mark the photo as classified by setting classifiedAt to the current timestamp
         await db
             .update(galleryTable)
             .set({ classifiedAt: Math.floor(Date.now() / 1000) })
@@ -80,7 +71,6 @@ async function processPhotos(photoIds) {
     parentPort.postMessage('Classification completed for batch.');
 }
 
-parentPort.on('message', async (message) => {
-    const { photoIds } = message;
-    await processPhotos(photoIds); // Process photos sent via messages
+parentPort.on('message', async ({ photoIds }) => {
+    await processPhotos(photoIds);
 });

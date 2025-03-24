@@ -1,17 +1,15 @@
 import {
     ArrowPathIcon,
-    TrashIcon,
     ChevronDoubleLeftIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
     ChevronDoubleRightIcon,
-    ListBulletIcon as ViewListIcon, // Correct export name for list icon
-    Squares2X2Icon as ViewGridIcon, // Correct export name for grid icon
+    ChevronLeftIcon,
+    ChevronRightIcon, // Correct export name for list icon
+    Squares2X2Icon as ViewGridIcon,
+    ListBulletIcon as ViewListIcon,
 } from '@heroicons/react/24/outline';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import lamb from './lamb.jpeg';
 import {
     Link,
     Route,
@@ -19,6 +17,7 @@ import {
     Routes,
     useParams,
 } from 'react-router-dom';
+import lamb from './lamb.jpeg';
 import './style.css';
 
 // Utility functions
