@@ -171,10 +171,26 @@ app.post('/api/register', async (req, res) => {
     }
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
-    await db.insert(usersTable).values({ username, passwordHash, role: null });
 
-    const token = await generateToken(username, null);
-    res.json({ message: 'Registration successful.', username, token });
+    db.insert(usersTable)
+        .values({ username, passwordHash, role: null })
+        .then(() => {
+            generateToken(username, null).then((token) => {
+                res.json({
+                    message: 'Registration successful.',
+                    username,
+                    token,
+                });
+            });
+        })
+        .catch((error) => {
+            if (error.message.includes('UNIQUE constraint failed')) {
+                sendErrorResponse(res, 400, 'Username already exists.');
+            } else {
+                console.error('Error during registration:', error);
+                sendErrorResponse(res, 500, 'Failed to register user.');
+            }
+        });
 });
 
 app.get('/api/check-auth', authenticateToken, (req, res) => {
@@ -324,10 +340,6 @@ app.post(
                 res.status(200).json({
                     message: 'Photos uploaded successfully.',
                 });
-            })
-            .catch((error) => {
-                console.error('Error saving photos to database:', error);
-                sendErrorResponse(res, 500, 'Failed to upload photos.');
             });
     }
 );
@@ -475,57 +487,33 @@ app.post('/api/gallery/describe', authenticateToken, (req, res) => {
     const imageBuffer = fs.readFileSync(imagePath);
     const decodedImage = tf.node.decodeImage(imageBuffer);
 
-    mobilenetModel
-        .classify(decodedImage)
-        .then((predictions) => {
-            db.select()
-                .from(galleryTable)
-                .where(eq(galleryTable.filename, filename))
-                .get()
-                .then((image) => {
-                    if (!image) {
-                        return sendErrorResponse(
-                            res,
-                            404,
-                            'Image not found in database.'
-                        );
-                    }
-
-                    const classRecords = predictions.map((prediction) => ({
-                        imageId: image.id,
-                        className: prediction.className,
-                        probability: prediction.probability,
-                    }));
-
-                    db.insert(imageClassesTable)
-                        .values(classRecords)
-                        .then(() => {
-                            res.status(200).json({ predictions });
-                        })
-                        .catch((error) => {
-                            console.error(
-                                'Error saving class names to database:',
-                                error
-                            );
-                            sendErrorResponse(
-                                res,
-                                500,
-                                'Failed to save class names.'
-                            );
-                        });
-                })
-                .catch((error) => {
-                    console.error(
-                        'Error retrieving image from database:',
-                        error
+    mobilenetModel.classify(decodedImage).then((predictions) => {
+        db.select()
+            .from(galleryTable)
+            .where(eq(galleryTable.filename, filename))
+            .get()
+            .then((image) => {
+                if (!image) {
+                    return sendErrorResponse(
+                        res,
+                        404,
+                        'Image not found in database.'
                     );
-                    sendErrorResponse(res, 500, 'Failed to retrieve image.');
-                });
-        })
-        .catch((error) => {
-            console.error('Error classifying image:', error);
-            sendErrorResponse(res, 500, 'Failed to classify image.');
-        });
+                }
+
+                const classRecords = predictions.map((prediction) => ({
+                    imageId: image.id,
+                    className: prediction.className,
+                    probability: prediction.probability,
+                }));
+
+                db.insert(imageClassesTable)
+                    .values(classRecords)
+                    .then(() => {
+                        res.status(200).json({ predictions });
+                    });
+            });
+    });
 });
 
 app.get('/api/gallery/by-class', authenticateToken, (req, res) => {
@@ -558,21 +546,7 @@ app.get('/api/gallery/by-class', authenticateToken, (req, res) => {
                     }));
 
                     res.status(200).json({ images: imagesWithUrls });
-                })
-                .catch((error) => {
-                    console.error(
-                        'Error retrieving images from database:',
-                        error
-                    );
-                    sendErrorResponse(res, 500, 'Failed to retrieve images.');
                 });
-        })
-        .catch((error) => {
-            console.error(
-                'Error retrieving class records from database:',
-                error
-            );
-            sendErrorResponse(res, 500, 'Failed to retrieve class records.');
         });
 });
 
