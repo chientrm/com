@@ -172,25 +172,24 @@ app.post('/api/register', async (req, res) => {
 
     const passwordHash = bcrypt.hashSync(password, SALT_ROUNDS);
 
-    db.insert(usersTable)
-        .values({ username, passwordHash, role: null })
-        .then(() => {
-            generateToken(username, null).then((token) => {
-                res.json({
-                    message: 'Registration successful.',
-                    username,
-                    token,
-                });
-            });
-        })
-        .catch((error) => {
-            if (error.message.includes('UNIQUE constraint failed')) {
-                sendErrorResponse(res, 400, 'Username already exists.');
-            } else {
-                console.error('Error during registration:', error);
-                sendErrorResponse(res, 500, 'Failed to register user.');
-            }
+    try {
+        await db
+            .insert(usersTable)
+            .values({ username, passwordHash, role: null });
+        const token = await generateToken(username, null);
+        res.json({
+            message: 'Registration successful.',
+            username,
+            token,
         });
+    } catch (error) {
+        if (error.message.includes('UNIQUE constraint failed')) {
+            sendErrorResponse(res, 400, 'Username already exists.');
+        } else {
+            console.error('Error during registration:', error);
+            sendErrorResponse(res, 500, 'Failed to register user.');
+        }
+    }
 });
 
 app.get('/api/check-auth', authenticateToken, (req, res) => {
@@ -320,7 +319,7 @@ app.post(
     '/api/gallery',
     authenticateToken,
     upload.array('photos', 200), // Increase the file limit to 200
-    (req, res) => {
+    async (req, res) => {
         if (!req.files || req.files.length === 0) {
             return sendErrorResponse(res, 400, 'No files uploaded.');
         }
@@ -334,144 +333,31 @@ app.post(
             uploadedAt,
         }));
 
-        db.insert(galleryTable)
-            .values(photoRecords)
-            .then(() => {
-                res.status(200).json({
-                    message: 'Photos uploaded successfully.',
-                });
-            });
+        await db.insert(galleryTable).values(photoRecords);
+
+        for (const file of req.files) {
+            const imagePath = path.join('uploads', file.filename);
+            const imageBuffer = fs.readFileSync(imagePath);
+            const decodedImage = tf.node.decodeImage(imageBuffer);
+
+            const predictions = await mobilenetModel.classify(decodedImage);
+
+            const classRecords = predictions.map((prediction) => ({
+                imageId: file.filename, // Use filename as a temporary identifier
+                className: prediction.className,
+                probability: prediction.probability,
+            }));
+
+            await db.insert(imageClassesTable).values(classRecords);
+        }
+
+        res.status(200).json({
+            message: 'Photos uploaded and classified successfully.',
+        });
     }
 );
 
-// Modify the gallery retrieval route to return only the logged-in user's photos
-app.get('/api/gallery', authenticateToken, (req, res) => {
-    const { username } = req.user;
-    const page = parseInt(req.query.page, 10) || 1; // Default to page 1
-    const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 photos per page
-    const offset = (page - 1) * limit;
-
-    db.select()
-        .from(galleryTable)
-        .where(eq(galleryTable.uploadedBy, username))
-        .limit(limit)
-        .offset(offset)
-        .all()
-        .then((photos) => {
-            const photosWithUrls = photos.map((photo) => ({
-                id: photo.id,
-                filename: photo.filename,
-                uploadedBy: photo.uploadedBy,
-                uploadedAt: photo.uploadedAt,
-                url: `${req.protocol}://${req.get('host')}/uploads/${
-                    photo.filename
-                }`,
-            }));
-
-            db.select({ count: count(galleryTable.id) })
-                .from(galleryTable)
-                .where(eq(galleryTable.uploadedBy, username))
-                .get()
-                .then((result) => {
-                    const totalCount = result.count;
-
-                    res.json({
-                        photos: photosWithUrls,
-                        total: totalCount,
-                        page,
-                        limit,
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error counting photos in database:', error);
-                    sendErrorResponse(
-                        res,
-                        500,
-                        'Failed to retrieve photo count.'
-                    );
-                });
-        })
-        .catch((error) => {
-            console.error('Error retrieving photos from database:', error);
-            sendErrorResponse(res, 500, 'Failed to retrieve photos.');
-        });
-});
-
-// Modify the delete route to allow users to delete only their own photos
-app.delete('/api/gallery/:photoId', authenticateToken, (req, res) => {
-    const { photoId } = req.params;
-    const { username } = req.user;
-
-    if (!photoId) {
-        console.error('Photo ID is missing in the request.');
-        return sendErrorResponse(res, 400, 'Photo ID is required.');
-    }
-
-    db.select()
-        .from(galleryTable)
-        .where(eq(galleryTable.id, photoId))
-        .get()
-        .then((photo) => {
-            if (!photo) {
-                return sendErrorResponse(
-                    res,
-                    404,
-                    'Photo not found in database.'
-                );
-            }
-
-            if (photo.uploadedBy !== username) {
-                return sendErrorResponse(
-                    res,
-                    403,
-                    'You are not authorized to delete this photo.'
-                );
-            }
-
-            const photoPath = path.join('uploads', photo.filename);
-            fs.unlink(photoPath, (err) => {
-                if (err) {
-                    if (err.code === 'ENOENT') {
-                        console.warn(
-                            `File not found: ${photoPath}. Proceeding with database cleanup.`
-                        );
-                    } else {
-                        console.error('Error deleting photo file:', err);
-                        return sendErrorResponse(
-                            res,
-                            500,
-                            'Failed to delete photo file.'
-                        );
-                    }
-                }
-
-                db.delete(galleryTable)
-                    .where(eq(galleryTable.id, photoId))
-                    .then(() => {
-                        res.status(200).json({
-                            message: 'Photo deleted successfully.',
-                        });
-                    })
-                    .catch((error) => {
-                        console.error(
-                            'Error deleting photo from database:',
-                            error
-                        );
-                        sendErrorResponse(
-                            res,
-                            500,
-                            'Failed to delete photo from database.'
-                        );
-                    });
-            });
-        })
-        .catch((error) => {
-            console.error('Error retrieving photo from database:', error);
-            sendErrorResponse(res, 500, 'Failed to delete photo.');
-        });
-});
-
-app.post('/api/gallery/describe', authenticateToken, (req, res) => {
+app.post('/api/gallery/describe', authenticateToken, async (req, res) => {
     const { filename } = req.body;
 
     if (!filename) {
@@ -487,67 +373,139 @@ app.post('/api/gallery/describe', authenticateToken, (req, res) => {
     const imageBuffer = fs.readFileSync(imagePath);
     const decodedImage = tf.node.decodeImage(imageBuffer);
 
-    mobilenetModel.classify(decodedImage).then((predictions) => {
-        db.select()
-            .from(galleryTable)
-            .where(eq(galleryTable.filename, filename))
-            .get()
-            .then((image) => {
-                if (!image) {
-                    return sendErrorResponse(
-                        res,
-                        404,
-                        'Image not found in database.'
-                    );
-                }
+    const predictions = await mobilenetModel.classify(decodedImage);
 
-                const classRecords = predictions.map((prediction) => ({
-                    imageId: image.id,
-                    className: prediction.className,
-                    probability: prediction.probability,
-                }));
+    const image = await db
+        .select()
+        .from(galleryTable)
+        .where(eq(galleryTable.filename, filename))
+        .get();
 
-                db.insert(imageClassesTable)
-                    .values(classRecords)
-                    .then(() => {
-                        res.status(200).json({ predictions });
-                    });
-            });
+    if (!image) {
+        return sendErrorResponse(res, 404, 'Image not found in database.');
+    }
+
+    const classRecords = predictions.map((prediction) => ({
+        imageId: image.id,
+        className: prediction.className,
+        probability: prediction.probability,
+    }));
+
+    await db.insert(imageClassesTable).values(classRecords);
+
+    res.status(200).json({ predictions });
+});
+
+app.get('/api/gallery', authenticateToken, async (req, res) => {
+    const { username } = req.user;
+    const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 photos per page
+    const offset = (page - 1) * limit;
+
+    const photos = await db
+        .select()
+        .from(galleryTable)
+        .where(eq(galleryTable.uploadedBy, username))
+        .limit(limit)
+        .offset(offset)
+        .all();
+
+    const photosWithUrls = photos.map((photo) => ({
+        id: photo.id,
+        filename: photo.filename,
+        uploadedBy: photo.uploadedBy,
+        uploadedAt: photo.uploadedAt,
+        url: `${req.protocol}://${req.get('host')}/uploads/${photo.filename}`,
+    }));
+
+    const result = await db
+        .select({ count: count(galleryTable.id) })
+        .from(galleryTable)
+        .where(eq(galleryTable.uploadedBy, username))
+        .get();
+
+    const totalCount = result.count;
+
+    res.json({
+        photos: photosWithUrls,
+        total: totalCount,
+        page,
+        limit,
     });
 });
 
-app.get('/api/gallery/by-class', authenticateToken, (req, res) => {
+app.delete('/api/gallery/:photoId', authenticateToken, async (req, res) => {
+    const { photoId } = req.params;
+    const { username } = req.user;
+
+    if (!photoId) {
+        console.error('Photo ID is missing in the request.');
+        return sendErrorResponse(res, 400, 'Photo ID is required.');
+    }
+
+    const photo = await db
+        .select()
+        .from(galleryTable)
+        .where(eq(galleryTable.id, photoId))
+        .get();
+
+    if (!photo) {
+        return sendErrorResponse(res, 404, 'Photo not found in database.');
+    }
+
+    if (photo.uploadedBy !== username) {
+        return sendErrorResponse(
+            res,
+            403,
+            'You are not authorized to delete this photo.'
+        );
+    }
+
+    const photoPath = path.join('uploads', photo.filename);
+    fs.unlink(photoPath, async (err) => {
+        if (err && err.code !== 'ENOENT') {
+            console.error('Error deleting photo file:', err);
+            return sendErrorResponse(res, 500, 'Failed to delete photo file.');
+        }
+
+        await db.delete(galleryTable).where(eq(galleryTable.id, photoId));
+
+        res.status(200).json({
+            message: 'Photo deleted successfully.',
+        });
+    });
+});
+
+app.get('/api/gallery/by-class', authenticateToken, async (req, res) => {
     const { className } = req.query;
 
     if (!className) {
         return sendErrorResponse(res, 400, 'Class name is required.');
     }
 
-    db.select()
+    const classRecords = await db
+        .select()
         .from(imageClassesTable)
         .where(eq(imageClassesTable.className, className))
-        .all()
-        .then((classRecords) => {
-            const imageIds = classRecords.map((record) => record.imageId);
+        .all();
 
-            db.select()
-                .from(galleryTable)
-                .where(galleryTable.id.in(imageIds))
-                .all()
-                .then((images) => {
-                    const imagesWithUrls = images.map((image) => ({
-                        id: image.id,
-                        filename: image.filename,
-                        uploadedBy: image.uploadedBy,
-                        uploadedAt: image.uploadedAt,
-                        url: `${req.protocol}://${req.get('host')}/uploads/${
-                            image.filename
-                        }`,
-                    }));
+    const imageIds = classRecords.map((record) => record.imageId);
 
-                    res.status(200).json({ images: imagesWithUrls });
-                });
-        });
+    const images = await db
+        .select()
+        .from(galleryTable)
+        .where(galleryTable.id.in(imageIds))
+        .all();
+
+    const imagesWithUrls = images.map((image) => ({
+        id: image.id,
+        filename: image.filename,
+        uploadedBy: image.uploadedBy,
+        uploadedAt: image.uploadedAt,
+        url: `${req.protocol}://${req.get('host')}/uploads/${image.filename}`,
+    }));
+
+    res.status(200).json({ images: imagesWithUrls });
 });
 
 app.use('/uploads', express.static('uploads'));
