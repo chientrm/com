@@ -560,7 +560,9 @@ function Gallery() {
         const response = await fetchWithAuth(`/api/gallery/classes/${photoId}`);
         if (response.ok) {
             const data = await response.json();
-            setPhotoClasses(data.classes);
+            setPhotoClasses(
+                data.classes.map((cls) => cls.className).join(', ')
+            );
         } else {
             setPhotoClasses([]);
             setError('Failed to fetch photo classes.');
@@ -706,21 +708,9 @@ function Gallery() {
                             alt={selectedPhoto.filename}
                             className="max-w-full max-h-96 rounded-md mb-4"
                         />
-                        <h3 className="text-lg font-bold mb-2">
-                            Classifications:
-                        </h3>
-                        <ul className="list-disc list-inside mb-4">
-                            {photoClasses.length > 0 ? (
-                                photoClasses.map((cls, index) => (
-                                    <li key={index}>
-                                        {cls.className} -{' '}
-                                        {(cls.probability * 100).toFixed(2)}%
-                                    </li>
-                                ))
-                            ) : (
-                                <li>No classifications available.</li>
-                            )}
-                        </ul>
+                        <p className="text-sm text-gray-700 mb-4">
+                            <strong>Labels:</strong> {photoClasses || 'None'}
+                        </p>
                         <button
                             onClick={() => setSelectedPhoto(null)}
                             className="px-4 py-2 bg-gray-600 text-white rounded-md"
