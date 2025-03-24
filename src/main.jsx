@@ -612,11 +612,18 @@ function Gallery() {
     const handleSearchChange = (e) => {
         const label = e.target.value;
         setSearchLabel(label);
-        fetchPhotos(label.trim());
         setPage(1); // Reset to the first page on search
+        fetchPhotos(label.trim());
+    };
+
+    const handleClearSearch = () => {
+        setSearchLabel('');
+        setPage(1); // Reset to the first page on clearing search
+        fetchPhotos();
     };
 
     const paginatedPhotos = photos.slice((page - 1) * limit, page * limit);
+    const totalPages = Math.ceil(photos.length / limit);
 
     useEffect(() => {
         fetchPhotos(searchLabel);
@@ -657,10 +664,7 @@ function Gallery() {
                 />
                 {searchLabel && (
                     <button
-                        onClick={() => {
-                            setSearchLabel('');
-                            fetchPhotos();
-                        }}
+                        onClick={handleClearSearch}
                         className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
                     >
                         Clear
@@ -708,24 +712,36 @@ function Gallery() {
             <div className="mt-4 flex justify-between items-center">
                 <button
                     disabled={page === 1}
+                    onClick={() => setPage(1)}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                >
+                    First Page
+                </button>
+                <button
+                    disabled={page === 1}
                     onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                     className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
                 >
                     Previous
                 </button>
                 <span>
-                    Page {page} of {Math.ceil(photos.length / limit)}
+                    Page {page} of {totalPages}
                 </span>
                 <button
-                    disabled={page === Math.ceil(photos.length / limit)}
+                    disabled={page === totalPages}
                     onClick={() =>
-                        setPage((prev) =>
-                            Math.min(prev + 1, Math.ceil(photos.length / limit))
-                        )
+                        setPage((prev) => Math.min(prev + 1, totalPages))
                     }
                     className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
                 >
                     Next
+                </button>
+                <button
+                    disabled={page === totalPages}
+                    onClick={() => setPage(totalPages)}
+                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+                >
+                    Last Page
                 </button>
             </div>
             {selectedPhoto && (
