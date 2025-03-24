@@ -657,6 +657,10 @@ function Gallery() {
         return () => window.removeEventListener('resize', handleResize);
     }, [limit]);
 
+    const handleImageLoad = (e) => {
+        e.target.classList.add('opacity-100');
+    };
+
     return (
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
@@ -703,7 +707,8 @@ function Gallery() {
                             <img
                                 src={photo.url}
                                 alt={photo.filename}
-                                className="absolute top-0 left-0 w-full h-full object-cover"
+                                className="absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-500"
+                                onLoad={handleImageLoad}
                                 onClick={() => handlePhotoClick(photo)}
                             />
                             <button
