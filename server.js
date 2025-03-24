@@ -311,7 +311,7 @@ let classificationWorker;
 function startClassificationWorker() {
     classificationWorker = new Worker('./classificationWorker.js');
     classificationWorker.on('message', (message) => {
-        console.log(`Worker message: ${message}`);
+        console.log('Worker message:', JSON.stringify(message, null, 2)); // Log the actual message content
     });
     classificationWorker.on('error', (error) => {
         console.error('Worker error:', error);

@@ -24,18 +24,18 @@ let mobilenetModel;
 
     if (unclassifiedPhotos.length > 0) {
         const photoIds = unclassifiedPhotos.map((photo) => photo.id);
-        parentPort.postMessage({ photoIds }); // Send unclassified photo IDs to the worker
         console.log(
             `Worker initialized with ${photoIds.length} unclassified photos.`
         );
+
+        // Process the unclassified photos immediately
+        await processPhotos(photoIds);
     } else {
         console.log('No unclassified photos found on worker start.');
     }
 })();
 
-parentPort.on('message', async (message) => {
-    const { photoIds } = message;
-
+async function processPhotos(photoIds) {
     for (const photoId of photoIds) {
         const photo = await db
             .select()
@@ -78,4 +78,9 @@ parentPort.on('message', async (message) => {
     }
 
     parentPort.postMessage('Classification completed for batch.');
+}
+
+parentPort.on('message', async (message) => {
+    const { photoIds } = message;
+    await processPhotos(photoIds); // Process photos sent via messages
 });
