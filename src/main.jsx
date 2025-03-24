@@ -1,4 +1,4 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -658,9 +658,9 @@ function Gallery() {
                             {isAdmin && (
                                 <button
                                     onClick={() => handleDelete(photo.id)}
-                                    className="absolute top-2 right-2 bg-gray-200 text-gray-700 px-2 py-1 rounded-md hover:bg-gray-300 hover:text-gray-900"
+                                    className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                                 >
-                                    Delete
+                                    <TrashIcon className="w-5 h-5" />
                                 </button>
                             )}
                         </div>
