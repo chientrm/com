@@ -546,6 +546,30 @@ function Gallery() {
         }
     };
 
+    const handleDelete = async (photoId) => {
+        if (!photoId) {
+            console.error('Photo ID is null or undefined.');
+            return;
+        }
+
+        const confirmDelete = window.confirm(
+            'Are you sure you want to delete this photo?'
+        );
+        if (!confirmDelete) {
+            return;
+        }
+
+        const response = await fetchWithAuth(`/api/gallery/${photoId}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            fetchPhotos(searchLabel); // Refresh photos after deletion
+        } else {
+            const errorData = await response.json();
+            setError(errorData.message || 'Failed to delete photo.');
+        }
+    };
+
     const handlePhotoClick = async (photo) => {
         setSelectedPhoto(photo);
         setPhotoClasses([]); // Clear class names to prevent text glitching
