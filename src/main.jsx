@@ -57,13 +57,12 @@ function NavBar() {
         ? [
               { to: '/profile', label: 'My Profile' },
               ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
-              { to: '/gallery', label: 'Gallery' },
+              { to: '/gallery', label: 'Gallery' }, // Only show Gallery for logged-in users
           ]
         : [
               { to: '/login', label: 'Sign In' },
               { to: '/register', label: 'Sign Up' },
-              { to: '/gallery', label: 'Gallery' },
-          ];
+          ]; // Remove Gallery for not logged-in users
 
     return (
         <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
