@@ -819,7 +819,9 @@ function App() {
 function Home() {
     return (
         <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Welcome to the App!</h1>
+            <h1 className="text-3xl font-bold mb-4">
+                Welcome to Chientrm Super App!
+            </h1>
         </div>
     );
 }

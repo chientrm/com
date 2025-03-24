@@ -1,4 +1,4 @@
-# Software Requirements Specification (SRS)
+# Chientrm Super App
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@
 
 ## Introduction
 
-This application is a web-based system designed to provide user authentication, system administration tools, and log management. It includes features for user registration, login, and role-based access control. Administrators can view system logs and manage services.
+The **Chientrm Super App** is a web-based system designed to provide user authentication, system administration tools, and log management. It includes features for user registration, login, and role-based access control. Administrators can view system logs and manage services.
 
 ---
 
