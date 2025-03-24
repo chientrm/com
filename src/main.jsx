@@ -704,7 +704,7 @@ function Gallery() {
             </form>
             {isUploading && (
                 <div className="flex justify-center items-center mb-4">
-                    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-2 border-gray-300 border-t-blue-600"></div>
                 </div>
             )}
             <div className="flex-1 overflow-auto">
