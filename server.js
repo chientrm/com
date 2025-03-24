@@ -453,7 +453,7 @@ app.delete(
     }
 );
 
-app.post('/api/gallery/describe', authenticateToken, async (req, res) => {
+app.post('/api/gallery/describe', authenticateToken, (req, res) => {
     const { filename } = req.body;
 
     if (!filename) {
@@ -466,16 +466,18 @@ app.post('/api/gallery/describe', authenticateToken, async (req, res) => {
         return sendErrorResponse(res, 404, 'Image not found.');
     }
 
-    try {
-        const imageBuffer = fs.readFileSync(imagePath);
-        const decodedImage = tf.node.decodeImage(imageBuffer);
-        const predictions = await mobilenetModel.classify(decodedImage);
+    const imageBuffer = fs.readFileSync(imagePath);
+    const decodedImage = tf.node.decodeImage(imageBuffer);
 
-        res.status(200).json({ predictions });
-    } catch (error) {
-        console.error('Error classifying image:', error);
-        sendErrorResponse(res, 500, 'Failed to classify image.');
-    }
+    mobilenetModel
+        .classify(decodedImage)
+        .then((predictions) => {
+            res.status(200).json({ predictions });
+        })
+        .catch((error) => {
+            console.error('Error classifying image:', error);
+            sendErrorResponse(res, 500, 'Failed to classify image.');
+        });
 });
 
 app.use('/uploads', express.static('uploads'));
