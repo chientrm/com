@@ -11,7 +11,7 @@ import { SignJWT, jwtVerify } from 'jose';
 import multer from 'multer';
 import path from 'path';
 import ViteExpress from 'vite-express';
-import { galleryTable, usersTable } from './schema.js';
+import { galleryTable, usersTable, imageClassesTable } from './schema.js';
 
 dotenv.config();
 
@@ -478,11 +478,101 @@ app.post('/api/gallery/describe', authenticateToken, (req, res) => {
     mobilenetModel
         .classify(decodedImage)
         .then((predictions) => {
-            res.status(200).json({ predictions });
+            db.select()
+                .from(galleryTable)
+                .where(eq(galleryTable.filename, filename))
+                .get()
+                .then((image) => {
+                    if (!image) {
+                        return sendErrorResponse(
+                            res,
+                            404,
+                            'Image not found in database.'
+                        );
+                    }
+
+                    const classRecords = predictions.map((prediction) => ({
+                        imageId: image.id,
+                        className: prediction.className,
+                        probability: prediction.probability,
+                    }));
+
+                    db.insert(imageClassesTable)
+                        .values(classRecords)
+                        .then(() => {
+                            res.status(200).json({ predictions });
+                        })
+                        .catch((error) => {
+                            console.error(
+                                'Error saving class names to database:',
+                                error
+                            );
+                            sendErrorResponse(
+                                res,
+                                500,
+                                'Failed to save class names.'
+                            );
+                        });
+                })
+                .catch((error) => {
+                    console.error(
+                        'Error retrieving image from database:',
+                        error
+                    );
+                    sendErrorResponse(res, 500, 'Failed to retrieve image.');
+                });
         })
         .catch((error) => {
             console.error('Error classifying image:', error);
             sendErrorResponse(res, 500, 'Failed to classify image.');
+        });
+});
+
+app.get('/api/gallery/by-class', authenticateToken, (req, res) => {
+    const { className } = req.query;
+
+    if (!className) {
+        return sendErrorResponse(res, 400, 'Class name is required.');
+    }
+
+    db.select()
+        .from(imageClassesTable)
+        .where(eq(imageClassesTable.className, className))
+        .all()
+        .then((classRecords) => {
+            const imageIds = classRecords.map((record) => record.imageId);
+
+            db.select()
+                .from(galleryTable)
+                .where(galleryTable.id.in(imageIds))
+                .all()
+                .then((images) => {
+                    const imagesWithUrls = images.map((image) => ({
+                        id: image.id,
+                        filename: image.filename,
+                        uploadedBy: image.uploadedBy,
+                        uploadedAt: image.uploadedAt,
+                        url: `${req.protocol}://${req.get('host')}/uploads/${
+                            image.filename
+                        }`,
+                    }));
+
+                    res.status(200).json({ images: imagesWithUrls });
+                })
+                .catch((error) => {
+                    console.error(
+                        'Error retrieving images from database:',
+                        error
+                    );
+                    sendErrorResponse(res, 500, 'Failed to retrieve images.');
+                });
+        })
+        .catch((error) => {
+            console.error(
+                'Error retrieving class records from database:',
+                error
+            );
+            sendErrorResponse(res, 500, 'Failed to retrieve class records.');
         });
 });
 

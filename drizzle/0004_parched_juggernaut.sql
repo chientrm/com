@@ -1,0 +1,1 @@
+ALTER TABLE `image_classes_table` ADD `probability` text NOT NULL;

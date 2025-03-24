@@ -22,6 +22,34 @@
       "when": 1742730532691,
       "tag": "0002_uneven_ravenous",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1742799129841,
+      "tag": "0003_open_firedrake",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1742799383040,
+      "tag": "0004_parched_juggernaut",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1742799399642,
+      "tag": "0005_amazing_wonder_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1742799520155,
+      "tag": "0006_abnormal_cardiac",
+      "breakpoints": true
     }
   ]
 }
