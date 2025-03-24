@@ -624,6 +624,12 @@ function Gallery() {
         }
     };
 
+    const handlePhotoClick = (photo) => {
+        setSelectedPhoto(photo);
+        setPhotoClasses([]); // Clear class names to prevent text glitching
+        fetchPhotoClasses(photo.id);
+    };
+
     useEffect(() => {
         fetchPhotos(page, limit);
     }, [page, limit]);
@@ -664,10 +670,7 @@ function Gallery() {
                                 src={photo.url}
                                 alt={photo.filename}
                                 className="absolute top-0 left-0 w-full h-full object-cover"
-                                onClick={() => {
-                                    setSelectedPhoto(photo);
-                                    fetchPhotoClasses(photo.id);
-                                }}
+                                onClick={() => handlePhotoClick(photo)}
                             />
                             <button
                                 onClick={() => handleDelete(photo.id)}
