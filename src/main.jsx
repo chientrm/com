@@ -538,9 +538,9 @@ function Gallery() {
 
     const calculateLimit = () => {
         const width = window.innerWidth;
-        if (width >= 1024) return 12; // 4 images per row
-        if (width >= 768) return 9; // 3 images per row
-        return 6; // 2 images per row
+        if (width >= 1024) return 9; // 3 images per row on large screens
+        if (width >= 768) return 9; // 3 images per row on medium screens
+        return 6; // 2 images per row on small screens
     };
 
     const fetchPhotos = async (page, limit) => {
@@ -643,7 +643,7 @@ function Gallery() {
                 </form>
             )}
             <div className="flex-1 overflow-auto">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     {photos.map((photo) => (
                         <div
                             key={photo.id}
