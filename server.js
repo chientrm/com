@@ -10,6 +10,8 @@ import { usersTable, galleryTable } from './schema.js';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import * as tf from '@tensorflow/tfjs-node';
+import * as mobilenet from '@tensorflow-models/mobilenet';
 
 dotenv.config();
 
@@ -18,6 +20,14 @@ const PORT = process.env.PORT;
 const db = drizzle('file:local.db');
 const SALT_ROUNDS = 12;
 const JWT_SECRET = process.env.TURNSTILE_SECRET;
+
+let mobilenetModel;
+
+// Load the MobileNet model once when the server starts
+(async () => {
+    mobilenetModel = await mobilenet.load();
+    console.log('MobileNet model loaded.');
+})();
 
 // Utility functions
 function validateUsername(username) {
@@ -442,6 +452,31 @@ app.delete(
             });
     }
 );
+
+app.post('/api/gallery/describe', authenticateToken, async (req, res) => {
+    const { filename } = req.body;
+
+    if (!filename) {
+        return sendErrorResponse(res, 400, 'Filename is required.');
+    }
+
+    const imagePath = path.join('uploads', filename);
+
+    if (!fs.existsSync(imagePath)) {
+        return sendErrorResponse(res, 404, 'Image not found.');
+    }
+
+    try {
+        const imageBuffer = fs.readFileSync(imagePath);
+        const decodedImage = tf.node.decodeImage(imageBuffer);
+        const predictions = await mobilenetModel.classify(decodedImage);
+
+        res.status(200).json({ predictions });
+    } catch (error) {
+        console.error('Error classifying image:', error);
+        sendErrorResponse(res, 500, 'Failed to classify image.');
+    }
+});
 
 app.use('/uploads', express.static('uploads'));
 

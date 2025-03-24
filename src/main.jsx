@@ -611,6 +611,36 @@ function Gallery() {
         }
     };
 
+    const describeImage = async (photo) => {
+        try {
+            const response = await fetchWithAuth('/api/gallery/describe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: photo.filename }),
+            });
+
+            if (response.ok) {
+                const { predictions } = await response.json();
+                const description = predictions
+                    .map(
+                        (result) =>
+                            `${result.className} (${(
+                                result.probability * 100
+                            ).toFixed(2)}%)`
+                    )
+                    .join(', ');
+
+                alert(`Description for ${photo.filename}: ${description}`);
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message || 'Failed to describe the image.');
+            }
+        } catch (err) {
+            console.error('Error describing the image:', err);
+            alert('Failed to describe the image.');
+        }
+    };
+
     useEffect(() => {
         fetchPhotos(page, limit);
     }, [page, limit]);
@@ -690,31 +720,26 @@ function Gallery() {
             </div>
             {selectedPhoto && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-                    <div className="relative">
+                    <div className="relative bg-white p-4 rounded-md shadow-lg">
                         <img
                             src={selectedPhoto.url}
                             alt={selectedPhoto.filename}
-                            className="max-w-full max-h-screen rounded-md"
+                            className="max-w-full max-h-96 rounded-md mb-4"
                         />
-                        <button
-                            onClick={() => setSelectedPhoto(null)}
-                            className="absolute top-4 right-4 bg-gray-600 text-white p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="2"
-                                stroke="currentColor"
-                                className="w-5 h-5"
+                        <div className="flex justify-between">
+                            <button
+                                onClick={() => describeImage(selectedPhoto)}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-md"
                             >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
+                                Describe
+                            </button>
+                            <button
+                                onClick={() => setSelectedPhoto(null)}
+                                className="px-4 py-2 bg-gray-600 text-white rounded-md"
+                            >
+                                Close
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
