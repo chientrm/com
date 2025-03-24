@@ -3,7 +3,7 @@ import * as tf from '@tensorflow/tfjs-node';
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
-import { count, eq } from 'drizzle-orm';
+import { count, eq, isNull } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import fs from 'fs';
@@ -12,6 +12,7 @@ import multer from 'multer';
 import path from 'path';
 import ViteExpress from 'vite-express';
 import { galleryTable, usersTable, imageClassesTable } from './schema.js';
+import { table } from 'console';
 
 dotenv.config();
 
@@ -29,7 +30,7 @@ async function initializeUnclassifiedPhotos() {
     const unclassifiedPhotos = await db
         .select()
         .from(galleryTable)
-        .where(eq(galleryTable.classifiedAt, null)) // Check for unclassified photos
+        .where(isNull(galleryTable.classifiedAt)) // Check for unclassified photos
         .all();
 
     unclassifiedPhotos.forEach((photo) => {
@@ -411,7 +412,7 @@ app.post(
             .returning();
 
         insertedPhotos.forEach((photo) => {
-            classificationQueue.push(photo.id); // Queue photo ID
+            classificationQueue.push(photo.id);
         });
 
         processClassificationQueue();
