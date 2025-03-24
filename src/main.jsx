@@ -631,9 +631,10 @@ function Gallery() {
         fetchPhotoClasses(photo.id);
     };
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        fetchPhotos(1, limit, searchLabel.trim());
+    const handleSearchChange = (e) => {
+        const label = e.target.value;
+        setSearchLabel(label);
+        fetchPhotos(1, limit, label.trim()); // Trigger search on input change
     };
 
     useEffect(() => {
@@ -650,21 +651,15 @@ function Gallery() {
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
             <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
-            <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+            <div className="mb-4">
                 <input
                     type="text"
                     placeholder="Search by label..."
                     value={searchLabel}
-                    onChange={(e) => setSearchLabel(e.target.value)}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+                    onChange={handleSearchChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 />
-                <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                >
-                    Search
-                </button>
-            </form>
+            </div>
             <form onSubmit={handleUpload} className="mb-4">
                 <input
                     type="file"
