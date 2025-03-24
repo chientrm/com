@@ -534,7 +534,6 @@ function Gallery() {
     const [totalPages, setTotalPages] = useState(1);
     const [limit, setLimit] = useState(9); // Default limit
     const fileInputRef = useRef(null);
-    const { isAdmin } = useAuth();
 
     const calculateLimit = () => {
         const width = window.innerWidth;
@@ -544,7 +543,7 @@ function Gallery() {
     };
 
     const fetchPhotos = async (page, limit) => {
-        const response = await fetch(
+        const response = await fetchWithAuth(
             `/api/gallery?page=${page}&limit=${limit}`
         );
         if (response.ok) {
@@ -611,36 +610,6 @@ function Gallery() {
         }
     };
 
-    const describeImage = async (photo) => {
-        try {
-            const response = await fetchWithAuth('/api/gallery/describe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ filename: photo.filename }),
-            });
-
-            if (response.ok) {
-                const { predictions } = await response.json();
-                const description = predictions
-                    .map(
-                        (result) =>
-                            `${result.className} (${(
-                                result.probability * 100
-                            ).toFixed(2)}%)`
-                    )
-                    .join(', ');
-
-                alert(`Description for ${photo.filename}: ${description}`);
-            } else {
-                const errorData = await response.json();
-                alert(errorData.message || 'Failed to describe the image.');
-            }
-        } catch (err) {
-            console.error('Error describing the image:', err);
-            alert('Failed to describe the image.');
-        }
-    };
-
     useEffect(() => {
         fetchPhotos(page, limit);
     }, [page, limit]);
@@ -653,25 +622,23 @@ function Gallery() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
-            <h2 className="text-2xl font-bold mb-4">Gallery</h2>
+            <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
             {error && <p className="text-red-500">{error}</p>}
-            {isAdmin && (
-                <form onSubmit={handleUpload} className="mb-4">
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        className="mb-2"
-                        accept="image/*"
-                        multiple
-                    />
-                    <button
-                        type="submit"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                    >
-                        Upload Photos
-                    </button>
-                </form>
-            )}
+            <form onSubmit={handleUpload} className="mb-4">
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="mb-2"
+                    accept="image/*"
+                    multiple
+                />
+                <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >
+                    Upload Photos
+                </button>
+            </form>
             <div className="flex-1 overflow-auto">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     {photos.map((photo) => (
@@ -685,14 +652,12 @@ function Gallery() {
                                 className="absolute top-0 left-0 w-full h-full object-cover"
                                 onClick={() => setSelectedPhoto(photo)}
                             />
-                            {isAdmin && (
-                                <button
-                                    onClick={() => handleDelete(photo.id)}
-                                    className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                                >
-                                    <TrashIcon className="w-5 h-5" />
-                                </button>
-                            )}
+                            <button
+                                onClick={() => handleDelete(photo.id)}
+                                className="absolute top-2 right-2 bg-gray-200 text-gray-700 p-2 rounded-full hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+                            >
+                                <TrashIcon className="w-5 h-5" />
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -726,20 +691,12 @@ function Gallery() {
                             alt={selectedPhoto.filename}
                             className="max-w-full max-h-96 rounded-md mb-4"
                         />
-                        <div className="flex justify-between">
-                            <button
-                                onClick={() => describeImage(selectedPhoto)}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                            >
-                                Describe
-                            </button>
-                            <button
-                                onClick={() => setSelectedPhoto(null)}
-                                className="px-4 py-2 bg-gray-600 text-white rounded-md"
-                            >
-                                Close
-                            </button>
-                        </div>
+                        <button
+                            onClick={() => setSelectedPhoto(null)}
+                            className="px-4 py-2 bg-gray-600 text-white rounded-md"
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             )}

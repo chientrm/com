@@ -299,7 +299,7 @@ app.get(
     }
 );
 
-// Modify the upload route to handle multiple files
+// Modify the upload route to handle multiple files and associate them with the logged-in user
 app.post(
     '/api/gallery',
     authenticateToken,
@@ -332,13 +332,16 @@ app.post(
     }
 );
 
-app.get('/api/gallery', (req, res) => {
+// Modify the gallery retrieval route to return only the logged-in user's photos
+app.get('/api/gallery', authenticateToken, (req, res) => {
+    const { username } = req.user;
     const page = parseInt(req.query.page, 10) || 1; // Default to page 1
     const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 photos per page
     const offset = (page - 1) * limit;
 
     db.select()
         .from(galleryTable)
+        .where(eq(galleryTable.uploadedBy, username))
         .limit(limit)
         .offset(offset)
         .all()
@@ -353,9 +356,9 @@ app.get('/api/gallery', (req, res) => {
                 }`,
             }));
 
-            // Fix the count query
             db.select({ count: count(galleryTable.id) })
                 .from(galleryTable)
+                .where(eq(galleryTable.uploadedBy, username))
                 .get()
                 .then((result) => {
                     const totalCount = result.count;
@@ -382,76 +385,79 @@ app.get('/api/gallery', (req, res) => {
         });
 });
 
-app.delete(
-    '/api/gallery/:photoId',
-    authenticateToken,
-    authenticateAdmin,
-    (req, res) => {
-        const { photoId } = req.params;
+// Modify the delete route to allow users to delete only their own photos
+app.delete('/api/gallery/:photoId', authenticateToken, (req, res) => {
+    const { photoId } = req.params;
+    const { username } = req.user;
 
-        if (!photoId) {
-            console.error('Photo ID is missing in the request.');
-            return sendErrorResponse(res, 400, 'Photo ID is required.');
-        }
+    if (!photoId) {
+        console.error('Photo ID is missing in the request.');
+        return sendErrorResponse(res, 400, 'Photo ID is required.');
+    }
 
-        console.log(`Received request to delete photo with ID: ${photoId}`);
+    db.select()
+        .from(galleryTable)
+        .where(eq(galleryTable.id, photoId))
+        .get()
+        .then((photo) => {
+            if (!photo) {
+                return sendErrorResponse(
+                    res,
+                    404,
+                    'Photo not found in database.'
+                );
+            }
 
-        db.select()
-            .from(galleryTable)
-            .where(eq(galleryTable.id, photoId))
-            .get()
-            .then((photo) => {
-                if (!photo) {
-                    return sendErrorResponse(
-                        res,
-                        404,
-                        'Photo not found in database.'
-                    );
+            if (photo.uploadedBy !== username) {
+                return sendErrorResponse(
+                    res,
+                    403,
+                    'You are not authorized to delete this photo.'
+                );
+            }
+
+            const photoPath = path.join('uploads', photo.filename);
+            fs.unlink(photoPath, (err) => {
+                if (err) {
+                    if (err.code === 'ENOENT') {
+                        console.warn(
+                            `File not found: ${photoPath}. Proceeding with database cleanup.`
+                        );
+                    } else {
+                        console.error('Error deleting photo file:', err);
+                        return sendErrorResponse(
+                            res,
+                            500,
+                            'Failed to delete photo file.'
+                        );
+                    }
                 }
 
-                const photoPath = path.join('uploads', photo.filename);
-                fs.unlink(photoPath, (err) => {
-                    if (err) {
-                        if (err.code === 'ENOENT') {
-                            console.warn(
-                                `File not found: ${photoPath}. Proceeding with database cleanup.`
-                            );
-                        } else {
-                            console.error('Error deleting photo file:', err);
-                            return sendErrorResponse(
-                                res,
-                                500,
-                                'Failed to delete photo file.'
-                            );
-                        }
-                    }
-
-                    db.delete(galleryTable)
-                        .where(eq(galleryTable.id, photoId))
-                        .then(() => {
-                            res.status(200).json({
-                                message: 'Photo deleted successfully.',
-                            });
-                        })
-                        .catch((error) => {
-                            console.error(
-                                'Error deleting photo from database:',
-                                error
-                            );
-                            sendErrorResponse(
-                                res,
-                                500,
-                                'Failed to delete photo from database.'
-                            );
+                db.delete(galleryTable)
+                    .where(eq(galleryTable.id, photoId))
+                    .then(() => {
+                        res.status(200).json({
+                            message: 'Photo deleted successfully.',
                         });
-                });
-            })
-            .catch((error) => {
-                console.error('Error retrieving photo from database:', error);
-                sendErrorResponse(res, 500, 'Failed to delete photo.');
+                    })
+                    .catch((error) => {
+                        console.error(
+                            'Error deleting photo from database:',
+                            error
+                        );
+                        sendErrorResponse(
+                            res,
+                            500,
+                            'Failed to delete photo from database.'
+                        );
+                    });
             });
-    }
-);
+        })
+        .catch((error) => {
+            console.error('Error retrieving photo from database:', error);
+            sendErrorResponse(res, 500, 'Failed to delete photo.');
+        });
+});
 
 app.post('/api/gallery/describe', authenticateToken, (req, res) => {
     const { filename } = req.body;
