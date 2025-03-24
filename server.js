@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
-import { count, eq } from 'drizzle-orm';
+import { count, eq, like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import fs from 'fs';
@@ -381,7 +381,8 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
                 imageClassesTable,
                 eq(galleryTable.id, imageClassesTable.imageId)
             )
-            .where(eq(imageClassesTable.className, label));
+            .where(like(imageClassesTable.className, `%${label}%`))
+            .groupBy(galleryTable.id); // Group by galleryTable.id to remove duplicates
     } else {
         photosQuery = photosQuery.where(eq(galleryTable.uploadedBy, username));
     }
@@ -397,7 +398,7 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
     }));
 
     const totalCountQuery = db
-        .select({ count: count(galleryTable.id) })
+        .select({ count: count(galleryTable.id).as('total') }) // Ensure the count is aliased as 'total'
         .from(galleryTable);
 
     if (label) {
@@ -406,12 +407,14 @@ app.get('/api/gallery', authenticateToken, async (req, res) => {
                 imageClassesTable,
                 eq(galleryTable.id, imageClassesTable.imageId)
             )
-            .where(eq(imageClassesTable.className, label));
+            .where(like(imageClassesTable.className, `%${label}%`))
+            .groupBy(galleryTable.id); // Group by galleryTable.id for consistent total count
     } else {
         totalCountQuery.where(eq(galleryTable.uploadedBy, username));
     }
 
-    const totalCount = (await totalCountQuery.get()).count;
+    const totalCountResult = await totalCountQuery.get();
+    const totalCount = totalCountResult ? totalCountResult.total : 0; // Safely access the 'total' property
 
     res.json({
         photos: photosWithUrls,
