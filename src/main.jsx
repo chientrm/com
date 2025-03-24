@@ -67,7 +67,7 @@ function NavBar() {
 
     return (
         <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:px-8">
                 <div className="flex justify-between items-center h-16">
                     <div className="flex items-center">
                         <NavLink to="/" label="Home" />
@@ -645,11 +645,14 @@ function Gallery() {
             <div className="flex-1 overflow-auto">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {photos.map((photo) => (
-                        <div key={photo.id} className="relative">
+                        <div
+                            key={photo.id}
+                            className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
+                        >
                             <img
                                 src={photo.url}
                                 alt={photo.filename}
-                                className="w-full h-auto rounded-md cursor-pointer"
+                                className="absolute top-0 left-0 w-full h-full object-cover"
                                 onClick={() => setSelectedPhoto(photo)}
                             />
                             {isAdmin && (
@@ -711,7 +714,7 @@ function App() {
         <Router>
             <div className="h-screen flex flex-col">
                 <NavBar />
-                <div className="flex-1 overflow-hidden px-4 py-6">
+                <div className="flex-1 overflow-hidden px-4 sm:px-6 lg:px-8 md:px-8 py-6">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<LoginForm />} />
