@@ -540,6 +540,7 @@ function Gallery() {
     const [photoClasses, setPhotoClasses] = useState([]);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(9); // Default limit
+    const [isUploading, setIsUploading] = useState(false); // New state for upload animation
     const fileInputRef = useRef(null);
 
     const fetchPhotos = async (label = '') => {
@@ -601,6 +602,7 @@ function Gallery() {
             return;
         }
 
+        setIsUploading(true); // Start loading animation
         const formData = new FormData();
         Array.from(files).forEach((file) => formData.append('photos', file));
 
@@ -608,6 +610,8 @@ function Gallery() {
             method: 'POST',
             body: formData,
         });
+
+        setIsUploading(false); // Stop loading animation
         if (response.ok) {
             fetchPhotos(searchLabel); // Refresh photos after upload
         } else {
@@ -693,10 +697,16 @@ function Gallery() {
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-600 text-white rounded-md"
+                    disabled={isUploading} // Disable button during upload
                 >
-                    Upload Photos
+                    {isUploading ? 'Uploading...' : 'Upload Photos'}
                 </button>
             </form>
+            {isUploading && (
+                <div className="flex justify-center items-center mb-4">
+                    <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            )}
             <div className="flex-1 overflow-auto">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                     {paginatedPhotos.map((photo) => (
