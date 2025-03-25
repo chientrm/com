@@ -667,10 +667,10 @@ function Gallery() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 h-full flex flex-col">
-            <h2 className="text-2xl font-bold mb-4">My Gallery</h2>
-            {error && <p className="text-red-500">{error}</p>}
-            <div className="mb-4 flex gap-2 items-center">
+        <div className="w-full h-full flex flex-col">
+            <h2 className="text-2xl font-bold mb-4 px-6">My Gallery</h2>
+            {error && <p className="text-red-500 px-6">{error}</p>}
+            <div className="mb-4 flex gap-2 items-center px-6">
                 <input
                     type="text"
                     placeholder="Search by label..."
@@ -693,8 +693,9 @@ function Gallery() {
                         )
                     }
                     className="p-2 bg-secondary text-secondary-foreground rounded-full shadow-sm hover:bg-secondary-hover"
-                    title={`Switch to ${viewMode === 'tile' ? 'List' : 'Tile'
-                        } Mode`}
+                    title={`Switch to ${
+                        viewMode === 'tile' ? 'List' : 'Tile'
+                    } Mode`}
                 >
                     {viewMode === 'tile' ? (
                         <ViewListIcon className="w-5 h-5" />
@@ -703,7 +704,7 @@ function Gallery() {
                     )}
                 </button>
             </div>
-            <form onSubmit={handleUpload} className="mb-4">
+            <form onSubmit={handleUpload} className="mb-4 px-6">
                 <input
                     type="file"
                     ref={fileInputRef}
@@ -724,9 +725,9 @@ function Gallery() {
                     <div className="h-8 w-8 animate-spin rounded-full border-2 border-t-2 border-gray-300 border-t-blue-600"></div>
                 </div>
             )}
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-auto px-6">
                 {viewMode === 'tile' ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {paginatedPhotos.map((photo) => (
                             <div
                                 key={photo.id}
@@ -784,7 +785,7 @@ function Gallery() {
                     </table>
                 )}
             </div>
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-between px-6">
                 <div className="flex items-center gap-2">
                     <button
                         disabled={page === 1}
