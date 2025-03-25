@@ -19,6 +19,7 @@ import {
 } from 'react-router-dom';
 import lamb from './lamb.jpeg';
 import './style.css';
+import { VirtuosoGrid } from 'react-virtuoso'; // Import VirtuosoGrid for virtualization
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
@@ -538,8 +539,8 @@ function Gallery() {
     const [searchLabel, setSearchLabel] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [photoClasses, setPhotoClasses] = useState([]);
-    const [isUploading, setIsUploading] = useState(false); // New state for upload animation
-    const [viewMode, setViewMode] = useState('tile'); // New state for view mode
+    const [isUploading, setIsUploading] = useState(false);
+    const [viewMode, setViewMode] = useState('tile');
     const fileInputRef = useRef(null);
 
     const fetchPhotos = async (label = '') => {
@@ -569,7 +570,7 @@ function Gallery() {
             method: 'DELETE',
         });
         if (response.ok) {
-            fetchPhotos(searchLabel); // Refresh photos after deletion
+            fetchPhotos(searchLabel);
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to delete photo.');
@@ -578,7 +579,7 @@ function Gallery() {
 
     const handlePhotoClick = async (photo) => {
         setSelectedPhoto(photo);
-        setPhotoClasses([]); // Clear class names to prevent text glitching
+        setPhotoClasses([]);
 
         const response = await fetchWithAuth(
             `/api/gallery/classes/${photo.id}`
@@ -601,7 +602,7 @@ function Gallery() {
             return;
         }
 
-        setIsUploading(true); // Start loading animation
+        setIsUploading(true);
         const formData = new FormData();
         Array.from(files).forEach((file) => formData.append('photos', file));
 
@@ -610,9 +611,9 @@ function Gallery() {
             body: formData,
         });
 
-        setIsUploading(false); // Stop loading animation
+        setIsUploading(false);
         if (response.ok) {
-            fetchPhotos(searchLabel); // Refresh photos after upload
+            fetchPhotos(searchLabel);
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to upload photos.');
@@ -687,7 +688,7 @@ function Gallery() {
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-600 text-white rounded-md"
-                    disabled={isUploading} // Disable button during upload
+                    disabled={isUploading}
                 >
                     {isUploading ? 'Uploading...' : 'Upload Photos'}
                 </button>
@@ -699,22 +700,29 @@ function Gallery() {
             )}
             <div className="flex-1 overflow-auto px-6">
                 {viewMode === 'tile' ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        {photos.map((photo) => (
-                            <div
-                                key={photo.id}
-                                className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
-                            >
-                                <img
-                                    src={photo.url}
-                                    alt={photo.filename}
-                                    className="absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-500"
-                                    onLoad={handleImageLoad}
-                                    onClick={() => handlePhotoClick(photo)}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    <VirtuosoGrid
+                        totalCount={photos.length}
+                        itemContent={(index) => {
+                            const photo = photos[index];
+                            return (
+                                <div
+                                    key={photo.id}
+                                    className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
+                                >
+                                    <img
+                                        src={photo.url}
+                                        alt={photo.filename}
+                                        className="absolute top-0 left-0 w-full h-full object-cover opacity-0 transition-opacity duration-500"
+                                        onLoad={handleImageLoad}
+                                        onClick={() =>
+                                            handlePhotoClick(photo)
+                                        }
+                                    />
+                                </div>
+                            );
+                        }}
+                        listClassName="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+                    />
                 ) : (
                     <table className="table-auto w-full border-collapse border border-gray-300">
                         <thead>
