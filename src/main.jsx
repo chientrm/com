@@ -538,8 +538,6 @@ function Gallery() {
     const [searchLabel, setSearchLabel] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState(null);
     const [photoClasses, setPhotoClasses] = useState([]);
-    const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(9); // Default limit
     const [isUploading, setIsUploading] = useState(false); // New state for upload animation
     const [viewMode, setViewMode] = useState('tile'); // New state for view mode
     const fileInputRef = useRef(null);
@@ -624,43 +622,17 @@ function Gallery() {
     const handleSearchChange = (e) => {
         const label = e.target.value;
         setSearchLabel(label);
-        setPage(1); // Reset to the first page on search
         fetchPhotos(label.trim());
     };
 
     const handleClearSearch = () => {
         setSearchLabel('');
-        setPage(1); // Reset to the first page on clearing search
         fetchPhotos();
     };
-
-    const paginatedPhotos = photos.slice((page - 1) * limit, page * limit);
-    const totalPages = Math.ceil(photos.length / limit);
 
     useEffect(() => {
         fetchPhotos(searchLabel);
     }, [searchLabel]);
-
-    useEffect(() => {
-        const calculateLimit = () => {
-            const width = window.innerWidth;
-            if (width >= 1024) return 9; // 3 images per row on large screens
-            if (width >= 768) return 9; // 3 images per row on medium screens
-            return 6; // 2 images per row on small screens
-        };
-
-        const handleResize = () => {
-            const newLimit = calculateLimit();
-            if (newLimit !== limit) {
-                setLimit(newLimit);
-                setPage(1); // Reset to the first page when limit changes
-            }
-        };
-
-        handleResize(); // Set initial limit
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [limit]);
 
     const handleImageLoad = (e) => {
         e.target.classList.add('opacity-100');
@@ -728,7 +700,7 @@ function Gallery() {
             <div className="flex-1 overflow-auto px-6">
                 {viewMode === 'tile' ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        {paginatedPhotos.map((photo) => (
+                        {photos.map((photo) => (
                             <div
                                 key={photo.id}
                                 className="relative w-full pt-[100%] bg-gray-100 rounded-md overflow-hidden"
@@ -759,7 +731,7 @@ function Gallery() {
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedPhotos.map((photo) => (
+                            {photos.map((photo) => (
                                 <tr key={photo.id}>
                                     <td className="border border-gray-300 px-4 py-2">
                                         {photo.filename}
@@ -784,45 +756,6 @@ function Gallery() {
                         </tbody>
                     </table>
                 )}
-            </div>
-            <div className="mt-4 flex items-center justify-between px-6">
-                <div className="flex items-center gap-2">
-                    <button
-                        disabled={page === 1}
-                        onClick={() => setPage(1)}
-                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                    >
-                        <ChevronDoubleLeftIcon className="w-4 h-4" />
-                    </button>
-                    <button
-                        disabled={page === 1}
-                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                    >
-                        <ChevronLeftIcon className="w-4 h-4" />
-                    </button>
-                </div>
-                <span className="text-sm text-gray-700">
-                    Page {page} of {totalPages}
-                </span>
-                <div className="flex items-center gap-2">
-                    <button
-                        disabled={page === totalPages}
-                        onClick={() =>
-                            setPage((prev) => Math.min(prev + 1, totalPages))
-                        }
-                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                    >
-                        <ChevronRightIcon className="w-4 h-4" />
-                    </button>
-                    <button
-                        disabled={page === totalPages}
-                        onClick={() => setPage(totalPages)}
-                        className="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                    >
-                        <ChevronDoubleRightIcon className="w-4 h-4" />
-                    </button>
-                </div>
             </div>
             {selectedPhoto && (
                 <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
