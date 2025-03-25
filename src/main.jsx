@@ -3,7 +3,7 @@ import {
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     ChevronLeftIcon,
-    ChevronRightIcon, // Correct export name for list icon
+    ChevronRightIcon,
     Squares2X2Icon as ViewGridIcon,
     ListBulletIcon as ViewListIcon,
 } from '@heroicons/react/24/outline';
@@ -64,13 +64,13 @@ function NavBar() {
 
     const links = isLoggedIn
         ? [
-              { to: '/profile', label: 'My Profile' },
-              ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
-          ]
+            { to: '/profile', label: 'My Profile' },
+            ...(isAdmin ? [{ to: '/admin', label: 'Admin Panel' }] : []),
+        ]
         : [
-              { to: '/login', label: 'Sign In' },
-              { to: '/register', label: 'Sign Up' },
-          ]; // Removed Gallery for all users
+            { to: '/login', label: 'Sign In' },
+            { to: '/register', label: 'Sign Up' },
+        ]; // Removed Gallery for all users
 
     return (
         <nav className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
@@ -243,11 +243,10 @@ function LogTable({ logs }) {
                             </td>
                             <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 <div
-                                    className={`relative overflow-hidden ${
-                                        expandedRows.has(index)
+                                    className={`relative overflow-hidden ${expandedRows.has(index)
                                             ? ''
                                             : 'line-clamp-1'
-                                    }`}
+                                        }`}
                                 >
                                     {log.message || 'N/A'}
                                     {!expandedRows.has(index) &&
@@ -694,9 +693,8 @@ function Gallery() {
                         )
                     }
                     className="p-2 bg-secondary text-secondary-foreground rounded-full shadow-sm hover:bg-secondary-hover"
-                    title={`Switch to ${
-                        viewMode === 'tile' ? 'List' : 'Tile'
-                    } Mode`}
+                    title={`Switch to ${viewMode === 'tile' ? 'List' : 'Tile'
+                        } Mode`}
                 >
                     {viewMode === 'tile' ? (
                         <ViewListIcon className="w-5 h-5" />
@@ -1019,9 +1017,8 @@ function SystemctlServices() {
                     className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
                 />
                 <button
-                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${
-                        isLoading ? 'animate-spin' : ''
-                    }`}
+                    className={`p-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-100 ${isLoading ? 'animate-spin' : ''
+                        }`}
                     onClick={fetchServices}
                     title="Refresh Services"
                     disabled={isLoading}
