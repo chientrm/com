@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { exec } from 'child_process';
 import dotenv from 'dotenv';
-import { count, eq, like } from 'drizzle-orm';
+import { eq, like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/libsql';
 import express from 'express';
 import fs from 'fs';
@@ -312,7 +312,7 @@ app.get(
 let classificationWorker;
 
 function startClassificationWorker() {
-    classificationWorker = new Worker('./classificationWorker.js');
+    classificationWorker = new Worker('./server/classificationWorker.js');
     classificationWorker.on('message', (message) => {
         console.log('Worker message:', JSON.stringify(message, null, 2)); // Log the actual message content
     });
