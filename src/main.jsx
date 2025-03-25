@@ -570,7 +570,7 @@ function Gallery() {
             method: 'DELETE',
         });
         if (response.ok) {
-            fetchPhotos(searchLabel);
+            fetchPhotos(searchLabel); // Refresh photos after deletion
         } else {
             const errorData = await response.json();
             setError(errorData.message || 'Failed to delete photo.');
@@ -749,7 +749,7 @@ function Gallery() {
                                             photo.uploadedAt * 1000
                                         ).toLocaleString()}
                                     </td>
-                                    <td className="border border-gray-300 px-4 py-2">
+                                    <td className="border border-gray-300 px-4 py-2 flex gap-2">
                                         <button
                                             onClick={() =>
                                                 handlePhotoClick(photo)
@@ -757,6 +757,14 @@ function Gallery() {
                                             className="px-2 py-1 bg-blue-600 text-white rounded-md"
                                         >
                                             View
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                handleDelete(photo.id)
+                                            }
+                                            className="px-2 py-1 bg-red-600 text-white rounded-md"
+                                        >
+                                            Delete
                                         </button>
                                     </td>
                                 </tr>
