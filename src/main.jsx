@@ -1,11 +1,7 @@
 import {
     ArrowPathIcon,
-    ChevronDoubleLeftIcon,
-    ChevronDoubleRightIcon,
-    ChevronLeftIcon,
-    ChevronRightIcon,
     Squares2X2Icon as ViewGridIcon,
-    ListBulletIcon as ViewListIcon,
+    ListBulletIcon as ViewListIcon
 } from '@heroicons/react/24/outline';
 import { decodeJwt } from 'jose';
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,9 +13,9 @@ import {
     Routes,
     useParams,
 } from 'react-router-dom';
+import { VirtuosoGrid } from 'react-virtuoso'; // Import VirtuosoGrid for virtualization
 import lamb from './lamb.jpeg';
 import './style.css';
-import { VirtuosoGrid } from 'react-virtuoso'; // Import VirtuosoGrid for virtualization
 
 // Utility functions
 function fetchWithAuth(url, options = {}) {
@@ -245,8 +241,8 @@ function LogTable({ logs }) {
                             <td className="border border-gray-200 px-4 py-2 text-sm text-gray-700">
                                 <div
                                     className={`relative overflow-hidden ${expandedRows.has(index)
-                                            ? ''
-                                            : 'line-clamp-1'
+                                        ? ''
+                                        : 'line-clamp-1'
                                         }`}
                                 >
                                     {log.message || 'N/A'}
@@ -666,9 +662,8 @@ function Gallery() {
                         )
                     }
                     className="p-2 bg-secondary text-secondary-foreground rounded-full shadow-sm hover:bg-secondary-hover"
-                    title={`Switch to ${
-                        viewMode === 'tile' ? 'List' : 'Tile'
-                    } Mode`}
+                    title={`Switch to ${viewMode === 'tile' ? 'List' : 'Tile'
+                        } Mode`}
                 >
                     {viewMode === 'tile' ? (
                         <ViewListIcon className="w-5 h-5" />
