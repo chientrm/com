@@ -1,1 +1,0 @@
-ALTER TABLE `image_classes_table` DROP COLUMN `probability`;
