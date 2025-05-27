@@ -37,8 +37,8 @@
 				websites on the Internet.
 			</p>
 			<ul>
-				<li>Try Native Fetch for free for 7 days with no credit card required.</li>
-				<li>Experience the full features before deciding to purchase for a $17 one-time fee.</li>
+				<li>The Free version is free forever and lets you download from all supported sites.</li>
+				<li>Upgrade to Premium for a one-time $17 fee to unlock extra features.</li>
 			</ul>
 			<div class="flex gap-4 mt-4">
 				<a
@@ -46,14 +46,14 @@
 					target="_blank"
 					class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
 				>
-					Try for Free
+					Download Free Version
 				</a>
 				<a
 					href="https://nativefetch.com/checkout"
 					target="_blank"
 					class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
 				>
-					Buy Now
+					Upgrade to Premium
 				</a>
 			</div>
 		</div>
