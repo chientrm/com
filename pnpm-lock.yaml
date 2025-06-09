@@ -38,6 +38,9 @@ importers:
       tailwindcss:
         specifier: ^4.0.0
         version: 4.1.5
+      three:
+        specifier: ^0.177.0
+        version: 0.177.0
       vite:
         specifier: ^6.2.6
         version: 6.3.4(jiti@2.4.2)(lightningcss@1.29.2)
@@ -1135,6 +1138,9 @@ packages:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
 
+  three@0.177.0:
+    resolution: {integrity: sha512-EiXv5/qWAaGI+Vz2A+JfavwYCMdGjxVsrn3oBwllUoqYeaBO75J63ZfyaQKoiLrqNHoTlUc6PFgMXnS0kI45zg==}
+
   tinyglobby@0.2.13:
     resolution: {integrity: sha512-mEwzpUgrLySlveBwEVDMKk5B57bhLPYovRfPAXD5gA/98Opn0rCDj3GtLwFvCvH5RK9uPCExUROW5NjDwvqkxw==}
     engines: {node: '>=12.0.0'}
@@ -2115,6 +2121,8 @@ snapshots:
   tailwindcss@4.1.5: {}
 
   tapable@2.2.1: {}
+
+  three@0.177.0: {}
 
   tinyglobby@0.2.13:
     dependencies:
