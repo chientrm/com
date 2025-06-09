@@ -15,7 +15,53 @@
 			);
 
 			const scene = new THREE.Scene();
-			scene.background = new THREE.Color(0xaec6cf);
+
+			// --- Add cubemap skybox using a single cross-layout image ---
+			const textureLoader = new THREE.TextureLoader();
+			const cubemapTexture = await textureLoader.loadAsync('/Cubemap/Cubemap_Sky_01-512x512.png');
+			const cubemap = new THREE.CubeTexture();
+
+			// Helper function to extract 6 faces from a cross-layout cubemap image
+			function extractCubemapFaces(image: HTMLImageElement, size: number) {
+				const canvas = document.createElement('canvas');
+				canvas.width = size;
+				canvas.height = size;
+				const ctx = canvas.getContext('2d')!;
+				const faces = [];
+				// Cross layout: +X, -X, +Y, -Y, +Z, -Z
+				const map = [
+					[size * 2, size], // +X
+					[0, size], // -X
+					[size, 0], // +Y
+					[size, size * 2], // -Y
+					[size, size], // +Z
+					[size * 3, size] // -Z
+				];
+				for (let i = 0; i < 6; i++) {
+					ctx.clearRect(0, 0, size, size);
+					ctx.drawImage(image, map[i][0], map[i][1], size, size, 0, 0, size, size);
+					const face = ctx.getImageData(0, 0, size, size);
+					const data = new Uint8Array(face.data.buffer);
+					const tex = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+					tex.needsUpdate = true;
+					faces.push(tex);
+				}
+				return faces;
+			}
+
+			await new Promise<void>((resolve) => {
+				if (cubemapTexture.image && cubemapTexture.image.complete) {
+					resolve();
+				} else {
+					cubemapTexture.image.onload = () => resolve();
+				}
+			});
+
+			const faces = extractCubemapFaces(cubemapTexture.image, 512);
+			cubemap.images = faces;
+			cubemap.needsUpdate = true;
+			scene.background = cubemap;
+			// --- End cubemap skybox ---
 
 			// Camera
 			const camera = new THREE.PerspectiveCamera(
@@ -42,7 +88,6 @@
 			scene.add(dirLight);
 
 			// --- Add ground plane with realistic dirt texture ---
-			const textureLoader = new THREE.TextureLoader();
 			const [dirtColorMap, dirtNormalMap] = await Promise.all([
 				textureLoader.loadAsync('/GroundDirt03_MR_4K/GroundDirt03_4K_BaseColor.png'),
 				textureLoader.loadAsync('/GroundDirt03_MR_4K/GroundDirt03_4K_Normal.png')
@@ -52,7 +97,7 @@
 			dirtColorMap.repeat.set(20, 20);
 			dirtNormalMap.repeat.set(20, 20);
 
-			const groundGeo = new THREE.PlaneGeometry(200, 200);
+			const groundGeo = new THREE.PlaneGeometry(600, 600);
 			const groundMat = new THREE.MeshPhongMaterial({
 				map: dirtColorMap,
 				normalMap: dirtNormalMap
