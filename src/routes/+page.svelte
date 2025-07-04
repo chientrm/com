@@ -25,3 +25,16 @@
 		</p>
 	</div>
 </section>
+
+<section class="mb-8">
+	<h2 class="text-2xl font-semibold mb-4">Projects</h2>
+	<div class="prose">
+		<p>
+			I've built <a
+				href="https://nativefetch.com"
+				target="_blank"
+				class="text-blue-600 hover:underline">Native Fetch</a
+			>, a powerful app that downloads videos and audio from 1800+ websites.
+		</p>
+	</div>
+</section>
