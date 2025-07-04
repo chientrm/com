@@ -29,12 +29,16 @@
 <section class="mb-8">
 	<h2 class="text-2xl font-semibold mb-4">Projects</h2>
 	<div class="prose">
-		<p>
-			I've built <a
+		<div class="flex items-center gap-3 mb-2">
+			<div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+				<span class="text-white font-bold text-sm">NF</span>
+			</div>
+			<a
 				href="https://nativefetch.com"
 				target="_blank"
-				class="text-blue-600 hover:underline">Native Fetch</a
-			>, a powerful app that downloads videos and audio from 1800+ websites.
-		</p>
+				class="text-blue-600 hover:underline font-semibold">Native Fetch</a
+			>
+		</div>
+		<p class="ml-11">A powerful app that downloads videos and audio from 1800+ websites.</p>
 	</div>
 </section>
