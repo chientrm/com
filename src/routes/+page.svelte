@@ -1,61 +1,44 @@
 <svelte:head>
-	<title>chientrm.com - Innovative Products</title>
+	<title>chientrm.com</title>
 	<meta
 		name="description"
-		content="Discover and purchase innovative products designed to make your life easier. Explore Native Fetch and more."
+		content="Personal website of chientrm (Chien) - thoughts, ideas, and musings."
 	/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </svelte:head>
 
 <h1 class="text-4xl font-bold mb-4">Welcome to chientrm.com</h1>
 <p class="text-lg mb-6">
-	Discover and purchase innovative products designed to make your life easier.
+	Personal website of chientrm (Chien). A place for thoughts, ideas, and musings.
 </p>
 
 <section class="mb-8">
-	<h2 class="text-2xl font-semibold mb-4">Products</h2>
-	<div class="flex flex-col gap-6">
-		<div class="flex items-center gap-4">
+	<div class="prose">
+		<p>
+			Welcome to my personal corner of the internet. Here you'll find my thoughts on technology,
+			life, and everything in between.
+		</p>
+		<p>
+			Feel free to explore and learn more <a href="/about" class="text-blue-600 hover:underline"
+				>about me</a
+			>.
+		</p>
+	</div>
+</section>
+
+<section class="mb-8">
+	<h2 class="text-2xl font-semibold mb-4">Projects</h2>
+	<div class="prose">
+		<div class="flex items-center gap-3 mb-2">
+			<div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+				<span class="text-white font-bold text-sm">NF</span>
+			</div>
 			<a
 				href="https://nativefetch.com"
 				target="_blank"
-				class="flex items-center gap-4 text-blue-600 hover:underline"
+				class="text-blue-600 hover:underline font-semibold">Native Fetch</a
 			>
-				<img
-					src="https://nativefetch.com/nativefetch_foreground.png"
-					alt="Native Fetch Logo"
-					class="w-24 rounded-lg"
-				/>
-				<span class="text-lg font-medium"
-					>Native Fetch - Download videos and audio from 1800+ websites</span
-				>
-			</a>
 		</div>
-		<div class="prose">
-			<p>
-				Native Fetch is a powerful app that allows you to download videos and audio from over 1800
-				websites on the Internet.
-			</p>
-			<ul>
-				<li>The Free version is free forever and lets you download from all supported sites.</li>
-				<li>Upgrade to Premium for a one-time $17 fee to unlock extra features.</li>
-			</ul>
-			<div class="flex gap-4 mt-4">
-				<a
-					href="https://nativefetch.com/download"
-					target="_blank"
-					class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-				>
-					Download Free Version
-				</a>
-				<a
-					href="https://nativefetch.com/checkout"
-					target="_blank"
-					class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-				>
-					Upgrade to Premium
-				</a>
-			</div>
-		</div>
+		<p class="ml-11">A powerful app that downloads videos and audio from 1800+ websites.</p>
 	</div>
 </section>
