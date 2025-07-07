@@ -1,7 +1,29 @@
 <script>
+	import { onMount } from 'svelte';
 	import '../app.css';
 
 	let { children } = $props();
+
+	onMount(() => {
+		if (document.getElementById('giscus') && !document.getElementById('giscus').hasChildNodes()) {
+			const script = document.createElement('script');
+			script.src = 'https://giscus.app/client.js';
+			script.setAttribute('data-repo', 'chientrm/com');
+			script.setAttribute('data-repo-id', 'R_kgDOJzQmtA');
+			script.setAttribute('data-category', 'General');
+			script.setAttribute('data-category-id', 'DIC_kwDOJzQmtM4CslE1');
+			script.setAttribute('data-mapping', 'pathname');
+			script.setAttribute('data-strict', '0');
+			script.setAttribute('data-reactions-enabled', '1');
+			script.setAttribute('data-emit-metadata', '0');
+			script.setAttribute('data-input-position', 'bottom');
+			script.setAttribute('data-theme', 'light');
+			script.setAttribute('data-lang', 'en');
+			script.crossOrigin = 'anonymous';
+			script.async = true;
+			document.getElementById('giscus').appendChild(script);
+		}
+	});
 </script>
 
 <svelte:head>
@@ -28,6 +50,7 @@
 
 	<main class="flex-grow p-4">
 		{@render children()}
+		<div id="giscus"></div>
 	</main>
 
 	<footer class="bg-gray-100 p-4 text-center text-gray-600">
