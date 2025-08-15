@@ -26,6 +26,10 @@
 		<a href="/about" class="text-blue-600 text-xl hover:underline">about</a>
 	</nav>
 
+	<main class="flex-grow p-4">
+		{@render children()}
+	</main>
+
 	<footer class="bg-gray-100 p-4 text-center text-gray-600">
 		<p>&copy; {new Date().getFullYear()} chientrm.com. All rights reserved.</p>
 	</footer>
