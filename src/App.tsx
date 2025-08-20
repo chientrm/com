@@ -65,8 +65,11 @@ function App() {
             </Button>
           </div>
         </CardContent>
-        <CardFooter className="justify-center text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} Chien Tran. All rights reserved.
+        <CardFooter className="flex flex-col items-center gap-1 text-xs text-muted-foreground">
+          <Badge variant="outline">v{__APP_VERSION__}</Badge>
+          <span>
+            &copy; {new Date().getFullYear()} Chien Tran. All rights reserved.
+          </span>
         </CardFooter>
       </Card>
     </div>
