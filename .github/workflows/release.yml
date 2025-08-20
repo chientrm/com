@@ -1,12 +1,12 @@
-name: Build and Package
+name: Release to npm
 
 on:
   push:
     tags:
-      - "."
+      - "*.*.*" # Run only on version tags like 1.2.3
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,14 +27,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build client
-        run: pnpm build:client
+      - name: Build
+        run: pnpm build
 
-      - name: Build server
-        run: pnpm build:server
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist.tar.gz
+      - name: Publish to npm
+        run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

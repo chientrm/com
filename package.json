@@ -1,14 +1,17 @@
 {
-  "name": "home",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@microh-labs/home",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build:client": "tsc -b && vite build",
     "build:server": "node esbuild.config.mjs",
+    "build": "pnpm build:client && pnpm build:server",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -51,10 +54,9 @@
     "vite-plugin-node-polyfills": "^0.24.0"
   },
   "files": [
-    "dist",
-    "package.json",
-    "app.ts",
-    "index.js",
-    "pnpm-lock.yaml"
-  ]
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
