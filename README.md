@@ -1,15 +1,70 @@
+<p align="center">
+   <img src="screenshots/image.png" alt="chientrm.com screenshot" width="700" />
+</p>
+
 # chientrm.com – Personal Homepage & Web App
 
-This is the source code for [chientrm.com](https://chientrm.com), the personal homepage and web app of Chien Tran. Distributed as a web application via npm.
+**A modern, minimal, and instantly runnable personal homepage and web app.**
 
-## Features
+---
+
+## 🚀 Quick Start (End Users)
+
+Run this web app instantly, no build or setup required:
+
+### 1. Run instantly with npx or pnpm dlx
+
+```bash
+npx @microh-labs/home
+# or
+pnpm dlx @microh-labs/home
+```
+
+### 2. Or install globally (optional)
+
+```bash
+npm install -g @microh-labs/home
+# or
+pnpm install -g @microh-labs/home
+ulabs_home
+```
+
+### 3. Or install locally in a project
+
+```bash
+npm install @microh-labs/home
+# or
+pnpm add @microh-labs/home
+npx ulabs_home
+# or
+pnpm exec ulabs_home
+```
+
+#### Custom port
+
+To run on a specific port:
+
+```bash
+PORT=5000 npx @microh-labs/home
+# or
+PORT=5000 ulabs_home
+```
+
+The app will print the URL to access it in your browser.
+
+---
+
+## 🌟 Features
 
 - Modern, minimal design using [shadcn/ui](https://ui.shadcn.com/) React components
 - Responsive and accessible
 - Express API backend with Swagger docs
-- Automated build and npm publishing via GitHub Actions
 
-## Tech Stack
+---
+
+## 🛠️ For Developers
+
+### Tech Stack
 
 - React + TypeScript
 - Vite
@@ -18,7 +73,7 @@ This is the source code for [chientrm.com](https://chientrm.com), the personal h
 - Express (API)
 - pnpm (package manager)
 
-## Development
+### Development
 
 Install dependencies:
 
@@ -38,7 +93,9 @@ Build for production:
 pnpm build
 ```
 
-## Publishing
+---
+
+## For Maintainers: Publishing
 
 This app is published to npm on every version tag push (e.g., `1.2.3`).
 
