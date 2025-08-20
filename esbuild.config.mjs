@@ -21,7 +21,7 @@ build({
     "url",
   ],
   banner: {
-    js: 'import { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);',
+    js: '#!/usr/bin/env node\nimport { createRequire as __createRequire } from "module"; const require = __createRequire(import.meta.url);',
   },
 })
   .then(() => {

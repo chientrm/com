@@ -70,5 +70,8 @@
     "express",
     "personal-site",
     "chientrm"
-  ]
+  ],
+  "bin": {
+    "ulabs_home": "index.js"
+  }
 }
