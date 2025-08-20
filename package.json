@@ -59,5 +59,16 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "license": "MIT",
+  "keywords": [
+    "homepage",
+    "webapp",
+    "react",
+    "vite",
+    "shadcn",
+    "express",
+    "personal-site",
+    "chientrm"
+  ]
 }
