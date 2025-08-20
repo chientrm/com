@@ -32,9 +32,6 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           npm version --no-git-tag-version $TAG
 
-      - name: Build
-        run: pnpm build
-
       - name: Publish to npm
         run: pnpm publish --no-git-checks
         env:
