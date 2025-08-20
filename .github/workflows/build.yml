@@ -3,7 +3,7 @@ name: Build and Package
 on:
   push:
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+      - "."
 
 jobs:
   build:
@@ -27,12 +27,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build app
-        run: pnpm build
+      - name: Build client
+        run: pnpm build:client
 
-      - name: Package build output
-        run: |
-          tar -czf dist.tar.gz dist
+      - name: Build server
+        run: pnpm build:server
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4

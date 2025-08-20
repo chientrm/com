@@ -78,13 +78,15 @@ app.get("/api/hello", (_req: Request, res: Response) => {
   res.json({ message: "Hello from Chien Tran!" });
 });
 
-// Only listen if PORT is set (entrypoint usage)
-if (process.env.PORT) {
-  const port = process.env.PORT;
-  app.use("/", express.static(path.join(__dirname, "dist")));
-  app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-    console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+// Only listen if not imported as middleware (i.e., if run as entrypoint)
+if (import.meta.main) {
+  app.use(express.static(path.join(__dirname, "dist")));
+  const server = app.listen(0, () => {
+    const actualPort = (server.address() as any).port;
+    console.log(`Server running at http://localhost:${actualPort}`);
+    console.log(
+      `Swagger UI available at http://localhost:${actualPort}/api-docs`
+    );
   });
 }
 

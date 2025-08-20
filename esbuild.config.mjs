@@ -25,7 +25,7 @@ build({
   },
 })
   .then(() => {
-    console.log("esbuild: Bundled app.ts to dist/index.js");
+    console.log("esbuild: Bundled app.ts to index.js");
   })
   .catch((err) => {
     console.error(err);
