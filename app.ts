@@ -81,7 +81,8 @@ app.get("/api/hello", (_req: Request, res: Response) => {
 // Only listen if not imported as middleware (i.e., if run as entrypoint)
 if (import.meta.main) {
   app.use(express.static(path.join(__dirname, "dist")));
-  const server = app.listen(0, () => {
+  const port = process.env.PORT ? Number(process.env.PORT) : 0;
+  const server = app.listen(port, () => {
     const actualPort = (server.address() as any).port;
     console.log(`Server running at http://localhost:${actualPort}`);
     console.log(
