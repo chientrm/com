@@ -9,6 +9,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+// Trust proxy headers (needed for correct protocol detection behind Cloudflare Tunnel or reverse proxies)
+app.set("trust proxy", true);
 
 // Swagger definition (servers will be set at runtime)
 const swaggerDefinition = {
