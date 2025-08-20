@@ -54,6 +54,7 @@
   },
   "files": [
     "dist",
+    "screenshots",
     "app.ts"
   ],
   "publishConfig": {
@@ -70,6 +71,13 @@
     "personal-site",
     "chientrm"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microh-labs/home.git"
+  },
+  "bugs": {
+    "url": "https://github.com/microh-labs/home/issues"
+  },
   "bin": {
     "ulabs_home": "index.js"
   }

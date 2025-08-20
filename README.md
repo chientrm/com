@@ -12,20 +12,16 @@
 
 Run this web app instantly, no build or setup required:
 
-### 1. Run instantly with npx or pnpm dlx
+### 1. Run instantly with npx
 
 ```bash
 npx @microh-labs/home
-# or
-pnpm dlx @microh-labs/home
 ```
 
 ### 2. Or install globally (optional)
 
 ```bash
 npm install -g @microh-labs/home
-# or
-pnpm install -g @microh-labs/home
 ulabs_home
 ```
 
@@ -33,11 +29,7 @@ ulabs_home
 
 ```bash
 npm install @microh-labs/home
-# or
-pnpm add @microh-labs/home
 npx ulabs_home
-# or
-pnpm exec ulabs_home
 ```
 
 #### Custom port
@@ -71,9 +63,8 @@ The app will print the URL to access it in your browser.
 - Tailwind CSS
 - shadcn/ui
 - Express (API)
-- pnpm (package manager)
 
-### Development
+### Development (use pnpm)
 
 Install dependencies:
 
