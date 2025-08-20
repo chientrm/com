@@ -33,6 +33,6 @@ jobs:
           npm version --no-git-tag-version $TAG
 
       - name: Publish to npm
-        run: npm publish
+        run: npm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
