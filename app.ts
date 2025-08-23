@@ -1,28 +1,41 @@
-import type { Request, Response } from "express";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express5";
+import { buildSchema } from "drizzle-graphql";
 import express from "express";
 import path from "path";
-
 import { fileURLToPath } from "url";
+import { db } from "./src/db/index";
+import * as schema from "./src/db/schema";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// --- Express app setup ---
 const app = express();
-// Trust proxy headers (needed for correct protocol detection behind Cloudflare Tunnel or reverse proxies)
+app.use(express.json());
 app.set("trust proxy", true);
 
-app.get("/api/hello", (_req: Request, res: Response) => {
-  res.json({ message: "Hello from Chien Tran!" });
-});
+// --- Apollo Server setup ---
+const apolloServer = new ApolloServer(buildSchema(db));
+await apolloServer.start();
+app.use("/graphql", expressMiddleware(apolloServer));
 
-// Only listen if not imported as middleware (i.e., if run as entrypoint)
-
-// Serve static files
+// --- Server startup ---
 if (import.meta.main) {
-  app.use(express.static(path.join(__dirname, "dist")));
+  try {
+    const { pushSQLiteSchema } = await import("drizzle-kit/api");
+    const { apply } = await pushSQLiteSchema(schema, db);
+    await apply();
+    console.log("Migrations applied successfully.");
+  } catch (e) {
+    console.error("Failed to run drizzle migrations:", e);
+    process.exit(1);
+  }
+  app.use("/", express.static(path.join(__dirname, "dist")));
   const port = process.env.PORT ? Number(process.env.PORT) : 0;
   const server = app.listen(port, () => {
     const actualPort = (server.address() as any).port;
-    console.log(`Server running at http://localhost:${actualPort}`);
+    console.log(`Server running at http://localhost:${actualPort}/`);
   });
 }
 
