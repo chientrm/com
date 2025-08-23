@@ -11,7 +11,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     (() => ({
-      name: "vite-plugin-api",
+      name: "vite-plugin-app",
       configureServer(server) {
         server.middlewares.use(app);
       },
