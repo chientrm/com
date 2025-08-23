@@ -78,6 +78,17 @@ Start the development server:
 pnpm dev
 ```
 
+**Important for Drizzle ORM migrations:**
+
+> After changing your database schema, you must run:
+>
+> ```bash
+> pnpm build
+> node .
+> ```
+>
+> at least once to apply migrations and hydrate the database. This step cannot be done from `pnpm dev` due to Vite's limitations with Node.js dynamic imports.
+
 Build for production:
 
 ```bash
