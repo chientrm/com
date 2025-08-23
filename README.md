@@ -78,16 +78,19 @@ Start the development server:
 pnpm dev
 ```
 
-**Important for Drizzle ORM migrations:**
+**Drizzle ORM migrations:**
 
-> After changing your database schema, you must run:
+> After changing your database schema, you can now run Drizzle migrations directly using the drizzle-kit CLI (thanks to `drizzle.config.ts`). No need to build and run the app first!
+>
+> To push schema changes to your SQLite database:
 >
 > ```bash
-> pnpm build
-> node .
+> pnpm drizzle-kit push:sqlite
+> # or
+> npx drizzle-kit push:sqlite
 > ```
 >
-> at least once to apply migrations and hydrate the database. This step cannot be done from `pnpm dev` due to Vite's limitations with Node.js dynamic imports.
+> This will apply your schema changes and hydrate the database. You only need to run `pnpm build` and `node .` for production or to start the app normally.
 
 Build for production:
 
