@@ -1,14 +1,14 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 function App() {
   return (
@@ -110,7 +110,6 @@ function App() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-center gap-1 text-xs text-muted-foreground">
-          <Badge variant="outline">v{__APP_VERSION__}</Badge>
           <span>
             &copy; {new Date().getFullYear()} Chien Tran. All rights reserved.
           </span>
