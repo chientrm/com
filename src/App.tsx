@@ -99,7 +99,7 @@ function App() {
                   className="mt-1 inline-block"
                 >
                   <img
-                    src="https://nativefetch.com/assets/new-og.png"
+                    src="https://nativefetch.com/assets/og-3.png"
                     alt="NativeFetch OpenGraph"
                     className="rounded border w-full max-w-xs shadow"
                     style={{ maxHeight: 120 }}
