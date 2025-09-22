@@ -113,22 +113,22 @@ function App() {
             <h2 className="text-lg font-semibold mb-2">Funny Quby Stickers</h2>
             <div className="flex flex-wrap gap-4 justify-center">
               <img
-                src="/58ab83b436f9fc4b7e8c0b17c7120b3b.gif"
+                src="/95fc7cff-bbae-4cd7-97e5-f416cd49d1ff.webp"
                 alt="Quby Sticker 1"
                 className="rounded shadow max-h-32"
               />
               <img
-                src="/92d4cd1563163f090f2cab3f182fc8e3.gif"
+                src="/3213b631-139f-4880-b69e-cac268cc7201.webp"
                 alt="Quby Sticker 2"
                 className="rounded shadow max-h-32"
               />
               <img
-                src="/93d86ab11ffef15c498064d5557aef9b.gif"
+                src="/5a623118-dd61-41cb-8ece-f74aa41277ee.webp"
                 alt="Quby Sticker 3"
                 className="rounded shadow max-h-32"
               />
               <img
-                src="/961979a5cca498c1c04f830db21b6dfc.gif"
+                src="/e0be601c-d57d-4c42-93cd-768018fb4e04.webp"
                 alt="Quby Sticker 4"
                 className="rounded shadow max-h-32"
               />
