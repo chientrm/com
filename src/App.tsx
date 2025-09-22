@@ -78,7 +78,7 @@ function App() {
               <div className="flex-1 flex flex-col gap-1">
                 <div className="flex items-center gap-2">
                   <a
-                    href="https://nativefetch.com"
+                    href="https://nativefetch.com/?utm_source=portfolio&utm_medium=web&utm_campaign=showcase"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-lg font-bold hover:underline"
@@ -93,7 +93,7 @@ function App() {
                   dependencies.
                 </div>
                 <a
-                  href="https://nativefetch.com"
+                  href="https://nativefetch.com/?utm_source=portfolio&utm_medium=web&utm_campaign=showcase"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-1 inline-block"
